@@ -59,7 +59,7 @@ export default function Dashboard() {
     const map = new Map<string, number>();
     filtered.forEach((e) => {
       const g = e.grupo || "Sem Grupo";
-      map.set(g, (map.get(g) || 0) + (e.valor_pago || 0));
+      map.set(g, (map.get(g) || 0) + Math.abs(e.valor_pago || e.valor_negativo || 0));
     });
     return Array.from(map, ([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 8);
   }, [filtered]);
