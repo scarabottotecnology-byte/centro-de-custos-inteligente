@@ -36,7 +36,11 @@ export default function Dashboard() {
   const kpis = useMemo(() => {
     const totalPrevisto = filtered.reduce((s, e) => s + (e.valor_previsto || 0), 0);
     const totalPago = filtered.reduce((s, e) => s + (e.valor_pago || 0), 0);
-    return { totalPrevisto, totalPago, diferenca: totalPrevisto - totalPago, count: filtered.length };
+    const totalNegativo = filtered.reduce((s, e) => s + Math.abs(e.valor_negativo || 0), 0);
+    // Use valor_pago if available, otherwise fall back to valor_negativo
+    const effectivePago = totalPago || totalNegativo;
+    const effectivePrevisto = totalPrevisto || totalNegativo;
+    return { totalPrevisto: effectivePrevisto, totalPago: effectivePago, diferenca: effectivePrevisto - effectivePago, count: filtered.length };
   }, [filtered]);
 
   const barData = useMemo(() => {
