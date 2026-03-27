@@ -20,8 +20,8 @@ export default function CostCenters() {
   }, [entries, selectedCC, ccType]);
 
   const summary = useMemo(() => {
-    const totalPrevisto = filtered.reduce((s, e) => s + (e.valor_previsto || 0), 0);
-    const totalPago = filtered.reduce((s, e) => s + (e.valor_pago || 0), 0);
+    const totalPrevisto = filtered.reduce((s, e) => s + (e.valor_previsto || Math.abs(e.valor_negativo || 0)), 0);
+    const totalPago = filtered.reduce((s, e) => s + (e.valor_pago || Math.abs(e.valor_negativo || 0)), 0);
     return { totalPrevisto, totalPago, count: filtered.length };
   }, [filtered]);
 
