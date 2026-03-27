@@ -50,6 +50,20 @@ export const AUTO_MAP_HINTS: Record<string, string[]> = {
   projeto: ["projeto"],
 };
 
+/** Convert Excel serial date number to ISO date string (YYYY-MM-DD) */
+export function excelSerialToDate(val: unknown): string | null {
+  if (val == null || val === "") return null;
+  const num = Number(val);
+  if (!isNaN(num) && num > 1 && num < 200000) {
+    // Excel serial date: days since 1899-12-30
+    const utcDays = Math.floor(num) - 25569; // 25569 = days from 1899-12-30 to 1970-01-01
+    const date = new Date(utcDays * 86400 * 1000);
+    return date.toISOString().split("T")[0];
+  }
+  // Already a date string, return as-is
+  return String(val);
+}
+
 export function autoMapFields(spreadsheetColumns: string[]): FieldMapping {
   const mapping: FieldMapping = {};
   const normalized = spreadsheetColumns.map((c) => c.toLowerCase().trim());

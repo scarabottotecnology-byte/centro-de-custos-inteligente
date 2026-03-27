@@ -75,6 +75,8 @@ export default function ImportPage() {
             const fieldDef = DB_FIELDS.find((f) => f.key === dbField);
             if (fieldDef && "type" in fieldDef && fieldDef.type === "number") {
               entry[dbField] = val != null ? Number(val) || 0 : null;
+            } else if (fieldDef && "type" in fieldDef && fieldDef.type === "date") {
+              entry[dbField] = val != null ? excelSerialToDate(val) : null;
             } else {
               entry[dbField] = val != null ? String(val) : null;
             }
