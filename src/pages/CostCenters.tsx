@@ -44,8 +44,8 @@ export default function CostCenters() {
     entries.forEach((e) => {
       const cc = e[ccType] || "N/A";
       const cur = map.get(cc) || { previsto: 0, pago: 0 };
-      cur.previsto += e.valor_previsto || 0;
-      cur.pago += e.valor_pago || 0;
+      cur.previsto += e.valor_previsto || Math.abs(e.valor_negativo || 0);
+      cur.pago += e.valor_pago || Math.abs(e.valor_negativo || 0);
       map.set(cc, cur);
     });
     return Array.from(map, ([name, v]) => ({ name, ...v }))
