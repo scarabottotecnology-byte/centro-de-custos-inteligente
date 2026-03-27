@@ -69,8 +69,8 @@ export default function Dashboard() {
     filtered.forEach((e) => {
       const comp = e.competencia || e.mes || "N/A";
       const cur = map.get(comp) || { previsto: 0, pago: 0 };
-      cur.previsto += e.valor_previsto || 0;
-      cur.pago += e.valor_pago || 0;
+      cur.previsto += e.valor_previsto || Math.abs(e.valor_negativo || 0);
+      cur.pago += e.valor_pago || Math.abs(e.valor_negativo || 0);
       map.set(comp, cur);
     });
     return Array.from(map, ([name, v]) => ({ name, ...v }));
