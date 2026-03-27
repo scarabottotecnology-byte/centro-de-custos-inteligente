@@ -48,11 +48,11 @@ export default function Dashboard() {
     filtered.forEach((e) => {
       const cc = e.cca || e.ccs || e.cod_cc || "Sem CC";
       const cur = map.get(cc) || { previsto: 0, pago: 0 };
-      cur.previsto += e.valor_previsto || 0;
-      cur.pago += e.valor_pago || 0;
+      cur.previsto += e.valor_previsto || Math.abs(e.valor_negativo || 0);
+      cur.pago += e.valor_pago || Math.abs(e.valor_negativo || 0);
       map.set(cc, cur);
     });
-    return Array.from(map, ([name, v]) => ({ name, ...v })).slice(0, 15);
+    return Array.from(map, ([name, v]) => ({ name, ...v })).sort((a, b) => b.pago - a.pago).slice(0, 15);
   }, [filtered]);
 
   const pieData = useMemo(() => {
