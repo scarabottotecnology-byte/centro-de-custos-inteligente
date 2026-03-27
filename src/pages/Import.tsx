@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import * as XLSX from "xlsx";
 import { supabase } from "@/integrations/supabase/client";
-import { DB_FIELDS, autoMapFields, type FieldMapping } from "@/lib/field-mapping";
+import { DB_FIELDS, autoMapFields, type FieldMapping, excelSerialToDate } from "@/lib/field-mapping";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
