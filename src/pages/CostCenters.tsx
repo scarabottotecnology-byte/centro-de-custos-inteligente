@@ -30,8 +30,8 @@ export default function CostCenters() {
     filtered.forEach((e) => {
       const f = e.fornecedor || e.razao_social || "Sem Fornecedor";
       const cur = map.get(f) || { previsto: 0, pago: 0 };
-      cur.previsto += e.valor_previsto || 0;
-      cur.pago += e.valor_pago || 0;
+      cur.previsto += e.valor_previsto || Math.abs(e.valor_negativo || 0);
+      cur.pago += e.valor_pago || Math.abs(e.valor_negativo || 0);
       map.set(f, cur);
     });
     return Array.from(map, ([name, v]) => ({ name, ...v }))
