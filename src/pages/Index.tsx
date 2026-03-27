@@ -36,7 +36,11 @@ export default function Dashboard() {
   const kpis = useMemo(() => {
     const totalPrevisto = filtered.reduce((s, e) => s + (e.valor_previsto || 0), 0);
     const totalPago = filtered.reduce((s, e) => s + (e.valor_pago || 0), 0);
-    return { totalPrevisto, totalPago, diferenca: totalPrevisto - totalPago, count: filtered.length };
+    const totalNegativo = filtered.reduce((s, e) => s + Math.abs(e.valor_negativo || 0), 0);
+    // Use valor_pago if available, otherwise fall back to valor_negativo
+    const effectivePago = totalPago || totalNegativo;
+    const effectivePrevisto = totalPrevisto || totalNegativo;
+    return { totalPrevisto: effectivePrevisto, totalPago: effectivePago, diferenca: effectivePrevisto - effectivePago, count: filtered.length };
   }, [filtered]);
 
   const barData = useMemo(() => {
@@ -44,18 +48,18 @@ export default function Dashboard() {
     filtered.forEach((e) => {
       const cc = e.cca || e.ccs || e.cod_cc || "Sem CC";
       const cur = map.get(cc) || { previsto: 0, pago: 0 };
-      cur.previsto += e.valor_previsto || 0;
-      cur.pago += e.valor_pago || 0;
+      cur.previsto += e.valor_previsto || Math.abs(e.valor_negativo || 0);
+      cur.pago += e.valor_pago || Math.abs(e.valor_negativo || 0);
       map.set(cc, cur);
     });
-    return Array.from(map, ([name, v]) => ({ name, ...v })).slice(0, 15);
+    return Array.from(map, ([name, v]) => ({ name, ...v })).sort((a, b) => b.pago - a.pago).slice(0, 15);
   }, [filtered]);
 
   const pieData = useMemo(() => {
     const map = new Map<string, number>();
     filtered.forEach((e) => {
       const g = e.grupo || "Sem Grupo";
-      map.set(g, (map.get(g) || 0) + (e.valor_pago || 0));
+      map.set(g, (map.get(g) || 0) + Math.abs(e.valor_pago || e.valor_negativo || 0));
     });
     return Array.from(map, ([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 8);
   }, [filtered]);
@@ -65,8 +69,8 @@ export default function Dashboard() {
     filtered.forEach((e) => {
       const comp = e.competencia || e.mes || "N/A";
       const cur = map.get(comp) || { previsto: 0, pago: 0 };
-      cur.previsto += e.valor_previsto || 0;
-      cur.pago += e.valor_pago || 0;
+      cur.previsto += e.valor_previsto || Math.abs(e.valor_negativo || 0);
+      cur.pago += e.valor_pago || Math.abs(e.valor_negativo || 0);
       map.set(comp, cur);
     });
     return Array.from(map, ([name, v]) => ({ name, ...v }));
