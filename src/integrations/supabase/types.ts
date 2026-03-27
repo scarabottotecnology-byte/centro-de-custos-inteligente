@@ -14,7 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      financial_entries: {
+        Row: {
+          bu: string | null
+          bu_projeto: string | null
+          cca: string | null
+          ccs: string | null
+          cf: string | null
+          cod_cc: string | null
+          competencia: string | null
+          created_at: string
+          emissao: string | null
+          filial: string | null
+          fornecedor: string | null
+          grupo: string | null
+          historico: string | null
+          id: string
+          import_batch_id: string | null
+          lancamento: string | null
+          mes: string | null
+          numero: string | null
+          pagamento: string | null
+          projeto: string | null
+          razao_social: string | null
+          valor_negativo: number | null
+          valor_pago: number | null
+          valor_previsto: number | null
+          vencimento: string | null
+        }
+        Insert: {
+          bu?: string | null
+          bu_projeto?: string | null
+          cca?: string | null
+          ccs?: string | null
+          cf?: string | null
+          cod_cc?: string | null
+          competencia?: string | null
+          created_at?: string
+          emissao?: string | null
+          filial?: string | null
+          fornecedor?: string | null
+          grupo?: string | null
+          historico?: string | null
+          id?: string
+          import_batch_id?: string | null
+          lancamento?: string | null
+          mes?: string | null
+          numero?: string | null
+          pagamento?: string | null
+          projeto?: string | null
+          razao_social?: string | null
+          valor_negativo?: number | null
+          valor_pago?: number | null
+          valor_previsto?: number | null
+          vencimento?: string | null
+        }
+        Update: {
+          bu?: string | null
+          bu_projeto?: string | null
+          cca?: string | null
+          ccs?: string | null
+          cf?: string | null
+          cod_cc?: string | null
+          competencia?: string | null
+          created_at?: string
+          emissao?: string | null
+          filial?: string | null
+          fornecedor?: string | null
+          grupo?: string | null
+          historico?: string | null
+          id?: string
+          import_batch_id?: string | null
+          lancamento?: string | null
+          mes?: string | null
+          numero?: string | null
+          pagamento?: string | null
+          projeto?: string | null
+          razao_social?: string | null
+          valor_negativo?: number | null
+          valor_pago?: number | null
+          valor_previsto?: number | null
+          vencimento?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
