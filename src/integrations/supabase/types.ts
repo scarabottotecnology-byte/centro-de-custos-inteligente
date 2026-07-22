@@ -14,6 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
+      pricing_products: {
+        Row: {
+          id: string
+          sku: string | null
+          nome: string
+          categoria: string | null
+          unidade: string | null
+          custo_materia_prima: number
+          custo_embalagem: number
+          mao_de_obra_direta: number
+          custos_indiretos: number
+          outros_custos_variaveis: number
+          custo_variavel_unitario: number
+          preco_atual: number | null
+          margem_desejada_pct: number
+          volume_mensal_estimado: number
+          ativo: boolean
+          import_batch_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          sku?: string | null
+          nome: string
+          categoria?: string | null
+          unidade?: string | null
+          custo_materia_prima?: number
+          custo_embalagem?: number
+          mao_de_obra_direta?: number
+          custos_indiretos?: number
+          outros_custos_variaveis?: number
+          preco_atual?: number | null
+          margem_desejada_pct?: number
+          volume_mensal_estimado?: number
+          ativo?: boolean
+          import_batch_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          sku?: string | null
+          nome?: string
+          categoria?: string | null
+          unidade?: string | null
+          custo_materia_prima?: number
+          custo_embalagem?: number
+          mao_de_obra_direta?: number
+          custos_indiretos?: number
+          outros_custos_variaveis?: number
+          preco_atual?: number | null
+          margem_desejada_pct?: number
+          volume_mensal_estimado?: number
+          ativo?: boolean
+          import_batch_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sales_channels: {
+        Row: {
+          id: string
+          nome: string
+          comissao_pct: number
+          taxa_pagamento_pct: number
+          impostos_pct: number
+          frete_pct: number
+          marketing_pct: number
+          margem_desejada_pct: number | null
+          ativo: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          nome: string
+          comissao_pct?: number
+          taxa_pagamento_pct?: number
+          impostos_pct?: number
+          frete_pct?: number
+          marketing_pct?: number
+          margem_desejada_pct?: number | null
+          ativo?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          nome?: string
+          comissao_pct?: number
+          taxa_pagamento_pct?: number
+          impostos_pct?: number
+          frete_pct?: number
+          marketing_pct?: number
+          margem_desejada_pct?: number | null
+          ativo?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      commercial_expenses: {
+        Row: {
+          id: string
+          descricao: string
+          categoria: string | null
+          valor_mensal: number
+          tipo: string
+          competencia: string | null
+          import_batch_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          descricao: string
+          categoria?: string | null
+          valor_mensal?: number
+          tipo?: string
+          competencia?: string | null
+          import_batch_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          descricao?: string
+          categoria?: string | null
+          valor_mensal?: number
+          tipo?: string
+          competencia?: string | null
+          import_batch_id?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       financial_entries: {
         Row: {
           bu: string | null
