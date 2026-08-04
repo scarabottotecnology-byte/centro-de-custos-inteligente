@@ -473,7 +473,7 @@ export default function PricingChannelsExpenses() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Canais de Venda & Despesas Comerciais</h1>
-        <p className="text-sm text-muted-foreground">Configure a estrutura de custo variável de cada canal e as despesas fixas usadas no ponto de equilíbrio</p>
+        <p className="text-sm text-muted-foreground">Marketplace, loja física e atacado têm custos diferentes — aplicar a mesma margem para todos é deixar dinheiro na mesa.</p>
       </div>
       <Tabs defaultValue="channels">
         <TabsList>

@@ -114,7 +114,7 @@ export default function PricingCalculator() {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Package className="h-16 w-16 text-muted-foreground" />
-        <p className="text-muted-foreground text-lg">Nenhum produto ativo cadastrado ainda.</p>
+        <p className="text-muted-foreground text-lg">Sem produto cadastrado, não tem como simular preço.</p>
         <a href="/pricing/products" className="text-primary underline">Cadastrar produtos</a>
       </div>
     );
@@ -126,7 +126,7 @@ export default function PricingCalculator() {
         <Calculator className="h-6 w-6 text-primary" />
         <div>
           <h1 className="text-2xl font-bold">Calculadora de Precificação</h1>
-          <p className="text-sm text-muted-foreground">Simule o preço de venda e veja margem, ponto de equilíbrio e o canal ideal em tempo real</p>
+          <p className="text-sm text-muted-foreground">Descubra a margem líquida real e o ponto de equilíbrio antes de vender no prejuízo — não depois.</p>
         </div>
       </div>
 

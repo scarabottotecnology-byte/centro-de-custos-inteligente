@@ -35,7 +35,10 @@ export default function Entries() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Lançamentos</h1>
+      <div>
+        <h1 className="text-2xl font-bold">Lançamentos</h1>
+        <p className="text-sm text-muted-foreground">Cada lançamento, buscável e filtrável — sem virar planilha perdida em e-mail.</p>
+      </div>
       <div className="flex flex-wrap gap-3">
         <Input placeholder="Buscar fornecedor, razão social..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-sm" />
         <Select value={filterGrupo} onValueChange={setFilterGrupo}>

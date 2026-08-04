@@ -85,10 +85,27 @@ export default function Dashboard() {
 
   if (entries.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 gap-4">
-        <FileText className="h-16 w-16 text-muted-foreground" />
-        <p className="text-muted-foreground text-lg">Nenhum dado importado ainda.</p>
-        <a href="/import" className="text-primary underline">Importar planilha</a>
+      <div className="max-w-3xl mx-auto space-y-8 py-8">
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl font-bold">Fechamento demora dias? Orçamento só no Excel?</h1>
+          <p className="text-muted-foreground">Importe sua base financeira e tenha centro de custo, fornecedor e resultado num só lugar — sem depender de planilha solta.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          {[
+            "Fechamento gerencial demora dias",
+            "Custos sem critério de rateio",
+            "Cada área enxerga um número diferente",
+            "Falta visibilidade por centro de custo e fornecedor",
+          ].map((item) => (
+            <div key={item} className="rounded-lg border border-border bg-card px-4 py-3 text-muted-foreground">
+              {item}
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col items-center justify-center gap-4 pt-4">
+          <FileText className="h-12 w-12 text-muted-foreground" />
+          <a href="/import" className="text-primary underline font-medium">Importar planilha</a>
+        </div>
       </div>
     );
   }

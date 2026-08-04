@@ -60,7 +60,10 @@ export default function CostCenters() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Análise por Centro de Custos</h1>
+      <div>
+        <h1 className="text-2xl font-bold">Análise por Centro de Custos</h1>
+        <p className="text-sm text-muted-foreground">Rateio sem critério esconde onde o dinheiro está indo. Veja o gasto real por centro e fornecedor.</p>
+      </div>
 
       <div className="flex flex-wrap gap-3">
         <Select value={ccType} onValueChange={(v) => { setCcType(v as any); setSelectedCC("all"); }}>

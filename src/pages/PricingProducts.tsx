@@ -193,7 +193,7 @@ export default function PricingProducts() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Catálogo de Produtos</h1>
-          <p className="text-sm text-muted-foreground">Cadastre os produtos e suas variáveis de custo para precificação</p>
+          <p className="text-sm text-muted-foreground">Preço no achismo custa margem. Cadastre o custo real de cada produto uma vez e precifique com critério daqui pra frente.</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -322,7 +322,7 @@ export default function PricingProducts() {
           ) : products.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
               <Package className="h-12 w-12" />
-              <p>Nenhum produto cadastrado ainda.</p>
+              <p>Nenhum produto cadastrado ainda. Importe a planilha ou cadastre o primeiro.</p>
             </div>
           ) : (
             <div className="rounded-lg border overflow-auto max-h-[60vh]">
