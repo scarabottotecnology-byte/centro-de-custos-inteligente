@@ -1,0 +1,12 @@
+' ============================================================
+' Cole no módulo de código de "ThisWorkbook" (duplo clique em
+' "ThisWorkbook" no Project Explorer do VBA Editor).
+' ============================================================
+
+Private Sub Workbook_Open()
+    modPainel.IniciarAtualizacaoAutomatica
+End Sub
+
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    modPainel.PararAtualizacaoAutomatica
+End Sub

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>Painel de Centro de Custos</title>
+<style>
+  body{font-family:"Segoe UI",Arial,sans-serif;margin:0;padding:16px;background:#0f1720;color:#e6edf3;}
+  h1{font-size:16px;margin:0 0 12px;font-weight:600;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:6px 8px;text-align:right;border-bottom:1px solid #26313d;}
+  th:first-child,td:first-child{text-align:left;}
+  th{color:#9fb3c8;font-weight:600;}
+  .pos{color:#4ade80;}
+  .neg{color:#f87171;}
+  #atualizado{font-size:11px;color:#6b7f92;margin-top:10px;}
+</style>
+</head>
+<body>
+  <h1>Centro de Custos — Orçado x Realizado</h1>
+  <table id="tabela">
+    <thead>
+      <tr><th>Centro de Custo</th><th>Orçado</th><th>Realizado</th><th>Variação</th></tr>
+    </thead>
+    <tbody id="corpo"><tr><td colspan="4">Aguardando dados do Excel…</td></tr></tbody>
+  </table>
+  <div id="atualizado"></div>
+
+  <script>
+    function formatarMoeda(v) {
+      return Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function atualizarPainel(dados) {
+      var corpo = document.getElementById('corpo');
+      corpo.innerHTML = '';
+
+      if (!dados || dados.length === 0) {
+        corpo.innerHTML = '<tr><td colspan="4">Sem dados.</td></tr>';
+        return;
+      }
+
+      dados.forEach(function (item) {
+        var variacao = item.realizado - item.orcado;
+        var classe = variacao <= 0 ? 'pos' : 'neg';
+        var linha = document.createElement('tr');
+        linha.innerHTML =
+          '<td>' + item.centro + '</td>' +
+          '<td>' + formatarMoeda(item.orcado) + '</td>' +
+          '<td>' + formatarMoeda(item.realizado) + '</td>' +
+          '<td class="' + classe + '">' + formatarMoeda(variacao) + '</td>';
+        corpo.appendChild(linha);
+      });
+
+      document.getElementById('atualizado').textContent =
+        'Atualizado em ' + new Date().toLocaleTimeString('pt-BR');
+    }
+  </script>
+
+  <!-- Este arquivo é reescrito pela macro VBA (AtualizarDadosPainel) a cada -->
+  <!-- alteração na planilha ou a cada 5s. Ele já chama atualizarPainel(). -->
+  <script src="dados.js"></script>
+</body>
+</html>

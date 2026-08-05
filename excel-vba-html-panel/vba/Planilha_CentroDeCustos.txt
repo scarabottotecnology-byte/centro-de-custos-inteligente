@@ -1,0 +1,12 @@
+' ============================================================
+' Cole no módulo de código da planilha "CentroDeCustos"
+' (duplo clique nela no Project Explorer do VBA Editor).
+' Isso atualiza o painel instantaneamente sempre que alguém
+' editar as colunas A:C dessa planilha.
+' ============================================================
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    If Not Intersect(Target, Me.Range("A:C")) Is Nothing Then
+        modPainel.AtualizarDadosPainel
+    End If
+End Sub
