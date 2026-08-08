@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { findNavItem } from "@/app/navigation";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { pathname } = useLocation();
@@ -23,6 +24,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   fase {current.phase}
                 </span>
               )}
+            </div>
+            <div className="ml-auto flex items-center gap-1">
+              <ThemeToggle />
             </div>
           </header>
           <main className="min-w-0 flex-1 overflow-auto p-6">{children}</main>
