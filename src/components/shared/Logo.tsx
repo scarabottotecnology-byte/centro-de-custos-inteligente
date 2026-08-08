@@ -20,7 +20,13 @@ const BAND = "M9 16 Q32 6 55 16 L53.8 21.5 Q32 11.5 10.2 21.5 Z";
 
 interface LogoMarkProps {
   className?: string;
-  /** Sem a faixa de acento — para tamanhos abaixo de ~20px, onde ela vira ruído. */
+  /**
+   * Sem a faixa de acento.
+   *
+   * Obrigatório abaixo de ~30px: nesse tamanho a faixa clara no topo deixa de
+   * ler como a linha de carga do arco e passa a ler como líquido dentro de um
+   * recipiente. A silhueta sozinha não tem essa ambiguidade.
+   */
   plain?: boolean;
 }
 
@@ -46,12 +52,12 @@ interface LogoProps {
 
 export function Logo({ className, markOnly = false }: LogoProps) {
   if (markOnly) {
-    return <LogoMark className={cn("size-7", className)} />;
+    return <LogoMark className={cn("size-7", className)} plain />;
   }
 
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <LogoMark className="size-7 shrink-0" />
+      <LogoMark className="size-7 shrink-0" plain />
       <span className="flex flex-col leading-none">
         <span className="font-display text-[0.95rem] font-semibold tracking-[0.08em]">
           KEYSTONE
