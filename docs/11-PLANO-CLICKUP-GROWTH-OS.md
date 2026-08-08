@@ -160,6 +160,61 @@ e 15, travam o roadmap.
 
 ## Estado da execução
 
+### Criado no ClickUp
+
+| Objeto | ID | Situação |
+|---|---|---|
+| Pasta **GROWTH OS — Produto** | `901318739362` | ✅ |
+| EIXO A — Fundação | `901328129599` | ✅ |
+| EIXO B — Conteúdo | `901328129600` | ✅ |
+| EIXO C — Publicação e Análise | `901328129601` | ✅ |
+| EIXO D — Demanda | `901328129602` | ✅ |
+| EIXO E — Relacionamento | `901328129603` | ✅ |
+| EIXO F — Inteligência | `901328129604` | ✅ |
+| EIXO G — Produção | `901328129605` | ✅ |
+| FASE 1 — Fundação técnica | `86ajy2jwa` | ✅ completa, 14 subtarefas |
+| FASE 2 — Banco, auth e multi-tenant | `86ajy2jwg` | ⚠️ 4 de 18 subtarefas |
+| FASE 3 — Command Center | `86ajy2jwh` | ⚠️ 0 de 9 subtarefas |
+
+**29 de 245 objetos criados (12%).**
+
+### O que falta
+
+| Pendência | Volume |
+|---|---|
+| FASE 2, subtarefas 05–18 — inclui a **06, que corrige o C-01** | 14 |
+| FASE 3, subtarefas | 9 |
+| Fichas de fase dos eixos B a G | 21 |
+| Subtarefas dos eixos B a G | 172 |
+
+### Histórico
+
 | Data | Evento |
 |---|---|
-| 08/08/2026 | Estrutura especificada. Criação da pasta bloqueada por rate limit da API do ClickUp (224 min). Nova tentativa agendada. |
+| 08/08 · tarde | Estrutura especificada. Criação bloqueada por rate limit (224 min). Reagendada. |
+| 08/08 · 18:10 | Segunda tentativa: ainda bloqueado, 126 min restantes. |
+| 08/08 · 20:35 | Cota liberada. Pasta, 7 listas, 3 fichas do EIXO A e 18 subtarefas criadas. |
+| 08/08 · 20:38 | **Cota diária esgotada em ~29 objetos** — 1438 min (24 h) para renovar. Reagendado para 09/08 às 20:51. |
+
+### Nota sobre o limite da API
+
+O bloqueio de 1438 minutos indica **cota diária**, não janela deslizante: renova
+uma vez por dia. Na prática, cerca de 30 objetos por dia — os 216 restantes
+levariam mais de uma semana em criações automatizadas.
+
+Duas alternativas, se a velocidade importar:
+
+1. **Criar as 21 fichas de fase restantes primeiro e as subtarefas depois.** Em
+   um dia o roadmap inteiro fica visível; o detalhe entra ao longo da semana. É
+   a ordem já programada para a próxima execução.
+2. **Investigar o consumo da cota.** O limite bateu com poucas chamadas feitas
+   por esta sessão — vale verificar se outra integração conectada à conta
+   (Zap, app, automação) está consumindo o mesmo teto.
+
+### Correção pendente de aplicar
+
+A FASE 5 mudou depois que o documento 12 foi escrito. Ver
+[`14-GERACAO-DE-ARTE-E-AUTOMACAO.md`](./14-GERACAO-DE-ARTE-E-AUTOMACAO.md):
+passou de 2,5 para 3,5 semanas e ganhou geração automática de arte. A ficha da
+FASE 5 deve ser criada a partir do documento 14, não do 12 — e os prazos das
+fases seguintes deslocam uma semana.
