@@ -108,17 +108,33 @@ risco de conformidade: o primeiro em que o sistema fala com pessoas reais.*
 
 ## Conteúdo de cada ficha
 
-Cada uma das 24 fichas recebe, na descrição:
+O conteúdo completo — descrição e subtarefas de cada uma das 24 fichas — está
+especificado em **[`12-DETALHAMENTO-FASES.md`](./12-DETALHAMENTO-FASES.md)**, que
+é a fonte da verdade para a criação.
 
-1. **Objetivo** — uma frase sobre o que a fase entrega.
-2. **Entregas** — a lista de itens do roadmap.
-3. **Critérios de aceite** — os checkboxes de `09-ROADMAP-E-ACEITE.md §3`,
-   em formato de checklist markdown, para marcar dentro do card.
-4. **Dependência** — qual fase precisa estar concluída antes.
-5. **Referência** — o documento de arquitetura correspondente.
+Cada ficha recebe, na descrição:
+
+1. **Objetivo** — o que a fase entrega.
+2. **Por que esta fase existe** — a razão técnica ou de risco por trás dela, para
+   que quem executar entenda a decisão em vez de só seguir a lista.
+3. **Critérios de aceite** — checklist markdown marcável dentro do card.
+4. **Dependência** e **referência** ao documento de arquitetura.
+
+Cada ficha recebe também suas **subtarefas**, nomeadas com a etiqueta do STEP do
+método de execução (`[DATABASE]`, `[BACKEND]`, `[TEST]`…), cada uma com a
+especificação do que precisa ser feito.
 
 A ficha só é fechada quando todos os critérios estiverem marcados — é a
 `Definição de COMPLETE` do documento 09 aplicada dentro do ClickUp.
+
+### Volume real
+
+| | |
+|---|---|
+| Fichas de fase | 24 |
+| Subtarefas | 213 |
+| Critérios de aceite | 140 |
+| Total de objetos no ClickUp | **245** |
 
 ---
 
