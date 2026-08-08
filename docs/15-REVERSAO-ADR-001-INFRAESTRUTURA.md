@@ -125,12 +125,78 @@ o resolve — apenas o move para fora do campo de visão.
 
 ---
 
-## Pendências desta decisão
+## Decisões confirmadas pelo cliente (08/08)
 
-1. **Criar o repositório novo** e migrar o trabalho de frontend já entregue.
-2. **Criar o projeto Supabase** na organização da Keystone.
-3. **Atualizar as fichas do ClickUp** — as da FASE 2 descrevem a migração do
-   Cost Intelligence e a correção do C-01, que saem de escopo.
-4. **Abrir a correção do C-01** como tarefa separada, no produto certo.
-5. **Confirmar o destino do Centro de Custos:** continua na Lovable, ou também
-   migra para infraestrutura própria? É decisão de negócio, não técnica.
+### O Cost Intelligence vai junto
+
+O Centro de Custos **migra para o Growth OS** como módulo, com os dados indo
+para o Supabase novo.
+
+**Isto resolve o C-01 por construção.** O achado crítico morre na migração: os
+dados chegam num banco onde a RLS nasce correta, e as políticas `anon` do
+projeto antigo deixam de importar assim que a aplicação antiga for aposentada.
+O risco não fica órfão — some.
+
+**Em troca, aparece uma dependência nova.** A migração agora é entre dois
+projetos Supabase distintos, e o de origem (`hlvkkziiaeyqyenekdck`) é gerenciado
+pela Lovable, fora do alcance das ferramentas da Keystone. Para exportar os
+dados é preciso: acesso ao painel da Lovable, ou um dump gerado por lá, ou uma
+exportação feita pela própria aplicação atual — que tem leitura anônima liberada
+e, ironicamente, permite extrair tudo sem credencial nenhuma.
+
+A FASE 2 volta a **3 semanas**, e o roadmap a **52**. Migração entre projetos é
+mais delicada que o backfill original.
+
+### Terceira plataforma: Cloudflare
+
+Entra para hospedar o frontend e servir a mídia gerada das publicações. Encaixa
+bem: o Instagram exige a arte em URL pública no momento da criação do container,
+e R2 com URL assinada resolve isso sem expor o Storage do Supabase.
+
+Decisão de detalhe adiada para a FASE 24 (deploy): Workers vs. Pages, e se o R2
+substitui ou complementa o Supabase Storage.
+
+---
+
+## Infraestrutura criada
+
+| Recurso | Situação |
+|---|---|
+| **Supabase `keystone-growth-os`** | ✅ criado — ref `rplnjrqpzqznbxfascqs`, região `sa-east-1` (São Paulo), organização da Keystone, ativo |
+| Repositório GitHub | ❌ **bloqueado** — a integração retornou `403 Resource not accessible by integration` |
+| Projeto Cloudflare | pendente, FASE 24 |
+
+**Região São Paulo** foi escolhida deliberadamente: latência para usuários
+brasileiros e dado pessoal de titulares brasileiros hospedado no país, o que
+simplifica o capítulo de transferência internacional no ROPA da LGPD.
+
+### O bloqueio do GitHub
+
+A App do GitHub conectada a esta sessão tem escopo limitado ao repositório
+`centro-de-custos-inteligente` e não pode criar repositórios novos. É limitação
+de permissão, não erro.
+
+**Precisa de ação do Jefferson.** Duas saídas:
+
+1. Criar o repositório manualmente — `keystone-growth-os`, privado — e me dar o
+   nome para eu anexá-lo à sessão com `add_repo`.
+2. Ampliar a permissão da App do GitHub em
+   `claude.ai/admin-settings/claude-in-slack`, e eu crio.
+
+Enquanto isso, o trabalho de frontend continua na branch atual e migra assim que
+o destino existir.
+
+---
+
+## Pendências
+
+1. **Repositório novo** — bloqueado, aguarda ação do Jefferson.
+2. **Migrar o frontend já entregue** para o repositório novo: design system,
+   estrutura de módulos, shell, tema, identidade visual, testes.
+3. **Plano de exportação dos dados** do Supabase gerenciado pela Lovable.
+4. **Atualizar as fichas do ClickUp** — a FASE 2 muda de escopo: sai o backfill,
+   entra a migração entre projetos.
+5. **Apontar o `.env`** para o projeto novo quando a migração começar.
+6. **Decidir o destino da aplicação atual** depois da migração: aposentar ou
+   manter em paralelo. Enquanto ela existir com as políticas `anon`, o C-01
+   continua explorável, mesmo que o dado já esteja duplicado no banco novo.
