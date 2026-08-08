@@ -87,9 +87,17 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
+        // Display: serifada de contraste alto. Em consultoria financeira a
+        // serifa sinaliza julgamento e instituição — é o contraste que faltava.
+        display: [
+          "Newsreader Variable", "Newsreader", "Iowan Old Style", "Georgia", "serif",
+        ],
+        // Interface e dado: figuras tabulares reais e altura-x alta. Num produto
+        // onde coluna de número é o conteúdo, dígito de largura variável
+        // desalinha decimal e destrói a confiança na tabela.
         sans: [
-          "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto",
-          "Helvetica Neue", "Arial", "sans-serif",
+          "Inter Variable", "Inter", "-apple-system", "BlinkMacSystemFont",
+          "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif",
         ],
         mono: [
           "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas",

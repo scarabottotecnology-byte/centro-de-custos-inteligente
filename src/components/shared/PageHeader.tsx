@@ -20,7 +20,11 @@ export function PageHeader({
     <header className="flex flex-wrap items-start justify-between gap-4 border-b border-border pb-5">
       <div className="flex flex-col gap-1.5">
         {eyebrow && <span className="label-caps">{eyebrow}</span>}
-        <h1 className="text-balance text-2xl font-semibold tracking-tight">
+        {/* Três regras que separam premium de amador, e que estavam quebradas:
+            serifada no display, peso 600 (nunca 700+) e tracking negativo.
+            Peso alto em tamanho grande é o que fazia a tipografia parecer
+            infantil — a presença vem do tamanho, não da gordura da letra. */}
+        <h1 className="text-balance font-display text-[1.75rem] font-semibold leading-[1.15] tracking-[-0.02em]">
           {title}
         </h1>
         {description && (

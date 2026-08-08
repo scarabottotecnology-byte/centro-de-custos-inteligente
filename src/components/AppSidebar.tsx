@@ -1,5 +1,6 @@
 import { NavLink } from "@/components/NavLink";
 import { NAVIGATION } from "@/app/navigation";
+import { Logo, LogoMark } from "@/components/shared/Logo";
 import { cn } from "@/lib/utils";
 import {
   Sidebar,
@@ -7,6 +8,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -26,32 +28,22 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent className="gap-0">
-        <div
-          className={cn(
-            "flex h-14 items-center border-b border-sidebar-border px-4",
-            collapsed && "justify-center px-0",
-          )}
-        >
-          {collapsed ? (
-            <span
-              className="font-semibold tracking-tight text-sidebar-primary"
-              aria-hidden="true"
-            >
-              K
-            </span>
-          ) : (
-            <div className="flex flex-col leading-none">
-              <span className="text-sm font-semibold tracking-tight text-sidebar-accent-foreground">
-                KEYSTONE
-              </span>
-              <span className="mt-0.5 text-[0.65rem] font-medium uppercase tracking-[0.14em] text-sidebar-primary">
-                Growth OS
-              </span>
-            </div>
-          )}
-        </div>
+      {/* Fora do SidebarContent de propósito: o conteúdo rola quando a lista de
+          módulos passa da altura da tela, e a marca não pode rolar junto. */}
+      <SidebarHeader
+        className={cn(
+          "h-14 shrink-0 flex-row items-center border-b border-sidebar-border px-4 py-0",
+          collapsed && "justify-center px-0",
+        )}
+      >
+        {collapsed ? (
+          <LogoMark className="size-6 text-sidebar-accent-foreground" plain />
+        ) : (
+          <Logo className="text-sidebar-accent-foreground [&_.fill-primary]:fill-sidebar-primary [&_span.text-primary]:text-sidebar-primary" />
+        )}
+      </SidebarHeader>
 
+      <SidebarContent className="gap-0">
         <div className="flex flex-col gap-1 py-2">
           {NAVIGATION.map((group) => (
             <SidebarGroup key={group.label} className="py-1">
