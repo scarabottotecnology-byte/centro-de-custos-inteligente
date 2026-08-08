@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
-import { useFinancialData } from "@/hooks/useFinancialData";
+import { useFinancialData } from "@/modules/cost-intelligence/hooks/useFinancialData";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { QueryState } from "@/components/shared/QueryState";
 
 export default function Entries() {
-  const { data: entries = [], isLoading } = useFinancialData();
+  const { data: entries = [], isLoading, isError, error, refetch } = useFinancialData();
   const [search, setSearch] = useState("");
   const [filterGrupo, setFilterGrupo] = useState("all");
 
@@ -31,11 +33,24 @@ export default function Entries() {
   const fmt = (v: number | null) =>
     v != null ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v) : "—";
 
-  if (isLoading) return <div className="text-muted-foreground p-8">Carregando...</div>;
-
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Lançamentos</h1>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Controladoria"
+        title="Lançamentos"
+        description="Consulta detalhada dos lançamentos importados, com busca e filtro por grupo."
+      />
+
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        isEmpty={entries.length === 0}
+        onRetry={() => refetch()}
+        emptyTitle="Nenhum lançamento importado ainda"
+        emptyDescription="Importe uma planilha para que os lançamentos apareçam aqui."
+      >
+      <div className="space-y-4">
       <div className="flex flex-wrap gap-3">
         <Input placeholder="Buscar fornecedor, razão social..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-sm" />
         <Select value={filterGrupo} onValueChange={setFilterGrupo}>
@@ -78,6 +93,8 @@ export default function Entries() {
           </TableBody>
         </Table>
       </div>
+      </div>
+      </QueryState>
     </div>
   );
 }

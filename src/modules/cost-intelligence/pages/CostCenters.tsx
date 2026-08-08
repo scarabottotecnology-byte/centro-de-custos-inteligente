@@ -1,13 +1,16 @@
 import { useMemo, useState } from "react";
-import { useFinancialData } from "@/hooks/useFinancialData";
+import { useFinancialData } from "@/modules/cost-intelligence/hooks/useFinancialData";
+import type { CostCenterField } from "@/modules/cost-intelligence/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { QueryState } from "@/components/shared/QueryState";
 
 export default function CostCenters() {
-  const { data: entries = [], isLoading } = useFinancialData();
-  const [ccType, setCcType] = useState<"cca" | "ccs" | "cod_cc">("cca");
+  const { data: entries = [], isLoading, isError, error, refetch } = useFinancialData();
+  const [ccType, setCcType] = useState<CostCenterField>("cca");
   const [selectedCC, setSelectedCC] = useState<string>("all");
 
   const ccOptions = useMemo(() => {
@@ -56,14 +59,27 @@ export default function CostCenters() {
   const fmt = (v: number) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
-  if (isLoading) return <div className="text-muted-foreground p-8">Carregando...</div>;
-
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Análise por Centro de Custos</h1>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Controladoria"
+        title="Análise por centro de custo"
+        description="Detalhamento de um centro específico, com comparativo e totalização por fornecedor."
+      />
+
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        isEmpty={entries.length === 0}
+        onRetry={() => refetch()}
+        emptyTitle="Nenhum lançamento importado ainda"
+        emptyDescription="Importe uma planilha para analisar os centros de custo."
+      >
+      <div className="space-y-6">
 
       <div className="flex flex-wrap gap-3">
-        <Select value={ccType} onValueChange={(v) => { setCcType(v as any); setSelectedCC("all"); }}>
+        <Select value={ccType} onValueChange={(v) => { setCcType(v as CostCenterField); setSelectedCC("all"); }}>
           <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="cca">CCA</SelectItem>
@@ -106,8 +122,8 @@ export default function CostCenters() {
               <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
               <YAxis dataKey="name" type="category" tick={{ fontSize: 10 }} width={100} />
               <Tooltip formatter={(v: number) => fmt(v)} />
-              <Bar dataKey="pago" name="Pago" fill="hsl(160, 60%, 45%)" radius={[0, 4, 4, 0]} />
-              <Bar dataKey="previsto" name="Previsto" fill="hsl(220, 70%, 50%)" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="pago" name="Pago" fill="hsl(var(--chart-1))" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="previsto" name="Previsto" fill="hsl(var(--chart-2))" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -139,6 +155,8 @@ export default function CostCenters() {
           </CardContent>
         </Card>
       )}
+      </div>
+      </QueryState>
     </div>
   );
 }

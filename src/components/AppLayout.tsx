@@ -1,17 +1,31 @@
+import { useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { findNavItem } from "@/app/navigation";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
+  const current = findNavItem(pathname);
+
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <header className="h-14 flex items-center border-b border-border bg-card px-4">
-            <SidebarTrigger className="mr-4" />
-            <span className="text-sm text-muted-foreground">Dashboard Financeiro</span>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+            <SidebarTrigger />
+            <div className="flex min-w-0 items-baseline gap-2">
+              <span className="truncate text-sm font-medium">
+                {current?.label ?? "Keystone Growth OS"}
+              </span>
+              {current?.status === "planned" && (
+                <span className="shrink-0 rounded border border-border px-1.5 py-px font-mono text-[0.62rem] tabular-nums text-muted-foreground">
+                  fase {current.phase}
+                </span>
+              )}
+            </div>
           </header>
-          <main className="flex-1 p-6 overflow-auto">{children}</main>
+          <main className="min-w-0 flex-1 overflow-auto p-6">{children}</main>
         </div>
       </div>
     </SidebarProvider>

@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import * as XLSX from "xlsx";
 import { supabase } from "@/integrations/supabase/client";
-import { DB_FIELDS, autoMapFields, type FieldMapping, excelSerialToDate } from "@/lib/field-mapping";
+import { DB_FIELDS, autoMapFields, type FieldMapping, excelSerialToDate } from "@/modules/cost-intelligence/lib/field-mapping";
+import type { FinancialEntryInsert } from "@/modules/cost-intelligence/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,6 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "sonner";
 import { Upload, CheckCircle, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export default function ImportPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -69,38 +71,50 @@ export default function ImportPage() {
       const CHUNK = 500;
       for (let i = 0; i < rows.length; i += CHUNK) {
         const chunk = rows.slice(i, i + CHUNK).map((row) => {
-          const entry: Record<string, unknown> = { import_batch_id: batchId };
+          const entry: FinancialEntryInsert = { import_batch_id: batchId };
           for (const [dbField, col] of Object.entries(mapping)) {
             const val = row[col];
             const fieldDef = DB_FIELDS.find((f) => f.key === dbField);
+            const key = dbField as keyof FinancialEntryInsert;
             if (fieldDef && "type" in fieldDef && fieldDef.type === "number") {
-              entry[dbField] = val != null ? Number(val) || 0 : null;
+              Object.assign(entry, {
+                [key]: val != null ? Number(val) || 0 : null,
+              });
             } else if (fieldDef && "type" in fieldDef && fieldDef.type === "date") {
-              entry[dbField] = val != null ? excelSerialToDate(val) : null;
+              Object.assign(entry, {
+                [key]: val != null ? excelSerialToDate(val) : null,
+              });
             } else {
-              entry[dbField] = val != null ? String(val) : null;
+              Object.assign(entry, {
+                [key]: val != null ? String(val) : null,
+              });
             }
           }
           return entry;
         });
 
-        const { error } = await supabase.from("financial_entries").insert(chunk as any);
+        const { error } = await supabase.from("financial_entries").insert(chunk);
         if (error) throw error;
       }
 
       toast.success(`${rows.length} registros importados com sucesso!`);
       setDone(true);
       queryClient.invalidateQueries({ queryKey: ["financial-entries"] });
-    } catch (err: any) {
-      toast.error("Erro na importação: " + err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      toast.error("Erro na importação: " + message);
     } finally {
       setImporting(false);
     }
   };
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <h1 className="text-2xl font-bold">Importar Planilha</h1>
+    <div className="flex max-w-4xl flex-col gap-6">
+      <PageHeader
+        eyebrow="Controladoria"
+        title="Importar planilha"
+        description="Envie um .xlsx ou .csv, confira o mapeamento de colunas e revise o preview antes de gravar."
+      />
 
       {/* Upload */}
       <Card>
