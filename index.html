@@ -1,22 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
-    <title>Lovable App</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+    <meta name="theme-color" content="#0D1417" />
+    <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
+    <link rel="apple-touch-icon" href="/brand/avatar-512.png" />
 
-    <!-- TODO: Update og:title to match your application name -->
-    <meta property="og:title" content="Lovable App" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <title>Keystone Growth OS</title>
+    <meta
+      name="description"
+      content="Sistema de inteligência comercial e crescimento orientado por IA da Keystone Controladoria."
+    />
+
+    <meta property="og:title" content="Keystone Growth OS" />
+    <meta
+      property="og:description"
+      content="Sistema de inteligência comercial e crescimento orientado por IA."
+    />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:card" content="summary" />
+
+    <!--
+      Aplica o tema antes do primeiro paint.
+
+      Sem isto, o React só adiciona a classe na montagem e o usuário vê um
+      flash branco a cada carregamento (FOUC). O script precisa ser inline e
+      síncrono, no head, para rodar antes de o navegador pintar qualquer coisa.
+
+      A chave e o padrão devem espelhar o ThemeProvider em src/app/.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("keystone-theme") || "dark";
+          var resolved =
+            stored === "system"
+              ? window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"
+              : stored;
+          document.documentElement.classList.add(resolved);
+          document.documentElement.style.colorScheme = resolved;
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
   </head>
 
   <body>
