@@ -1,0 +1,2324 @@
+<title>Backlog do Canal de Controladoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --paper:#ffffff;
+  --surface:#f4f6fa;
+  --surface-2:#e9edf4;
+  --rule:#d8dfe9;
+  --rule-strong:#b9c4d3;
+  --ink:#141922;
+  --body:#333d4b;
+  --muted:#647082;
+  --accent:#1b3f73;
+  --accent-wash:#eaf0f9;
+  --crit:#a32330;
+  --crit-wash:#fbecee;
+  --warn:#875608;
+  --warn-wash:#faf1e0;
+  --ok:#276549;
+  --ok-wash:#e7f2ed;
+  --shadow:0 1px 2px rgba(20,25,34,.05), 0 10px 26px -18px rgba(20,25,34,.35);
+  --sans:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"IBM Plex Serif",ui-serif,Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f131a;
+    --surface:#161d27;
+    --surface-2:#1e2733;
+    --rule:#2b3542;
+    --rule-strong:#3e4b5b;
+    --ink:#e9edf4;
+    --body:#bcc6d3;
+    --muted:#8794a4;
+    --accent:#88ade2;
+    --accent-wash:#172231;
+    --crit:#e8848f;
+    --crit-wash:#2b1a1e;
+    --warn:#d9a95a;
+    --warn-wash:#26200f;
+    --ok:#6fbf9b;
+    --ok-wash:#152521;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f131a;
+  --surface:#161d27;
+  --surface-2:#1e2733;
+  --rule:#2b3542;
+  --rule-strong:#3e4b5b;
+  --ink:#e9edf4;
+  --body:#bcc6d3;
+  --muted:#8794a4;
+  --accent:#88ade2;
+  --accent-wash:#172231;
+  --crit:#e8848f;
+  --crit-wash:#2b1a1e;
+  --warn:#d9a95a;
+  --warn-wash:#26200f;
+  --ok:#6fbf9b;
+  --ok-wash:#152521;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 30px -20px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--body);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{color:var(--ink);text-wrap:balance;margin:0}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible,button:focus-visible{
+  outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;
+}
+.wrap{max-width:74rem;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem)}
+.prose{max-width:66ch}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.topbar-in{display:flex;align-items:center;gap:1.5rem;height:3.25rem;justify-content:space-between}
+.topbar .mark{font-family:var(--mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.topnav{display:flex;gap:1.25rem;overflow-x:auto;scrollbar-width:none}
+.topnav::-webkit-scrollbar{display:none}
+.topnav a{
+  font-size:.82rem;color:var(--muted);text-decoration:none;white-space:nowrap;
+  padding:.15rem 0;border-bottom:2px solid transparent;
+}
+.topnav a:hover{color:var(--ink);border-bottom-color:var(--accent)}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(3rem,7vw,5.5rem) 0 2.5rem;border-bottom:1px solid var(--rule)}
+.eyebrow{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 1.1rem;
+}
+.hero h1{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(2.1rem,5.2vw,3.4rem);line-height:1.08;letter-spacing:-.015em;
+  margin-bottom:1.1rem;
+}
+.hero .lede{font-size:clamp(1.05rem,2vw,1.2rem);max-width:60ch;color:var(--body);margin:0}
+.hero .promise{
+  margin:2rem 0 0;padding:1.1rem 0 1.1rem 1.4rem;
+  border-left:3px solid var(--accent);
+  font-family:var(--serif);font-size:clamp(1.15rem,2.4vw,1.45rem);line-height:1.4;color:var(--ink);
+  max-width:52ch;
+}
+
+/* ---------- stat strip ---------- */
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+  gap:1px;background:var(--rule);border-bottom:1px solid var(--rule);
+}
+.stat{background:var(--paper);padding:1.35rem clamp(1rem,3vw,1.75rem)}
+.stat dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 .35rem}
+.stat dd{margin:0;font-family:var(--serif);font-size:1.85rem;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.stat .sub{display:block;font-family:var(--sans);font-size:.76rem;font-weight:400;color:var(--muted);margin-top:.3rem}
+
+/* ---------- sections ---------- */
+section.block{padding:clamp(2.75rem,6vw,4.25rem) 0;border-bottom:1px solid var(--rule)}
+.sec-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:.6rem}
+.sec-num{font-family:var(--mono);font-size:.78rem;color:var(--accent);font-weight:500}
+.sec-head h2{font-family:var(--serif);font-size:clamp(1.5rem,3.2vw,2rem);font-weight:600;letter-spacing:-.01em}
+.sec-intro{max-width:62ch;margin:0 0 2rem;color:var(--muted)}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:34rem}
+th,td{text-align:left;padding:.7rem .9rem;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;background:var(--surface);white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td strong{color:var(--ink)}
+caption{caption-side:bottom;padding-top:.7rem;font-size:.8rem;color:var(--muted);text-align:left}
+
+/* ---------- cards ---------- */
+.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))}
+.card{
+  border:1px solid var(--rule);border-radius:6px;padding:1.2rem 1.25rem;background:var(--surface);
+}
+.card h4{font-size:1rem;margin-bottom:.15rem}
+.card .role{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 .6rem}
+.card p{margin:0;font-size:.88rem}
+.card .pain{margin-top:.65rem;padding-top:.65rem;border-top:1px solid var(--rule);font-style:italic;color:var(--muted)}
+
+/* ---------- phases ---------- */
+.phases{display:grid;gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.phase{display:grid;grid-template-columns:5.5rem 1fr;gap:1.25rem;padding:1.1rem 1.25rem;border-bottom:1px solid var(--rule);background:var(--paper)}
+.phase:last-child{border-bottom:0}
+.phase:nth-child(even){background:var(--surface)}
+.phase .ph-id{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:500}
+.phase .ph-id span{display:block;color:var(--muted);font-size:.72rem;font-weight:400;margin-top:.2rem}
+.phase h4{font-size:.98rem;margin-bottom:.2rem}
+.phase p{margin:0;font-size:.87rem;color:var(--muted)}
+
+/* ---------- callout ---------- */
+.callout{
+  border:1px solid var(--crit);border-radius:6px;background:var(--crit-wash);
+  padding:1.4rem 1.5rem;
+}
+.callout h3{font-size:1.05rem;color:var(--crit);display:flex;align-items:center;gap:.5rem;margin-bottom:.55rem}
+.callout h3::before{content:"";width:.55rem;height:.55rem;border-radius:50%;background:var(--crit);flex:none}
+.callout p{margin:0 0 1rem;max-width:64ch;font-size:.92rem}
+.callout .tablewrap{background:var(--paper)}
+
+/* ---------- filters ---------- */
+.filters{
+  display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;
+  margin-bottom:1.5rem;padding:.9rem 1rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface);
+  position:sticky;top:3.25rem;z-index:10;
+}
+.filters .flabel{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:.35rem}
+.filters .sep{width:1px;height:1.2rem;background:var(--rule-strong);margin:0 .45rem}
+button.f{
+  font-family:var(--sans);font-size:.78rem;color:var(--body);
+  background:var(--paper);border:1px solid var(--rule-strong);border-radius:999px;
+  padding:.28rem .7rem;cursor:pointer;transition:background .12s,color .12s,border-color .12s;
+}
+button.f:hover{border-color:var(--accent);color:var(--ink)}
+button.f[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.count{margin-left:auto;font-family:var(--mono);font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* ---------- epics ---------- */
+.epic{margin-bottom:2.5rem}
+.epic-head{
+  display:grid;grid-template-columns:auto 1fr auto;gap:1.25rem;align-items:start;
+  padding-bottom:.9rem;border-bottom:2px solid var(--rule-strong);margin-bottom:.25rem;
+}
+.epic-id{
+  font-family:var(--mono);font-size:.78rem;font-weight:600;color:var(--paper);
+  background:var(--accent);border-radius:4px;padding:.25rem .5rem;white-space:nowrap;
+}
+.epic-title h3{font-family:var(--serif);font-size:1.25rem;font-weight:600;margin-bottom:.2rem}
+.epic-title p{margin:0;font-size:.87rem;color:var(--muted);max-width:58ch}
+.epic-stats{display:flex;gap:1.4rem;margin:0}
+.epic-stats dt{font-family:var(--mono);font-size:.63rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.epic-stats dd{margin:0;font-size:1rem;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+.issues{list-style:none;margin:0;padding:0}
+.issue{border-bottom:1px solid var(--rule)}
+.issue[hidden]{display:none}
+.issue details summary{
+  display:grid;grid-template-columns:4.6rem 1fr auto;gap:.9rem;align-items:center;
+  padding:.72rem .25rem;cursor:pointer;list-style:none;
+}
+.issue details summary::-webkit-details-marker{display:none}
+.issue details summary:hover{background:var(--surface)}
+.iid{font-family:var(--mono);font-size:.78rem;color:var(--muted);font-weight:500}
+.ititle{color:var(--ink);font-size:.93rem;font-weight:500}
+details[open] .ititle{color:var(--accent)}
+.chips{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}
+.chip{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.03em;
+  padding:.14rem .45rem;border-radius:3px;white-space:nowrap;border:1px solid transparent;
+}
+.chip-alta{color:var(--crit);background:var(--crit-wash);border-color:var(--crit)}
+.chip-media{color:var(--warn);background:var(--warn-wash);border-color:var(--warn)}
+.chip-baixa{color:var(--ok);background:var(--ok-wash);border-color:var(--ok)}
+.chip-plain{color:var(--muted);background:var(--surface-2)}
+.chip-sprint{color:var(--accent);background:var(--accent-wash);border-color:var(--rule-strong)}
+.issue-body{padding:.3rem 0 1.2rem 5.5rem;max-width:72ch}
+.dep{margin:0 0 .9rem;font-size:.82rem;color:var(--muted);font-family:var(--mono)}
+.dep span{color:var(--ink);font-weight:500}
+.dep-none span{color:var(--ok)}
+.crit-label{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 .45rem;
+}
+.crits{margin:0;padding-left:1.1rem;font-size:.88rem}
+.crits li{margin-bottom:.3rem}
+.crits li::marker{color:var(--accent)}
+.resp{margin:.9rem 0 0;font-size:.82rem;color:var(--muted)}
+.resp strong{color:var(--ink);font-weight:500}
+
+/* ---------- flow ---------- */
+.flow{list-style:none;counter-reset:step;margin:0;padding:0;display:grid;gap:0}
+.flow li{
+  counter-increment:step;display:grid;grid-template-columns:2.2rem 1fr;gap:1rem;
+  padding:.7rem 0;border-bottom:1px solid var(--rule);align-items:baseline;
+}
+.flow li:last-child{border-bottom:0}
+.flow li::before{
+  content:counter(step,decimal-leading-zero);
+  font-family:var(--mono);font-size:.75rem;color:var(--accent);font-weight:500;
+}
+.flow strong{color:var(--ink);font-weight:500}
+.flow .warnstep{color:var(--crit);font-family:var(--mono);font-size:.75rem;display:block;margin-top:.15rem}
+
+footer.pagefoot{padding:2.5rem 0 4rem;color:var(--muted);font-size:.83rem}
+footer.pagefoot p{margin:.25rem 0;max-width:64ch}
+footer.pagefoot code{font-family:var(--mono);font-size:.8rem;color:var(--body)}
+
+@media (max-width:820px){
+  .epic-head{grid-template-columns:auto 1fr;gap:.8rem}
+  .epic-stats{grid-column:1/-1;gap:1.1rem;flex-wrap:wrap}
+  .issue details summary{grid-template-columns:4.2rem 1fr;row-gap:.4rem}
+  .chips{grid-column:2;justify-content:flex-start}
+  .issue-body{padding-left:0}
+  .phase{grid-template-columns:1fr;gap:.4rem}
+  .filters{position:static}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <span class="mark">PROJ-2026-YTB-001</span>
+    <nav class="topnav">
+      <a href="#charter">Charter</a>
+      <a href="#posicionamento">Posicionamento</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#capacidade">Capacidade</a>
+      <a href="#backlog">Backlog</a>
+      <a href="#calendario">Calendário</a>
+      <a href="#kpis">KPIs</a>
+      <a href="#riscos">Riscos</a>
+      <a href="#ritual">Ritual</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Backlog de lançamento &middot; 24 ago 2026 → 31 dez 2026</p>
+    <h1>Canal no YouTube de Controladoria Estratégica</h1>
+    <p class="lede">Oitenta issues mapeadas em dez épicos e seis sprints — do posicionamento à primeira publicação, do primeiro vídeo ao primeiro lead qualificado. Cada item traz estimativa, dependência, responsável e critérios de aceite.</p>
+    <p class="promise">“Controladoria que vira decisão: como transformar número em margem, caixa e crescimento.”</p>
+  </div>
+</div>
+
+<dl class="stats">
+  <div class="stat"><dt>Issues mapeadas</dt><dd>80<span class="sub">em 10 épicos</span></dd></div>
+  <div class="stat"><dt>Esforço estimado</dt><dd>269<span class="sub">horas de trabalho</span></dd></div>
+  <div class="stat"><dt>Bloqueiam a estreia</dt><dd>42<span class="sub">must have &middot; 141h</span></dd></div>
+  <div class="stat"><dt>Estreia planejada</dt><dd>06/10<span class="sub">trailer + 3 vídeos</span></dd></div>
+  <div class="stat"><dt>Meta em 12 meses</dt><dd>1.000<span class="sub">inscritos &middot; 4.000h</span></dd></div>
+</dl>
+
+<div class="wrap">
+
+<section class="block" id="charter">
+  <div class="sec-head"><span class="sec-num">01</span><h2>Project Charter</h2></div>
+  <p class="sec-intro">O contrato do projeto. Enquanto estes campos não estiverem validados, nenhuma gravação deve começar.</p>
+  <div class="tablewrap">
+    <table>
+      <tbody>
+        <tr><th scope="row">Objetivo</th><td>Lançar um canal sobre controladoria estratégica publicando <strong>1 vídeo longo e 3 Shorts por semana</strong>, atingindo <strong>1.000 inscritos e 4.000h de exibição em 12 meses</strong> e gerando <strong>≥ 5 leads qualificados por mês</strong> para a consultoria a partir do mês 6.</td></tr>
+        <tr><th scope="row">Inclui</th><td>Posicionamento, identidade visual, setup do canal, kit de produção, pesquisa e SEO, roteirização, gravação, edição, publicação, distribuição multicanal, funil de captura, métricas e governança.</td></tr>
+        <tr><th scope="row">Não inclui</th><td>Produção de curso pago completo (apenas roadmap), contratação de equipe fixa, tráfego pago em escala, reformulação do site institucional.</td></tr>
+        <tr><th scope="row">Restrições</th><td>Máximo <strong>8h/semana</strong> do fundador &middot; CAPEX inicial ≤ R$ 8.000 &middot; nenhum dado de cliente sem anonimização formal.</td></tr>
+        <tr><th scope="row">Critérios de sucesso</th><td>12 vídeos em 12 semanas sem furo de calendário &middot; CTR ≥ 4% &middot; retenção aos 30s ≥ 60% &middot; 1 lead qualificado/semana a partir da semana 12 &middot; SOP documentado e replicável.</td></tr>
+        <tr><th scope="row">Gestão</th><td>Asana (projeto próprio / Keystone Controladoria). Seções por sprint, tags por épico, prioridade como campo customizado.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block" id="posicionamento">
+  <div class="sec-head"><span class="sec-num">02</span><h2>Posicionamento</h2></div>
+  <p class="sec-intro">O nicho é dominado por conteúdo acadêmico-teórico de um lado e finanças pessoais do outro. O espaço vazio é a controladoria empresarial operacional — mostrar a planilha, o rateio e o DRE gerencial sendo montados na tela. O canal ataca por aí: <strong>o vídeo mostra a tela, não o slide</strong>.</p>
+
+  <h3 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:.9rem">Para quem é o canal</h3>
+  <div class="cards" style="margin-bottom:2.25rem">
+    <div class="card">
+      <p class="role">Audiência primária</p>
+      <h4>Controller e analista de FP&amp;A</h4>
+      <p>Empresas de R$ 10M a R$ 500M de faturamento, com contabilidade terceirizada e gestão interna incipiente.</p>
+      <p class="pain">“Fecho o mês, mas não consigo explicar o resultado nem influenciar decisão.”</p>
+    </div>
+    <div class="card">
+      <p class="role">Audiência secundária</p>
+      <h4>Dono ou CEO de empresa média</h4>
+      <p>Tem contador, não tem controladoria. Decide por intuição e extrato bancário.</p>
+      <p class="pain">“Não sei o custo real nem a margem por produto.”</p>
+    </div>
+    <div class="card">
+      <p class="role">Audiência terciária</p>
+      <h4>Profissional em transição</h4>
+      <p>Vem da contabilidade ou do financeiro operacional e quer entrar em controladoria e FP&amp;A.</p>
+      <p class="pain">“Sei a teoria contábil, não sei operar na prática.”</p>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:.9rem">Pilares de conteúdo</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Pilar</th><th class="num">Calendário</th><th>Pautas de exemplo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P1 &middot; Fundamentos de Controladoria</strong></td><td class="num">25%</td><td>O que faz um controller &middot; DRE contábil x gerencial &middot; Centro de custo na prática</td></tr>
+        <tr><td><strong>P2 &middot; Custos &amp; Rentabilidade</strong></td><td class="num">25%</td><td>Absorção x variável &middot; Margem de contribuição &middot; Rateio que distorce decisão &middot; Produto deficitário</td></tr>
+        <tr><td><strong>P3 &middot; FP&amp;A, Orçamento &amp; Forecast</strong></td><td class="num">20%</td><td>Budget do zero &middot; Orçado x realizado &middot; Rolling forecast &middot; Análise de variância</td></tr>
+        <tr><td><strong>P4 &middot; Precificação &amp; Margem</strong></td><td class="num">15%</td><td>Mark-up x margem &middot; Precificação por valor &middot; Ponto de equilíbrio</td></tr>
+        <tr><td><strong>P5 &middot; Ferramentas &amp; Automação</strong></td><td class="num">15%</td><td>Excel para controladoria &middot; Power BI &middot; IA no fechamento &middot; Dashboards</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block" id="roadmap">
+  <div class="sec-head"><span class="sec-num">03</span><h2>Roadmap</h2></div>
+  <p class="sec-intro">Seis fases. A regra que sustenta todas elas: <strong>só publique com estoque de 4 vídeos prontos</strong>. Canal morre por falta de cadência, não por falta de qualidade.</p>
+  <div class="phases">
+    <div class="phase"><div class="ph-id">S1<span>24/08 – 06/09</span></div><div><h4>F0 &middot; Fundação</h4><p>Estratégia, ICP, pilares e identidade visual. 18 issues, 53h.</p></div></div>
+    <div class="phase"><div class="ph-id">S2<span>07/09 – 20/09</span></div><div><h4>F1 &middot; Setup</h4><p>Canal no ar, estúdio montado, keyword research e calendário editorial. 26 issues, 66h.</p></div></div>
+    <div class="phase"><div class="ph-id">S3<span>21/09 – 04/10</span></div><div><h4>F2 &middot; Piloto</h4><p>Produção do estoque: 5 vídeos longos e 10 Shorts gravados. 12 issues, 56h.</p></div></div>
+    <div class="phase"><div class="ph-id">S4<span>05/10 – 18/10</span></div><div><h4>F3 &middot; Lançamento</h4><p>Estreia pública com trailer e 3 vídeos na primeira semana. 8 issues, 29h.</p></div></div>
+    <div class="phase"><div class="ph-id">S5<span>19/10 – 15/11</span></div><div><h4>F4 &middot; Ritmo</h4><p>Cadência semanal, testes A/B de thumbnail, distribuição multicanal. 9 issues, 31h.</p></div></div>
+    <div class="phase"><div class="ph-id">S6<span>16/11 – 31/12</span></div><div><h4>F5 &middot; Monetização</h4><p>Lead magnets, landing page, nutrição por e-mail e oferta de entrada. 7 issues, 34h.</p></div></div>
+  </div>
+</section>
+
+<section class="block" id="capacidade">
+  <div class="sec-head"><span class="sec-num">04</span><h2>A decisão nº 1 do kick-off</h2></div>
+  <div class="callout">
+    <h3>O cronograma não cabe na restrição de capacidade</h3>
+    <p>Os três primeiros sprints exigem entre 26 e 33 horas por semana, contra o teto de <strong>8h/semana</strong> declarado no charter. O plano só fecha com uma destas três decisões — e ela precisa ser tomada antes de qualquer gravação. Sem escolher, o risco <strong>R01 (quebra de cadência)</strong> se materializa por volta do sexto vídeo.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Cenário</th><th>O que muda</th><th class="num">Estreia</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A &middot; Terceirizar</strong><br><span style="color:var(--muted);font-size:.82rem">recomendado</span></td><td>Contratar design (EP-02, 24h) e pós-produção (EP-07, 28h). O fundador concentra o tempo em roteiro e gravação, que são intransferíveis.</td><td class="num">06/10/2026</td></tr>
+          <tr><td><strong>B &middot; Estender o prazo</strong></td><td>Manter tudo interno respeitando as 8h/semana: 269h ÷ 8h ≈ 34 semanas de execução.</td><td class="num">abr/2027</td></tr>
+          <tr><td><strong>C &middot; Cortar escopo</strong></td><td>Executar apenas as 42 issues Must have (141h) e adiar distribuição e monetização para o ano seguinte.</td><td class="num">dez/2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="backlog">
+  <div class="sec-head"><span class="sec-num">05</span><h2>Backlog completo</h2></div>
+  <p class="sec-intro">As 80 issues, agrupadas por épico. Clique em qualquer uma para ver dependências, critérios de aceite e responsável. Use os filtros para isolar o que bloqueia a estreia ou o que cabe no sprint atual.</p>
+
+  <div class="filters">
+    <span class="flabel">Prioridade</span>
+    <button class="f" data-filter="prio" data-value="all" aria-pressed="true">Todas</button>
+    <button class="f" data-filter="prio" data-value="alta" aria-pressed="false">Must have</button>
+    <button class="f" data-filter="prio" data-value="media" aria-pressed="false">Should have</button>
+    <button class="f" data-filter="prio" data-value="baixa" aria-pressed="false">Could have</button>
+    <span class="sep" aria-hidden="true"></span>
+    <span class="flabel">Sprint</span>
+    <button class="f" data-filter="sprint" data-value="all" aria-pressed="true">Todos</button>
+    <button class="f" data-filter="sprint" data-value="S1" aria-pressed="false">S1</button>
+    <button class="f" data-filter="sprint" data-value="S2" aria-pressed="false">S2</button>
+    <button class="f" data-filter="sprint" data-value="S3" aria-pressed="false">S3</button>
+    <button class="f" data-filter="sprint" data-value="S4" aria-pressed="false">S4</button>
+    <button class="f" data-filter="sprint" data-value="S5" aria-pressed="false">S5</button>
+    <button class="f" data-filter="sprint" data-value="S6" aria-pressed="false">S6</button>
+    <span class="count" id="count" role="status">80 de 80 issues</span>
+  </div>
+
+<section class="epic" id="ep-01">
+<header class="epic-head">
+<div class="epic-id">EP-01</div>
+<div class="epic-title">
+<h3>Estratégia &amp; Posicionamento</h3>
+<p>Para quem é o canal, o que promete e como se diferencia. Nada abaixo faz sentido antes disto.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>8</dd></div>
+<div><dt>Esforço</dt><dd>20h</dd></div>
+<div><dt>Sprint</dt><dd>S1</dd></div>
+<div><dt>Must have</dt><dd>5</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-001</span>
+<span class="ititle">Definir ICP e personas do canal</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">estrategia</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>3 personas descritas em 1 página cada</li><li>Para cada persona: 5 dores redigidas com as palavras que ela usa</li><li>Definido qual persona é prioritária nos primeiros 12 vídeos</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-002</span>
+<span class="ititle">Definir proposta de valor e promessa do canal</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">estrategia</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-001</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Promessa em ≤ 15 palavras</li><li>3 variações escritas e escolhida 1</li><li>Promessa validada com 5 pessoas do ICP (mensagem no LinkedIn/WhatsApp)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-003</span>
+<span class="ititle">Análise competitiva de 10 canais do nicho</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Planilha com 10 canais: inscritos, frequência, formato, duração média, nicho, monetização</li><li>Identificados 5 gaps de conteúdo não cobertos</li><li>Listados 3 ângulos de diferenciação viáveis</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-004</span>
+<span class="ititle">Definir os 5 pilares de conteúdo e o mix do calendário</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">estrategia</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-001, YT-003</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>5 pilares nomeados com descrição de 1 parágrafo</li><li>% de ocupação de cada pilar definido e somando 100%</li><li>Cada pilar com ao menos 8 pautas iniciais listadas</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-005</span>
+<span class="ititle">Definir nome, @handle e tagline do canal</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">estrategia</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-002</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>10 opções geradas e reduzidas a 3</li><li>Disponibilidade verificada em YouTube, Instagram, LinkedIn e domínio .com.br</li><li>Handle reservado nas 3 plataformas</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-006</span>
+<span class="ititle">Definir tom de voz e diretrizes editoriais</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">estrategia</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-002</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Documento de 1 página com &quot;sempre fazer / nunca fazer&quot;</li><li>10 termos técnicos com a tradução simples padronizada (ex.: &quot;rateio&quot; → &quot;distribuição de custo&quot;)</li><li>Regra definida sobre opinião política, indicação de investimento e crítica a empresas</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-007</span>
+<span class="ititle">Definir OKRs de 90 e 365 dias</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">estrategia</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-002</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>1 objetivo com 3 KRs para 90 dias</li><li>1 objetivo com 3 KRs para 365 dias</li><li>Métrica North Star definida (proposta: leads qualificados/mês)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-008</span>
+<span class="ititle">Definir o modelo de negócio do canal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">estrategia</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-001, YT-007</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Fontes de receita listadas e priorizadas por prazo e margem</li><li>Definida a oferta principal para os primeiros 12 meses</li><li>Estimativa de ticket médio e volume necessário para meta de receita</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-02">
+<header class="epic-head">
+<div class="epic-id">EP-02</div>
+<div class="epic-title">
+<h3>Identidade Visual &amp; Branding</h3>
+<p>O sistema visual que faz o canal ser reconhecido na grade — thumbnail acima de tudo.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>7</dd></div>
+<div><dt>Esforço</dt><dd>24h</dd></div>
+<div><dt>Sprint</dt><dd>S1</dd></div>
+<div><dt>Must have</dt><dd>5</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-009</span>
+<span class="ititle">Definir paleta de cores e tipografia</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">design</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-005</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>1 cor primária, 1 secundária, 1 de destaque, 2 neutras — com códigos HEX</li><li>2 famílias tipográficas definidas (título e corpo), com licença de uso comercial</li><li>Contraste validado (mínimo AA) para legibilidade em telas pequenas</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-010</span>
+<span class="ititle">Criar logo / avatar do canal</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">design</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-005, YT-009</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Logo em versões horizontal, vertical e ícone</li><li>Avatar legível a 32×32 px</li><li>Arquivos entregues em SVG, PNG transparente e JPG</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-011</span>
+<span class="ititle">Criar banner (channel art) responsivo</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">design</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-010</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Arte 2560×1440 com área segura de 1546×423 respeitada</li><li>Testada em desktop, mobile e TV</li><li>Comunica a promessa do canal e a frequência de publicação</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-012</span>
+<span class="ititle">Criar template de thumbnail (3 variações)</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">design</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-009</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>3 layouts: (a) rosto + texto, (b) print de planilha + seta, (c) comparativo A vs B</li><li>Máximo 4 palavras de texto por thumbnail</li><li>Arquivo editável (Figma/Canva) com camadas nomeadas</li><li>Teste de legibilidade no tamanho real da grade do YouTube</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-013</span>
+<span class="ititle">Criar pacote de vinhetas e elementos de vídeo</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">design</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-009, YT-010</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Intro de no máximo 5s (ou decisão documentada de não usar intro)</li><li>Lower third com nome e cargo</li><li>Card de &quot;inscreva-se&quot; e tela final padronizada</li><li>Transições e caixa de destaque para números na tela</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-014</span>
+<span class="ititle">Criar template de slides e animações de conceito</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">design</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-009</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Template com 8 layouts (título, comparativo, cascata, tabela, fluxo, destaque, citação, CTA)</li><li>Padrão definido para formatação de números (R$, milhar, percentual)</li><li>Versão clara e versão escura</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-015</span>
+<span class="ititle">Consolidar brand book de 1 página</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">design</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-009 a YT-014</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Documento único com cores, fontes, logo, uso correto/incorreto</li><li>Link do documento salvo na pasta do projeto</li><li>Compartilhado com editor e designer</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-03">
+<header class="epic-head">
+<div class="epic-id">EP-03</div>
+<div class="epic-title">
+<h3>Setup e SEO do Canal</h3>
+<p>Colocar o canal no ar corretamente configurado, verificado e indexável.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>9</dd></div>
+<div><dt>Esforço</dt><dd>14h</dd></div>
+<div><dt>Sprint</dt><dd>S2</dd></div>
+<div><dt>Must have</dt><dd>6</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-016</span>
+<span class="ititle">Criar conta Google e Brand Account dedicada</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">1h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Conta Google exclusiva criada com e-mail do domínio da empresa</li><li>2FA ativado e chaves de recuperação guardadas em cofre de senhas</li><li>Brand Account (conta de marca) criada, não perfil pessoal</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-017</span>
+<span class="ititle">Criar o canal e configurar o handle</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">1h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-005, YT-016</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Canal criado com nome definido</li><li>@handle configurado igual ao das outras redes</li><li>URL personalizada anotada na documentação do projeto</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-018</span>
+<span class="ititle">Verificar o canal e habilitar recursos avançados</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">1h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-017</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Verificação por telefone concluída</li><li>Upload de vídeos &gt; 15 min habilitado</li><li>Thumbnail personalizada habilitada</li><li>Live streaming solicitado (carência de 24h considerada)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-019</span>
+<span class="ititle">Escrever descrição do canal otimizada para busca</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-002, YT-032</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Primeiras 150 caracteres com a promessa e a keyword principal</li><li>Pilares e frequência de publicação explícitos</li><li>CTA para lead magnet e contato comercial</li><li>Keywords do canal preenchidas nas configurações avançadas</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-020</span>
+<span class="ititle">Configurar links, e-mail comercial e trailer</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">1h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-017</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Até 5 links no banner (site, LinkedIn, Instagram, lead magnet, WhatsApp comercial)</li><li>E-mail comercial cadastrado</li><li>Slot de trailer reservado para o vídeo 00 (YT-042)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-021</span>
+<span class="ititle">Criar estrutura de playlists por pilar</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-004</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>1 playlist por pilar, com título e descrição otimizados</li><li>Playlist &quot;Comece por aqui&quot; criada</li><li>Ordem de reprodução definida (progressão didática, não cronológica)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-022</span>
+<span class="ititle">Configurar layout da página inicial do canal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">1h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-021</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Seção de destaque, playlists e Shorts organizadas</li><li>Vídeo de destaque definido para visitante não inscrito</li><li>Vídeo de destaque definido para inscrito recorrente</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-023</span>
+<span class="ititle">Configurar moderação e permissões no YouTube Studio</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-017</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Editor adicionado como &quot;Editor&quot; (sem acesso financeiro)</li><li>Lista de palavras bloqueadas configurada</li><li>Filtro de spam e retenção de comentários suspeitos ativados</li><li>Notificações por e-mail ajustadas</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-024</span>
+<span class="ititle">Configurar rastreamento: UTM, GA4 e Search Console</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">setup</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-020</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Padrão de UTM definido para todos os links do canal</li><li>GA4 instalado na landing page com evento de conversão</li><li>Planilha de rastreio ligando vídeo → clique → lead</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-04">
+<header class="epic-head">
+<div class="epic-id">EP-04</div>
+<div class="epic-title">
+<h3>Produção: Equipamento &amp; Estúdio</h3>
+<p>Kit mínimo viável e estúdio repetível. Equipamento não é o gargalo — consistência é.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>7</dd></div>
+<div><dt>Esforço</dt><dd>18h</dd></div>
+<div><dt>Sprint</dt><dd>S2</dd></div>
+<div><dt>Must have</dt><dd>6</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-025</span>
+<span class="ititle">Especificar e orçar captação de imagem</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>3 opções orçadas (celular atual / câmera entrada / câmera intermediária)</li><li>Decisão documentada com justificativa de custo-benefício</li><li>Compra aprovada dentro do teto de CAPEX</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-026</span>
+<span class="ititle">Especificar e orçar captação de áudio</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Microfone escolhido (lapela sem fio ou USB de mesa)</li><li>Teste de gravação em ambiente real feito antes da compra definitiva</li><li>Solução de tratamento acústico básico definida (tapete, cortina, painel)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-027</span>
+<span class="ititle">Definir iluminação e cenário</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Esquema de luz definido (key + fill ou luz natural + rebatedor)</li><li>Fundo escolhido e montado — coerente com a marca, sem poluição visual</li><li>Teste gravado nos horários de manhã e de tarde para validar consistência</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-028</span>
+<span class="ititle">Definir stack de software de produção</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Editor de vídeo escolhido (com licença comercial válida)</li><li>Teleprompter definido (app de celular ou software de desktop)</li><li>Ferramenta de captura de tela definida para as partes de planilha</li><li>Ferramenta de legendas automáticas escolhida</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-029</span>
+<span class="ititle">Montar o estúdio e gravar teste técnico</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-025 a YT-028</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Gravação de teste de 2 minutos concluída</li><li>Áudio, foco, enquadramento e temperatura de cor validados</li><li>Marcações de posição de tripé, luz e cadeira feitas no chão/mesa</li><li>Tempo de setup medido — meta: ≤ 10 minutos</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-030</span>
+<span class="ititle">Definir padrão técnico de captação e entrega</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-029</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Resolução e fps padronizados (ex.: 1080p60 para longos, 1080×1920 para Shorts)</li><li>Alvo de loudness definido (−14 LUFS) e validado no editor</li><li>Formato e codec de entrega definidos</li><li>Padrão de captura de tela para planilhas (zoom, fonte mínima 16pt)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-031</span>
+<span class="ititle">Estruturar pastas, nomenclatura e backup</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Árvore de pastas padrão criada (00_pauta, 01_roteiro, 02_brutos, 03_edicao, 04_arte, 05_final)</li><li>Convenção de nomes definida (`YYYYMMDD_EP##_slug_v#`)</li><li>Backup em nuvem configurado com sincronização automática</li><li>Política de retenção de brutos definida (ex.: 90 dias)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-05">
+<header class="epic-head">
+<div class="epic-id">EP-05</div>
+<div class="epic-title">
+<h3>Pesquisa, SEO &amp; Calendário</h3>
+<p>Descobrir o que o ICP busca antes de gravar qualquer coisa.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>8</dd></div>
+<div><dt>Esforço</dt><dd>29h</dd></div>
+<div><dt>Sprint</dt><dd>S2</dd></div>
+<div><dt>Must have</dt><dd>3</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-032</span>
+<span class="ititle">Keyword research: 100 termos de controladoria e FP&amp;A</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-001</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Planilha com 100 termos: volume estimado, dificuldade, intenção (informacional/transacional)</li><li>Fontes usadas: autocomplete do YouTube, Google Trends, PAA, ferramenta de SEO</li><li>Top 20 keywords priorizadas por (volume × intenção) ÷ dificuldade</li><li>Termos de cauda longa separados dos termos de cabeça</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-033</span>
+<span class="ititle">Análise de SERP do YouTube para as top 20 keywords</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-032</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Para cada keyword: 5 vídeos que ranqueiam, com views, duração, formato e idade</li><li>Identificado o que os vídeos que ranqueiam NÃO entregam</li><li>Definido o ângulo de superação para as 10 principais</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-034</span>
+<span class="ititle">Mapear perguntas reais do público</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-003</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>50 perguntas coletadas de comentários de concorrentes, LinkedIn, grupos e clientes reais</li><li>Perguntas agrupadas por pilar</li><li>Top 15 marcadas como pauta de alto potencial</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-035</span>
+<span class="ititle">Construir banco de pautas com 60 ideias</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-032, YT-034</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>60 pautas com: pilar, keyword-alvo, formato, ângulo, CTA e nível de esforço</li><li>Cada pauta pontuada por (potencial de busca + potencial de lead)</li><li>Banco de pautas em ferramenta consultável (planilha ou Asana)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-036</span>
+<span class="ititle">Definir taxonomia de títulos e nomenclatura</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-032</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>5 fórmulas de título documentadas (como fazer X, erro que Y, X vs Y, número + benefício, pergunta)</li><li>Regra de posição da keyword (nas primeiras 40 caracteres)</li><li>Limite de caracteres definido para não truncar em mobile</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-037</span>
+<span class="ititle">Montar calendário editorial de 12 semanas</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-035, YT-036</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>12 vídeos longos programados com data, pilar, keyword e CTA</li><li>36 Shorts derivados mapeados</li><li>Mix de pilares conferido contra o percentual definido em YT-004</li><li>Calendário publicado em ferramenta compartilhada com a equipe</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-038</span>
+<span class="ititle">Definir estratégia de Shorts</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-037</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Definido o papel dos Shorts (descoberta, não conversão)</li><li>5 formatos de Short definidos (número que choca, erro comum, 1 conceito em 40s, antes/depois, mito x verdade)</li><li>Regra de extração: 3 Shorts por vídeo longo</li><li>Decisão sobre CTA nos Shorts documentada</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-039</span>
+<span class="ititle">Desenhar séries e conteúdo evergreen de autoridade</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">pesquisa</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-035</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>2 séries desenhadas (ex.: &quot;Controladoria do zero em 10 aulas&quot;, &quot;Destrinchando o DRE&quot;)</li><li>Cada série com episódios, ordem e playlist correspondente</li><li>Definido qual série vira lead magnet ou produto pago depois</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-06">
+<header class="epic-head">
+<div class="epic-id">EP-06</div>
+<div class="epic-title">
+<h3>Roteiro &amp; Gravação</h3>
+<p>Produzir o estoque inicial. O canal só estreia com 4 vídeos prontos na gaveta.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>10</dd></div>
+<div><dt>Esforço</dt><dd>48h</dd></div>
+<div><dt>Sprint</dt><dd>S3</dd></div>
+<div><dt>Must have</dt><dd>7</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-040</span>
+<span class="ititle">Criar template de roteiro</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-006</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Estrutura definida: Hook (0–15s) → Promessa → Prova de credibilidade → Entrega em blocos → Recapitulação → CTA</li><li>Regra de retenção: nova informação ou mudança de plano a cada 20–30s</li><li>Campo de marcação de b-roll, print de tela e texto na tela</li><li>Padrão de duração: 1.400–1.900 palavras para vídeo de 10–13 min</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-041</span>
+<span class="ititle">Montar biblioteca de 20 hooks testáveis</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>20 hooks escritos, categorizados por gatilho (perda, erro, contraste, número, curiosidade)</li><li>Cada hook com ≤ 2 frases</li><li>Regra: o hook entrega a promessa do título nos primeiros 10 segundos</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-042</span>
+<span class="ititle">Roteirizar e gravar o Vídeo 00 (trailer do canal)</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040, YT-029</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Roteiro de 60s aprovado</li><li>Responde: para quem é, o que entrega, com que frequência, por que confiar</li><li>Gravado e aprovado tecnicamente (áudio, luz, enquadramento)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-043</span>
+<span class="ititle">Roteirizar e gravar o Vídeo 01 — &quot;O que faz um Controller&quot;</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040, YT-049</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Roteiro escrito no template e revisado tecnicamente</li><li>Print/planilha de apoio preparado e anonimizado</li><li>Gravação concluída com no máximo 2 takes por bloco</li><li>CTA para lead magnet inserido no roteiro</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-044</span>
+<span class="ititle">Roteirizar e gravar o Vídeo 02 — &quot;DRE contábil x DRE gerencial&quot;</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040, YT-049</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Planilha comparativa construída ao vivo na tela</li><li>Exemplo numérico fechado e conferido (soma bate)</li><li>Roteiro revisado tecnicamente</li><li>Gravação concluída</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-045</span>
+<span class="ititle">Roteirizar e gravar o Vídeo 03 — &quot;Margem de contribuição na prática&quot;</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040, YT-049</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Planilha modelo criada (será também lead magnet)</li><li>Demonstração passo a passo gravada em captura de tela</li><li>Roteiro revisado tecnicamente</li><li>Gravação concluída</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-046</span>
+<span class="ititle">Roteirizar e gravar o Vídeo 04 — &quot;Mark-up x margem&quot;</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040, YT-049</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Erro clássico de precificação demonstrado com número real</li><li>Fórmula de mark-up divisor apresentada na tela</li><li>Roteiro revisado tecnicamente</li><li>Gravação concluída</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-047</span>
+<span class="ititle">Roteirizar e gravar o Vídeo 05 — &quot;Rateio de custo indireto&quot;</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040, YT-049</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>3 critérios de rateio comparados com o mesmo conjunto de dados</li><li>Demonstrado como o critério muda a decisão (subsídio cruzado)</li><li>Roteiro revisado tecnicamente</li><li>Gravação concluída</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-048</span>
+<span class="ititle">Gravar lote de 10 Shorts</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">producao</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-038, YT-043 a YT-047</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>10 Shorts gravados na vertical (não recorte forçado do horizontal)</li><li>Cada Short entrega 1 ideia completa em ≤ 60s</li><li>Legenda queimada prevista no roteiro</li><li>Estoque suficiente para 3 semanas de publicação</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-049</span>
+<span class="ititle">Instituir processo de revisão técnica de conteúdo</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Checklist de revisão criado (conceito, fórmula, terminologia CPC/CFC, exemplo numérico)</li><li>Revisor definido e prazo de SLA acordado (48h)</li><li>Regra: nenhum vídeo é gravado sem roteiro revisado</li></ul>
+<p class="resp">Responsável: <strong>Controller</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-07">
+<header class="epic-head">
+<div class="epic-id">EP-07</div>
+<div class="epic-title">
+<h3>Pós-produção &amp; Publicação</h3>
+<p>Transformar o bruto em vídeo publicado com padrão repetível.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>8</dd></div>
+<div><dt>Esforço</dt><dd>28h</dd></div>
+<div><dt>Sprint</dt><dd>S3–S4</dd></div>
+<div><dt>Must have</dt><dd>7</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-050</span>
+<span class="ititle">Definir padrão de edição e criar projeto-template</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pos-producao</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-013, YT-028</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Projeto-template com presets de cor, áudio, legenda e títulos</li><li>Ritmo de corte definido (remoção de pausas, jump cuts, zoom de ênfase)</li><li>Padrão de exibição de números na tela definido</li><li>Tempo-alvo de edição por vídeo: ≤ 4h</li></ul>
+<p class="resp">Responsável: <strong>Editor</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S3">
+<details>
+<summary>
+<span class="iid">YT-051</span>
+<span class="ititle">Estabelecer processo de legendas e acessibilidade</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pos-producao</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S3</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-028</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Legenda automática gerada e revisada manualmente (termos técnicos erram sempre)</li><li>Arquivo .srt anexado a cada upload</li><li>Contraste e tamanho da legenda queimada validados em tela de celular</li></ul>
+<p class="resp">Responsável: <strong>Editor</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-052</span>
+<span class="ititle">Criar thumbnails dos vídeos 00 a 05</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pos-producao</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-012, YT-043 a YT-047</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>3 variações de thumbnail por vídeo (para teste A/B)</li><li>Testadas em miniatura (140px de largura)</li><li>Coerência visual entre elas sem virar repetição</li></ul>
+<p class="resp">Responsável: <strong>Design</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-053</span>
+<span class="ititle">Escrever títulos, descrições e tags dos vídeos 00 a 05</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pos-producao</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-036, YT-043 a YT-047</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>3 opções de título por vídeo, keyword nos primeiros 40 caracteres</li><li>Descrição com: resumo em 2 linhas + capítulos com timestamp + links + CTA</li><li>Tags e hashtags definidas por vídeo</li><li>Capítulos (chapters) marcados — aumentam retenção e geram rich snippet</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-054</span>
+<span class="ititle">Configurar cards, telas finais e playlists automáticas</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">pos-producao</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-021, YT-053</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Card no minuto de maior queda de retenção apontando para vídeo relacionado</li><li>Tela final com &quot;próximo vídeo&quot; + &quot;inscreva-se&quot; em todos os vídeos</li><li>Cada vídeo adicionado à playlist do seu pilar e a &quot;Comece por aqui&quot;</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-055</span>
+<span class="ititle">Criar checklist de publicação</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-050 a YT-054</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Checklist pré-upload (arquivo, legenda, thumbnail, título, descrição, tags, playlist, cards, tela final)</li><li>Checklist pós-upload (comentário fixado, compartilhamento, Community, repurposing)</li><li>Checklist transformado em template de tarefa recorrente no Asana</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-056</span>
+<span class="ititle">Definir política de agendamento e horário de publicação</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-037</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Dia e horário fixos definidos (proposta: terça, 19h — audiência B2B pós-expediente)</li><li>Regra de estreia (premiere) definida</li><li>Revisão do horário programada para D+60 com base nos dados de audiência</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-057</span>
+<span class="ititle">Definir processo de resposta a comentários</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-023</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Meta: 100% dos comentários respondidos nas primeiras 24h</li><li>Comentário próprio fixado com pergunta que estimula resposta</li><li>Comentários com dúvida de negócio marcados como lead e levados ao funil</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-08">
+<header class="epic-head">
+<div class="epic-id">EP-08</div>
+<div class="epic-title">
+<h3>Distribuição &amp; Crescimento</h3>
+<p>Um vídeo longo vira oito peças. Alcance não é sorte, é processo.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>8</dd></div>
+<div><dt>Esforço</dt><dd>30h</dd></div>
+<div><dt>Sprint</dt><dd>S4–S5</dd></div>
+<div><dt>Must have</dt><dd>0</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="media" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-058</span>
+<span class="ititle">Montar plano de repurposing multicanal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-037</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Matriz definida: vídeo → 3 Shorts → 1 post LinkedIn → 1 carrossel → 1 e-mail → 1 post de comunidade</li><li>Calendário de distribuição com D+1, D+2, D+3</li><li>Templates de post prontos para LinkedIn e Instagram</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S4">
+<details>
+<summary>
+<span class="iid">YT-059</span>
+<span class="ititle">Executar a semana de estreia do canal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S4</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-052 a YT-056</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Trailer + 3 vídeos publicados na semana de estreia (canal não pode parecer vazio)</li><li>Anúncio no LinkedIn, Instagram e lista de contatos</li><li>30 mensagens diretas para clientes e parceiros pedindo primeira visualização</li><li>Meta de estreia: 50 inscritos na primeira semana</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-060</span>
+<span class="ititle">Mapear e abordar 15 potenciais convidados/colaborações</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-003</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Lista de 15 nomes (CFOs, controllers, professores, criadores de finanças B2B)</li><li>Roteiro de abordagem escrito (valor primeiro, convite depois)</li><li>5 abordagens enviadas e 1 colaboração agendada</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-061</span>
+<span class="ititle">Montar newsletter e página de captura</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-024</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Ferramenta de e-mail escolhida e configurada (domínio autenticado: SPF/DKIM)</li><li>Página de captura publicada e testada em mobile</li><li>Formato e frequência da newsletter definidos (proposta: quinzenal)</li><li>Integração com o link da descrição dos vídeos validada ponta a ponta</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-062</span>
+<span class="ititle">Ativar a aba Community e rotina de engajamento</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-018</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>2 posts por semana programados (enquete, bastidor, pergunta, teaser)</li><li>Enquete usada para escolher a pauta de um dos vídeos do mês</li><li>Métrica de engajamento da Community acompanhada mensalmente</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-063</span>
+<span class="ititle">Distribuir em comunidades e grupos de finanças</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-059</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>10 comunidades mapeadas (LinkedIn, WhatsApp, Telegram, fóruns de contabilidade)</li><li>Regras de cada grupo lidas — sem spam, valor antes do link</li><li>Cadência de participação definida (contribuir 4× antes de divulgar 1×)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-064</span>
+<span class="ititle">Implantar processo de teste A/B de thumbnail e título</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-052</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Regra definida: trocar thumbnail se CTR &lt; 3% em 48h</li><li>Registro de testes criado (hipótese, variante, CTR antes/depois)</li><li>Aprendizados consolidados mensalmente no brand book</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-065</span>
+<span class="ititle">Rodar teste de tráfego pago de validação</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">growth</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-061</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Verba de R$ 500 alocada em teste</li><li>Objetivo: validar custo por lead do lead magnet, não comprar inscrito</li><li>Resultado documentado com CPL e decisão de escalar ou parar</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-09">
+<header class="epic-head">
+<div class="epic-id">EP-09</div>
+<div class="epic-title">
+<h3>Monetização &amp; Funil Comercial</h3>
+<p>Onde a audiência vira lead qualificado e o lead vira contrato.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>7</dd></div>
+<div><dt>Esforço</dt><dd>34h</dd></div>
+<div><dt>Sprint</dt><dd>S6</dd></div>
+<div><dt>Must have</dt><dd>0</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="media" data-sprint="S6">
+<details>
+<summary>
+<span class="iid">YT-066</span>
+<span class="ititle">Produzir lead magnet #1 — Planilha de DRE Gerencial</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">8h</span>
+<span class="chip chip-sprint">S6</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-044</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Planilha funcional com abas de lançamento, DRE gerencial e indicadores</li><li>Instruções de uso embutidas e vídeo de 3 min de apoio</li><li>Marca aplicada e link para o diagnóstico da consultoria</li><li>Testada por 3 pessoas fora da equipe</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S6">
+<details>
+<summary>
+<span class="iid">YT-067</span>
+<span class="ititle">Produzir lead magnet #2 — Checklist de fechamento mensal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S6</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Checklist de fechamento em 5 dias, com responsável e prazo por etapa</li><li>Versão PDF e versão editável</li><li>Vinculado ao vídeo 12 do calendário</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S6">
+<details>
+<summary>
+<span class="iid">YT-068</span>
+<span class="ititle">Publicar landing page de captura integrada</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S6</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-061, YT-066</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Estrutura de conversão: headline + prova + formulário curto (nome, e-mail, empresa)</li><li>Carregamento &lt; 2s e layout mobile-first</li><li>Integração com e-mail e com o CRM/Asana validada</li><li>Meta de conversão da página: ≥ 25%</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S6">
+<details>
+<summary>
+<span class="iid">YT-069</span>
+<span class="ititle">Escrever sequência de nutrição de 7 e-mails</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">6h</span>
+<span class="chip chip-sprint">S6</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-068</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>7 e-mails escritos (boas-vindas → história → conteúdo → caso → objeções → oferta → última chance)</li><li>Automação configurada com gatilho de download do lead magnet</li><li>Metas definidas: abertura ≥ 30%, clique ≥ 4%</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S6">
+<details>
+<summary>
+<span class="iid">YT-070</span>
+<span class="ititle">Estruturar a oferta de entrada (diagnóstico de controladoria)</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S6</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-008</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Escopo, duração, entregável e preço definidos</li><li>Página ou proposta de 1 página criada</li><li>Caminho de upsell para o serviço recorrente mapeado</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S6">
+<details>
+<summary>
+<span class="iid">YT-071</span>
+<span class="ititle">Desenhar roadmap de produto digital</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S6</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-039, YT-070</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Decisão entre curso, mentoria em grupo ou comunidade paga</li><li>Currículo em alto nível derivado das séries do canal</li><li>Janela de lançamento definida e pré-requisitos de audiência estabelecidos</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="baixa" data-sprint="S6">
+<details>
+<summary>
+<span class="iid">YT-072</span>
+<span class="ititle">Mapear requisitos do YouTube Partner Program</span>
+<span class="chips">
+<span class="chip chip-baixa">Could have</span>
+<span class="chip chip-plain">funil</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S6</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Requisitos atuais documentados (inscritos + horas de exibição ou views de Shorts)</li><li>Projeção de quando o canal atinge o requisito</li><li>Decisão sobre exibir anúncios (pode conflitar com posicionamento premium B2B)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+<section class="epic" id="ep-10">
+<header class="epic-head">
+<div class="epic-id">EP-10</div>
+<div class="epic-title">
+<h3>Métricas, Governança &amp; Compliance</h3>
+<p>O que mede, o que protege e o que faz o canal rodar sem o fundador.</p>
+</div>
+<dl class="epic-stats">
+<div><dt>Issues</dt><dd>8</dd></div>
+<div><dt>Esforço</dt><dd>24h</dd></div>
+<div><dt>Sprint</dt><dd>Transversal</dd></div>
+<div><dt>Must have</dt><dd>3</dd></div>
+</dl>
+</header>
+<ul class="issues">
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-073</span>
+<span class="ititle">Definir KPIs e metas do canal</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-007</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>KPIs definidos com fórmula, fonte e meta de 90 e 365 dias</li><li>North Star definida e comunicada à equipe</li><li>Limites de alerta definidos (ex.: CTR &lt; 3% dispara ação)</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-074</span>
+<span class="ititle">Construir dashboard de métricas do canal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">5h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-073, YT-024</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Dashboard com CTR, retenção, AVD, inscritos por vídeo, leads por vídeo</li><li>Atualização semanal (manual ou via export do YT Studio)</li><li>Visão por pilar de conteúdo para identificar o que performa</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-075</span>
+<span class="ititle">Instituir o ritual semanal de produção</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Blocos fixos na agenda (segunda pauta, terça roteiro, quinta gravação, sexta métricas)</li><li>Blocos protegidos como compromisso inegociável</li><li>Estoque mínimo de 4 vídeos monitorado semanalmente</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-076</span>
+<span class="ititle">Instituir a retrospectiva mensal do canal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-074</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Pauta fixa: o que performou, o que não performou, hipótese, ajuste</li><li>Decisões registradas em ata</li><li>Calendário do mês seguinte ajustado com base nos dados</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-077</span>
+<span class="ititle">Manter registro de riscos ativo</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">2h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Os 10 riscos do backlog registrados na ferramenta de gestão</li><li>Revisão mensal de probabilidade e impacto</li><li>Novos riscos incorporados na retrospectiva</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S1">
+<details>
+<summary>
+<span class="iid">YT-078</span>
+<span class="ititle">Definir política de sigilo, anonimização e LGPD</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">4h</span>
+<span class="chip chip-sprint">S1</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep dep-none"><span>Sem dependência</span> pode começar hoje</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Regra escrita: nenhum dado real de cliente sem autorização formal por escrito</li><li>Procedimento de anonimização (alterar valores, setor, nomes, ordem de grandeza)</li><li>Aviso de privacidade e disclaimer padrão para descrição dos vídeos</li><li>Checklist de sigilo incorporado à revisão pré-gravação</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="alta" data-sprint="S2">
+<details>
+<summary>
+<span class="iid">YT-079</span>
+<span class="ititle">Definir política de direitos autorais e licenciamento</span>
+<span class="chips">
+<span class="chip chip-alta">Must have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S2</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-028</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>Biblioteca de trilhas licenciadas definida e assinada</li><li>Fonte de imagens e ícones com licença comercial validada</li><li>Regra de citação de autores (Eliseu Martins, Kaplan, Horngren) documentada</li><li>Registro de licenças arquivado</li></ul>
+<p class="resp">Responsável: <strong>Editor</strong></p>
+</div>
+</details>
+</li>
+<li class="issue" data-prio="media" data-sprint="S5">
+<details>
+<summary>
+<span class="iid">YT-080</span>
+<span class="ititle">Documentar o SOP completo do canal</span>
+<span class="chips">
+<span class="chip chip-media">Should have</span>
+<span class="chip chip-plain">governanca</span>
+<span class="chip chip-plain">3h</span>
+<span class="chip chip-sprint">S5</span>
+</span>
+</summary>
+<div class="issue-body">
+<p class="dep"><span>Depende de</span> YT-040, YT-050, YT-055</p>
+<p class="crit-label">Critérios de aceite</p>
+<ul class="crits"><li>SOP com objetivo, escopo, responsáveis, passo a passo e critérios de aceite</li><li>Cobre o fluxo completo: pauta → roteiro → gravação → edição → arte → publicação → distribuição → métricas</li><li>Versionado, com histórico de revisões</li><li>Testado: um terceiro consegue publicar um vídeo seguindo apenas o SOP</li></ul>
+<p class="resp">Responsável: <strong>Jefferson</strong></p>
+</div>
+</details>
+</li>
+</ul></section>
+
+</section>
+
+<section class="block" id="calendario">
+  <div class="sec-head"><span class="sec-num">06</span><h2>Calendário editorial</h2></div>
+  <p class="sec-intro">Os doze primeiros vídeos, cada um com keyword-alvo e chamada para ação definidas antes da gravação. Publicação às terças, 19h — audiência B2B no pós-expediente.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th class="num">#</th><th>Pilar</th><th>Título de trabalho</th><th>Keyword-alvo</th><th>CTA</th></tr></thead>
+      <tbody>
+        <tr><td class="num">00</td><td>—</td><td>Trailer: o que você vai aprender neste canal</td><td>controladoria estratégica</td><td>Inscrição</td></tr>
+        <tr><td class="num">01</td><td>P1</td><td>O que faz um Controller (e por que sua empresa perde dinheiro sem um)</td><td>o que faz um controller</td><td>Lead magnet</td></tr>
+        <tr><td class="num">02</td><td>P2</td><td>DRE contábil x DRE gerencial: por que os dois números não batem</td><td>dre gerencial</td><td>Planilha</td></tr>
+        <tr><td class="num">03</td><td>P2</td><td>Margem de contribuição na prática: montando a planilha do zero</td><td>margem de contribuição</td><td>Planilha</td></tr>
+        <tr><td class="num">04</td><td>P4</td><td>Mark-up x margem: o erro de precificação que quebra empresa</td><td>markup e margem</td><td>Diagnóstico</td></tr>
+        <tr><td class="num">05</td><td>P2</td><td>Rateio de custo indireto: 3 métodos e qual destrói sua decisão</td><td>rateio de custos indiretos</td><td>Lead magnet</td></tr>
+        <tr><td class="num">06</td><td>P3</td><td>Como montar um orçamento empresarial do zero</td><td>como fazer orçamento empresarial</td><td>Planilha</td></tr>
+        <tr><td class="num">07</td><td>P1</td><td>Centro de custo: como estruturar sem virar burocracia</td><td>centro de custo</td><td>Diagnóstico</td></tr>
+        <tr><td class="num">08</td><td>P3</td><td>Orçado x realizado: análise de variância que a diretoria entende</td><td>análise de variação orçamentária</td><td>Lead magnet</td></tr>
+        <tr><td class="num">09</td><td>P4</td><td>Ponto de equilíbrio: quanto vender para não ter prejuízo</td><td>ponto de equilíbrio</td><td>Planilha</td></tr>
+        <tr><td class="num">10</td><td>P5</td><td>Excel para controladoria: as 7 funções que eu uso todo mês</td><td>excel para controladoria</td><td>Newsletter</td></tr>
+        <tr><td class="num">11</td><td>P2</td><td>Produto deficitário: como descobrir o que está dando prejuízo</td><td>produto deficitário rentabilidade</td><td>Diagnóstico</td></tr>
+        <tr><td class="num">12</td><td>P5</td><td>Fechamento mensal em 5 dias: o checklist completo</td><td>fechamento contábil mensal</td><td>Checklist</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block" id="kpis">
+  <div class="sec-head"><span class="sec-num">07</span><h2>KPIs</h2></div>
+  <p class="sec-intro">A métrica North Star é <strong>leads qualificados por mês</strong>, não inscritos. Em nicho B2B, um canal de 800 inscritos que gera contrato vale mais que um de 50 mil que não gera.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Indicador</th><th class="num">90 dias</th><th class="num">365 dias</th><th>Fonte</th></tr></thead>
+      <tbody>
+        <tr><td>Vídeos longos publicados</td><td class="num">12</td><td class="num">52</td><td>YouTube Studio</td></tr>
+        <tr><td>Shorts publicados</td><td class="num">36</td><td class="num">156</td><td>YouTube Studio</td></tr>
+        <tr><td>Inscritos</td><td class="num">300</td><td class="num">1.000</td><td>YouTube Studio</td></tr>
+        <tr><td>Horas de exibição públicas</td><td class="num">500 h</td><td class="num">4.000 h</td><td>YouTube Studio</td></tr>
+        <tr><td>CTR da impressão</td><td class="num">≥ 4%</td><td class="num">≥ 6%</td><td>YouTube Studio</td></tr>
+        <tr><td>Retenção aos 30 segundos</td><td class="num">≥ 55%</td><td class="num">≥ 65%</td><td>YouTube Studio</td></tr>
+        <tr><td>Duração média de visualização</td><td class="num">≥ 4 min</td><td class="num">≥ 6 min</td><td>YouTube Studio</td></tr>
+        <tr><td>Leads capturados por e-mail</td><td class="num">100</td><td class="num">800</td><td>Ferramenta de e-mail</td></tr>
+        <tr><td><strong>Leads qualificados para consultoria</strong></td><td class="num"><strong>5</strong></td><td class="num"><strong>60</strong></td><td>Asana (funil)</td></tr>
+        <tr><td>Custo por lead</td><td class="num">≤ R$ 60</td><td class="num">≤ R$ 25</td><td>(CAPEX + OPEX) ÷ leads</td></tr>
+      </tbody>
+      <caption>Limite de alerta: CTR abaixo de 3% em 48h dispara a troca de thumbnail prevista em YT-064.</caption>
+    </table>
+  </div>
+</section>
+
+<section class="block" id="riscos">
+  <div class="sec-head"><span class="sec-num">08</span><h2>Registro de riscos</h2></div>
+  <p class="sec-intro">Dez riscos mapeados, cada um com mitigação atribuída a uma issue do backlog. Revisão mensal na retrospectiva.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>#</th><th>Risco</th><th>Score</th><th>Mitigação</th></tr></thead>
+      <tbody>
+        <tr><td>R01</td><td>Quebra de cadência por sobrecarga do fundador</td><td><span class="chip chip-alta">Crítico</span></td><td>Gravação em lote e estoque mínimo de 4 vídeos &middot; YT-075</td></tr>
+        <tr><td>R02</td><td>Exposição indevida de dados de clientes</td><td><span class="chip chip-alta">Crítico</span></td><td>Política de anonimização e autorização formal &middot; YT-078</td></tr>
+        <tr><td>R03</td><td>Conteúdo tecnicamente incorreto em público</td><td><span class="chip chip-media">Atenção</span></td><td>Revisão técnica obrigatória antes de gravar &middot; YT-049</td></tr>
+        <tr><td>R04</td><td>CTR baixo e vídeos não distribuídos pelo algoritmo</td><td><span class="chip chip-alta">Crítico</span></td><td>Teste A/B contínuo, 3 thumbnails por vídeo &middot; YT-064</td></tr>
+        <tr><td>R05</td><td>Nicho B2B com audiência pequena, crescimento lento</td><td><span class="chip chip-alta">Crítico</span></td><td>Medir por leads, não por inscritos &middot; Shorts para topo de funil &middot; YT-038</td></tr>
+        <tr><td>R06</td><td>Dependência de um único editor freelancer</td><td><span class="chip chip-media">Atenção</span></td><td>SOP documentado e projeto-template de edição &middot; YT-080</td></tr>
+        <tr><td>R07</td><td>Uso de trilha ou imagem com direito autoral</td><td><span class="chip chip-media">Atenção</span></td><td>Biblioteca licenciada definida e arquivada &middot; YT-079</td></tr>
+        <tr><td>R08</td><td>Canal não converte em leads</td><td><span class="chip chip-alta">Crítico</span></td><td>CTA de fundo de funil desde o vídeo 01 &middot; YT-066</td></tr>
+        <tr><td>R09</td><td>Orçamento de equipamento estourar</td><td><span class="chip chip-baixa">Baixo</span></td><td>Fase 1 com celular e lapela &middot; upgrade só após o vídeo 12 &middot; YT-025</td></tr>
+        <tr><td>R10</td><td>Concorrente grande entra no nicho</td><td><span class="chip chip-baixa">Baixo</span></td><td>Defesa por profundidade prática e prova social real &middot; YT-003</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block" id="ritual">
+  <div class="sec-head"><span class="sec-num">09</span><h2>Da pauta à publicação</h2></div>
+  <p class="sec-intro">O fluxo desenhado (TO-BE) e o ritual semanal que o sustenta dentro de 8 horas. As etapas são uma sequência real: pular uma quebra a seguinte.</p>
+  <ol class="flow">
+    <li><div><strong>Selecionar a pauta da semana</strong> no banco de 60 ideias — segunda, 1h.</div></li>
+    <li><div><strong>Pesquisar a keyword</strong> e analisar os 5 vídeos que já ranqueiam.<span class="warnstep">Pular esta etapa mata o alcance do vídeo</span></div></li>
+    <li><div><strong>Escrever o roteiro</strong> no template: hook, promessa, entrega em blocos, recapitulação, CTA.</div></li>
+    <li><div><strong>Revisar tecnicamente</strong> conceito, fórmula e exemplo numérico — SLA de 48h com o controller.</div></li>
+    <li><div><strong>Gravar em lote</strong> — quinta, 3h: um vídeo longo e três Shorts na mesma montagem de estúdio.</div></li>
+    <li><div><strong>Editar</strong> no projeto-template, com legenda revisada. SLA de 3 dias úteis.</div></li>
+    <li><div><strong>Criar três thumbnails</strong>, título e descrição com capítulos marcados.</div></li>
+    <li><div><strong>Publicar às terças, 19h</strong>, com cards, tela final e playlist do pilar configurados.</div></li>
+    <li><div><strong>Responder 100% dos comentários</strong> nas duas primeiras horas.<span class="warnstep">Janela crítica de sinal de engajamento</span></div></li>
+    <li><div><strong>Distribuir</strong>: LinkedIn em D+1, Instagram em D+2, newsletter em D+3.</div></li>
+    <li><div><strong>Medir em D+7 e D+28</strong> e levar os números para a retrospectiva mensal.</div></li>
+  </ol>
+</section>
+
+<footer class="pagefoot">
+  <p>Backlog gerado a partir de <code>docs/canal-youtube-controladoria/issues.csv</code>, versionado no repositório <code>centro-de-custos-inteligente</code>, branch <code>claude/youtube-channel-strategic-accounting-areio8</code>.</p>
+  <p>O CSV está pronto para importação direta em Asana, ClickUp, Jira ou GitHub Issues, com todos os critérios de aceite preservados.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var state = {prio:'all', sprint:'all'};
+  var issues = Array.prototype.slice.call(document.querySelectorAll('.issue'));
+  var counter = document.getElementById('count');
+  var total = issues.length;
+
+  function apply(){
+    var shown = 0;
+    issues.forEach(function(li){
+      var ok = (state.prio === 'all' || li.dataset.prio === state.prio) &&
+               (state.sprint === 'all' || li.dataset.sprint === state.sprint);
+      li.hidden = !ok;
+      if (ok) shown++;
+    });
+    document.querySelectorAll('.epic').forEach(function(sec){
+      var any = sec.querySelector('.issue:not([hidden])');
+      sec.hidden = !any;
+    });
+    counter.textContent = shown === total
+      ? total + ' de ' + total + ' issues'
+      : shown + ' de ' + total + ' issues';
+  }
+
+  document.querySelectorAll('button.f').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var group = btn.dataset.filter;
+      state[group] = btn.dataset.value;
+      document.querySelectorAll('button.f[data-filter="' + group + '"]').forEach(function(b){
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      apply();
+    });
+  });
+
+  apply();
+})();
+</script>

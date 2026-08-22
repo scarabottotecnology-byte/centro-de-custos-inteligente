@@ -7,6 +7,7 @@ Backlog completo para o lançamento de um canal no YouTube sobre controladoria e
 | [`00-BACKLOG.md`](./00-BACKLOG.md) | Project Charter, posicionamento, roadmap, épicos, matriz de priorização, KPIs, riscos, fluxo de trabalho, calendário editorial e orçamento |
 | [`01-ISSUES.md`](./01-ISSUES.md) | As 80 issues detalhadas, com tipo, prioridade, estimativa, sprint, dependências, responsável e critérios de aceite |
 | [`issues.csv`](./issues.csv) | Mesma lista em formato importável para Asana, ClickUp, Jira, Trello ou GitHub Issues |
+| [`backlog-canal-youtube.html`](./backlog-canal-youtube.html) | Versão navegável do backlog, com filtros por prioridade e sprint (gerada a partir do CSV) |
 
 ## Números do projeto
 
