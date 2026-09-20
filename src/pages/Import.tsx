@@ -100,7 +100,10 @@ export default function ImportPage() {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <h1 className="text-2xl font-bold">Importar Planilha</h1>
+      <div>
+        <h1 className="text-2xl font-bold">Importar Planilha</h1>
+        <p className="text-sm text-muted-foreground">Tire sua base do Excel: mapeie as colunas uma vez e tenha os dados prontos para análise.</p>
+      </div>
 
       {/* Upload */}
       <Card>
