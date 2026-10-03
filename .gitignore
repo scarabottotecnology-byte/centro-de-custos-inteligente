@@ -15,6 +15,10 @@ dist-ssr
 # Claude Code agent worktrees
 .claude/
 
+# HyperFrames agent skills (local tooling, not project content)
+.agents/
+skills-lock.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
