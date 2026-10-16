@@ -1,0 +1,142 @@
+# Copie para prospeccao.yaml e ajuste. Tudo que é regra de negócio mora aqui;
+# senhas e endereços ficam no .env.
+
+organizacao:
+  slug: keystone
+  razao_social: Keystone Controladoria
+  nome: Keystone Controladoria
+
+# Usada pela IA para escrever a pesquisa e a frase de abertura.
+oferta: >
+  Controladoria terceirizada para PMEs: DRE gerencial mensal, custo e margem por
+  centro de custo, fluxo de caixa projetado e reunião mensal de resultado com o
+  dono. Substitui a montagem de um time financeiro interno.
+
+icp:
+  nome: PME com controladoria terceirizável
+  # Filtros aplicados NA CARGA da Receita. Quanto mais fechado, mais rápido e
+  # menor o banco. AJUSTE para a sua região.
+  filtros:
+    ufs: [PR]
+    municipios: [CURITIBA, SAO JOSE DOS PINHAIS, PINHAIS, COLOMBO, ARAUCARIA]
+    cnae_prefixos: ["10", "22", "25", "28", "41", "42", "43", "45", "46", "49", "56", "62", "71", "86"]
+    somente_matriz: true
+    excluir_mei: true
+    portes: [EPP, DEMAIS]        # MICRO | EPP | DEMAIS
+    abertura_min_anos: 2
+    capital_social_min: 50000
+  # Pesos do ICP Score (somam o que você quiser; o score é normalizado).
+  pesos:
+    porte: 25
+    capital_social: 20
+    idade: 15
+    segmento: 20
+    presenca_digital: 10
+    contato_direto: 10
+  # Prefixo de CNAE -> nota 0..1. Prefixo mais longo vence.
+  segmentos:
+    "46": 1.0     # comércio atacadista
+    "10": 0.9     # indústria de alimentos
+    "25": 0.9     # produtos de metal
+    "28": 0.9     # máquinas e equipamentos
+    "22": 0.8     # borracha e plástico
+    "41": 0.8     # construção
+    "42": 0.7
+    "43": 0.7
+    "45": 0.8     # veículos e peças
+    "49": 0.7     # transporte
+    "86": 0.8     # saúde
+    "62": 0.6     # TI
+    "71": 0.6     # engenharia
+    "56": 0.5     # alimentação
+  capital_social_ideal: 1000000
+  idade_ideal_anos: 5
+  limiar_priorizacao: 60
+
+enriquecimento:
+  google_maps: true
+  lote: 25                       # empresas por job do gosom
+  extrair_emails_do_site: true
+  tempo_max_job_segundos: 600
+  aceitar_email_risky: true      # catch-all é comum em PME brasileira
+
+envio:
+  modo: autonomous               # autonomous | approval_required
+  dry_run: true                  # ⚠️ comece em true, leia as prévias no log, depois mude para false
+  janela:
+    dias: [0, 1, 2, 3, 4]        # 0 = segunda
+    inicio: "09:00"
+    fim: "17:30"
+  # Chip novo: comece com 15–25/dia e suba aos poucos. Número banido = zero venda.
+  limite_diario:
+    whatsapp: 20
+    email: 40
+  intervalo_segundos: {min: 90, max: 240}
+  canal_preferido: whatsapp
+  remetente:
+    nome: Jefferson
+    empresa: Keystone Controladoria
+  # Seu WhatsApp pessoal: recebe o aviso na hora que um lead responde com interesse.
+  aviso_dono_whatsapp: "55DDDNUMERO"
+
+# Uma campanha por canal. O prospect entra na do melhor canal que tiver
+# (WhatsApp verificado > e-mail verificado). Variáveis em messages.py.
+campanhas:
+  whatsapp:
+    nome: Controladoria PME — WhatsApp
+    objetivo: reunião de 15 minutos
+    passos:
+      - dias: 0
+        texto: |
+          {saudacao}, tudo bem? Aqui é o {remetente}, da {empresa_remetente}.
+          {abertura}
+          A gente faz a controladoria de empresas como a {empresa}: DRE gerencial todo mês, margem por centro de custo e projeção de caixa, sem você precisar montar equipe financeira.
+          Faz sentido eu te mostrar em 15 minutos como ficaria para vocês?
+          (Se preferir não receber mensagens, é só responder SAIR.)
+      - dias: 3
+        texto: |
+          {saudacao}! Só retomando: muitas empresas de {segmento} em {cidade} descobrem margem negativa em produto ou cliente só no fim do ano. Quer que eu te mande um exemplo do relatório mensal que entregamos?
+      - dias: 8
+        texto: |
+          {saudacao}, última mensagem por aqui para não incomodar. Se em algum momento quiser enxergar custo e margem da {empresa} mês a mês, é só me chamar. Abraço!
+
+  email:
+    nome: Controladoria PME — E-mail
+    objetivo: reunião de 15 minutos
+    passos:
+      - dias: 0
+        assunto: "{empresa}: margem por centro de custo, todo mês"
+        texto: |
+          {saudacao},
+
+          Sou o {remetente}, da {empresa_remetente}.
+          {abertura}
+
+          Fazemos a controladoria de PMEs como a {empresa}: DRE gerencial mensal, custo e margem por centro de custo e fluxo de caixa projetado, com uma reunião mensal de resultado. Sai mais barato que montar um time financeiro interno.
+
+          Tem 15 minutos esta semana para eu mostrar como ficaria para vocês?
+
+          {remetente}
+          {empresa_remetente}
+
+          Não quer mais receber nossos e-mails? {link_saida}
+      - dias: 4
+        assunto: "Re: {empresa}: margem por centro de custo, todo mês"
+        texto: |
+          {saudacao},
+
+          Retomando a mensagem anterior: posso te mandar um exemplo (com dados fictícios) do relatório mensal que entregamos para empresas de {segmento}?
+
+          {remetente}
+
+          Não quer mais receber nossos e-mails? {link_saida}
+      - dias: 10
+        assunto: "Encerrando por aqui"
+        texto: |
+          {saudacao},
+
+          Não quero lotar sua caixa, então esta é a última mensagem. Se em algum momento fizer sentido olhar custo e margem da {empresa} mês a mês, é só responder este e-mail.
+
+          {remetente}
+
+          Não quer mais receber nossos e-mails? {link_saida}
