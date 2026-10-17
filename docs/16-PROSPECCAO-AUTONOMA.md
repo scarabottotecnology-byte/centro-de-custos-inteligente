@@ -17,7 +17,8 @@ Um robô que, sozinho e todo dia útil:
    comercial, nota, número de avaliações e e-mails publicados no site.
 3. **Pontua** cada empresa (ICP Score 0–100, normalizado pelo peso que tinha
    dado para avaliar) e prioriza.
-4. **Verifica** os canais: e-mail no Reacher, número no próprio WhatsApp.
+4. **Verifica** os canais: domínio do e-mail pelo DNS (ou Reacher, se houver
+   porta 25), número no próprio WhatsApp.
 5. **Pesquisa** a empresa com o Claude e escreve uma frase de abertura
    (opcional, só com fatos do banco).
 6. **Aborda** por WhatsApp ou e-mail, em cadência de 3 passos, dentro da janela
@@ -33,7 +34,7 @@ Um robô que, sozinho e todo dia útil:
 | Base de empresas | Dados Abertos CNPJ (Receita) | dado público | Discovery |
 | ETL | `prospector` (próprio) | — | Carga filtrada pelo ICP |
 | Google Maps | gosom/google-maps-scraper | MIT | Enriquecimento |
-| Verificação de e-mail | reacherhq/check-if-email-exists | AGPL-3.0 (serviço separado) | Antes do envio |
+| Verificação de e-mail | DNS (dnspython); opcional: reacherhq/check-if-email-exists | ISC; AGPL-3.0 (serviço separado) | Antes do envio |
 | WhatsApp | EvolutionAPI/evolution-api v2.3.7 | Apache-2.0 + aviso de uso | Envio e respostas |
 | Orquestração | `worker` do prospector, ou n8n | — / Sustainable Use | Agenda |
 | IA (opcional) | Claude (`claude-opus-5-5`) | API paga | Pesquisa A6 e classificação A8 |
@@ -64,7 +65,7 @@ Mapeamento para os workflows de `04-WORKFLOWS-N8N.md`:
 
 ## Garantias testadas
 
-`prospeccao/prospector/tests/` — 51 testes, incluindo o ciclo completo contra
+`prospeccao/prospector/tests/` — 61 testes, incluindo o ciclo completo contra
 Postgres:
 
 - CNPJ alfanumérico validado pelo exemplo oficial da Receita.
@@ -80,11 +81,26 @@ Postgres:
   duplicar.
 - Webhook repetido do WhatsApp não cria lead nem aviso em dobro.
 
+## Custo zero (17/10/2026)
+
+A pedido do Jefferson, a stack roda sem gasto no próprio PC Windows
+(`prospeccao/WINDOWS.md`): Docker Desktop, Gmail dedicado com senha de app,
+Tailscale Funnel para o link de descadastro e sem chave da Anthropic.
+
+O Reacher saiu do padrão (`--profile reacher`): precisa da porta 25 de saída,
+bloqueada na internet residencial brasileira e nas nuvens gratuitas, e a imagem
+só existe para amd64. No lugar, `verify.emails_mx` consulta o DNS do domínio:
+sem servidor de e-mail, o contato vira `unverified`; com servidor, segue
+`unknown` com `email_checked_at` e pode entrar em campanha — o bounce é
+suprimido pela leitura da caixa. Antes de cada lote, o DNS precisa confirmar
+`gmail.com`; se não confirmar (internet caiu, DNS filtrado), nada é marcado.
+
+As portas publicadas passaram a abrir só em `127.0.0.1`.
+
 ## Pendências
 
-1. Rodar num servidor com internet aberta (este ambiente bloqueia
+1. Rodar com internet aberta (este ambiente bloqueia
    `arquivos.receitafederal.gov.br`, Google e WhatsApp).
-2. Chip dedicado para o WhatsApp de prospecção e subdomínio de e-mail com SPF,
-   DKIM e DMARC.
+2. Chip dedicado para o WhatsApp de prospecção.
 3. Revisar os textos da campanha em `prospeccao.yaml` e o ICP da região.
 4. Migrar as tabelas para o Supabase `keystone-growth-os` na FASE 2.

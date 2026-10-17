@@ -130,6 +130,17 @@ def _download_resumable(client: httpx.Client, url: str, dest: Path) -> None:
                 fh.write(chunk)
 
 
+def prune(base: Path, keep: Path) -> int:
+    """Apaga os .zip dos meses que não são `keep`. Cada mês são ~8 GB; num PC
+    pessoal o disco enche em poucos meses se nada for apagado."""
+    freed = 0
+    for zip_path in base.glob("*/*.zip"):
+        if zip_path.parent.resolve() != keep.resolve():
+            freed += zip_path.stat().st_size
+            zip_path.unlink()
+    return freed
+
+
 # ── Leitura ─────────────────────────────────────────────────────────────────
 
 def iter_rows(zip_path: Path, columns: list[str]) -> Iterator[dict[str, str]]:

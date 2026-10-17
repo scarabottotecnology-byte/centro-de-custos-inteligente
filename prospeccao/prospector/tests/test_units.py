@@ -163,3 +163,61 @@ def test_janela_de_envio(settings):
     assert outreach.in_window(settings, datetime(2026, 10, 14, 10, 0, tzinfo=ZoneInfo(tz)), tz)      # quarta
     assert not outreach.in_window(settings, datetime(2026, 10, 14, 20, 0, tzinfo=ZoneInfo(tz)), tz)  # noite
     assert not outreach.in_window(settings, datetime(2026, 10, 17, 10, 0, tzinfo=ZoneInfo(tz)), tz)  # sábado
+
+
+class TestDns:
+    def test_mx_presente(self, monkeypatch):
+        from prospector import verify
+        monkeypatch.setattr(verify.dns.resolver, "resolve", lambda d, r, lifetime: ["mx"])
+        assert verify._has_mail_server("boavista.com.br") is True
+
+    def test_sem_mx_usa_registro_a(self, monkeypatch):
+        from prospector import verify
+        calls = []
+
+        def resolve(domain, record, lifetime):
+            calls.append(record)
+            if record == "MX":
+                raise verify.dns.resolver.NoAnswer()
+            return ["1.2.3.4"]
+
+        monkeypatch.setattr(verify.dns.resolver, "resolve", resolve)
+        assert verify._has_mail_server("exemplo.com.br") is True and calls == ["MX", "A"]
+
+    def test_dominio_inexistente(self, monkeypatch):
+        from prospector import verify
+
+        def resolve(domain, record, lifetime):
+            raise verify.dns.resolver.NXDOMAIN()
+
+        monkeypatch.setattr(verify.dns.resolver, "resolve", resolve)
+        assert verify._has_mail_server("nao-existe.com.br") is False
+
+    def test_servidor_de_nomes_falhou_vira_none(self, monkeypatch):
+        from prospector import verify
+
+        def resolve(domain, record, lifetime):
+            raise verify.dns.resolver.NoNameservers()
+
+        monkeypatch.setattr(verify.dns.resolver, "resolve", resolve)
+        assert verify._has_mail_server("boavista.com.br") is None
+
+    def test_timeout_vira_none(self, monkeypatch):
+        from prospector import verify
+
+        def resolve(domain, record, lifetime):
+            raise verify.dns.exception.Timeout()
+
+        monkeypatch.setattr(verify.dns.resolver, "resolve", resolve)
+        assert verify._has_mail_server("lento.com.br") is None
+
+
+def test_prune_apaga_so_meses_antigos(tmp_path):
+    for month in ("2026-08", "2026-09"):
+        (tmp_path / month).mkdir()
+        (tmp_path / month / "Empresas0.zip").write_bytes(b"x" * 10)
+        (tmp_path / month / ".carregado").write_text("ok")
+    assert receita.prune(tmp_path, keep=tmp_path / "2026-09") == 10
+    assert not (tmp_path / "2026-08" / "Empresas0.zip").exists()
+    assert (tmp_path / "2026-08" / ".carregado").exists()
+    assert (tmp_path / "2026-09" / "Empresas0.zip").exists()

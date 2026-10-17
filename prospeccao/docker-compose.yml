@@ -1,7 +1,11 @@
-# Stack de prospecção autônoma. Tudo open source, roda num VPS de 4 GB.
+# Stack de prospecção autônoma. Tudo open source; roda num PC com Docker
+# Desktop (Windows: ver WINDOWS.md) ou num servidor Linux de 4 GB.
 #
 #   docker compose up -d                 # sobe tudo
 #   docker compose run --rm cli init     # cria o esquema e as campanhas
+#
+# As portas só abrem para o próprio computador (127.0.0.1). Para expor de
+# propósito, troque no .env, ex.: PROSPECTOR_PORT=8000.
 #
 # Detalhes no README.md desta pasta.
 
@@ -16,7 +20,7 @@ x-prospector: &prospector
     PROSPECTOR_CONFIG: /config/prospeccao.yaml
     PROSPECTOR_DATA_DIR: /data
     GMAPS_URL: http://gmaps:8080
-    REACHER_URL: http://reacher:8080
+    REACHER_URL: ${REACHER_URL:-}   # vazio = checagem de e-mail só por DNS
     EVOLUTION_URL: http://evolution:8080
     PROSPECTOR_WEBHOOK_BASE: http://api:8000
   volumes:
@@ -56,7 +60,7 @@ services:
     <<: *prospector
     command: ["servidor", "--porta", "8000"]
     ports:
-      - "${PROSPECTOR_PORT:-8000}:8000"
+      - "${PROSPECTOR_PORT:-127.0.0.1:8000}:8000"
 
   # O robô: roda o ciclo sozinho, em loop, dentro da janela de envio.
   worker:
@@ -80,14 +84,18 @@ services:
       - gmaps_data:/gmapsdata
     restart: unless-stopped
 
-  # Verificação de e-mail sem enviar (reacherhq/check-if-email-exists, AGPL-3.0).
-  # Roda como serviço separado, chamado por HTTP — o código do prospector não é derivado dele.
+  # Opcional. Verificação de e-mail sem enviar (reacherhq/check-if-email-exists,
+  # AGPL-3.0, serviço separado chamado por HTTP). Precisa da porta 25 de saída,
+  # que internet residencial no Brasil e nuvens gratuitas bloqueiam; sem ele o
+  # prospector checa o domínio pelo DNS. Para ligar num servidor com porta 25:
+  #   docker compose --profile reacher up -d  e  REACHER_URL=http://reacher:8080
   reacher:
     image: reacherhq/backend:latest
+    profiles: ["reacher"]
     environment:
       RCH__HELLO_NAME: ${REACHER_HELLO_NAME:-localhost}
       RCH__FROM_EMAIL: ${REACHER_FROM_EMAIL:-verificacao@localhost}
-      RCH__HEADER_SECRET: ${REACHER_SECRET}
+      RCH__HEADER_SECRET: ${REACHER_SECRET:-}
     restart: unless-stopped
 
   # WhatsApp (Evolution API, Apache-2.0 com cláusula de aviso de uso — ver README).
@@ -109,7 +117,7 @@ services:
       CONFIG_SESSION_PHONE_NAME: Chrome
       LOG_LEVEL: ERROR,WARN
     ports:
-      - "${EVOLUTION_PORT:-8081}:8080"   # painel em /manager
+      - "${EVOLUTION_PORT:-127.0.0.1:8081}:8080"   # painel em http://localhost:8081/manager
     volumes:
       - evolution_instances:/evolution/instances
     depends_on:
@@ -129,7 +137,7 @@ services:
       PROSPECTOR_API_TOKEN: ${PROSPECTOR_API_TOKEN}
       N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
     ports:
-      - "${N8N_PORT:-5678}:5678"
+      - "${N8N_PORT:-127.0.0.1:5678}:5678"
     volumes:
       - n8n_data:/home/node/.n8n
       - ./n8n:/workflows:ro

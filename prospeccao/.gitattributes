@@ -1,0 +1,2 @@
+# Windows (Git com autocrlf) converteria para CRLF; os contêineres Linux precisam de LF.
+* text=auto eol=lf

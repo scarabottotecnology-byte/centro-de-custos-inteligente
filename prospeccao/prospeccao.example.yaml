@@ -119,7 +119,7 @@ campanhas:
           {remetente}
           {empresa_remetente}
 
-          Não quer mais receber nossos e-mails? {link_saida}
+          Não quer mais receber nossos e-mails? Responda SAIR ou acesse {link_saida}
       - dias: 4
         assunto: "Re: {empresa}: margem por centro de custo, todo mês"
         texto: |
@@ -129,7 +129,7 @@ campanhas:
 
           {remetente}
 
-          Não quer mais receber nossos e-mails? {link_saida}
+          Não quer mais receber nossos e-mails? Responda SAIR ou acesse {link_saida}
       - dias: 10
         assunto: "Encerrando por aqui"
         texto: |
@@ -139,4 +139,4 @@ campanhas:
 
           {remetente}
 
-          Não quer mais receber nossos e-mails? {link_saida}
+          Não quer mais receber nossos e-mails? Responda SAIR ou acesse {link_saida}

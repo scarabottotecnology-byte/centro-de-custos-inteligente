@@ -9,25 +9,31 @@ Arquitetura e decisões: [`docs/16-PROSPECCAO-AUTONOMA.md`](../docs/16-PROSPECCA
 e ADR-014 em [`docs/10`](../docs/10-DECISOES-ARQUITETURAIS-ADR.md).
 
 ```
-Receita (CNPJ) ─▶ ICP Score ─▶ Google Maps ─▶ Reacher / WhatsApp check ─▶ Claude (opcional)
+Receita (CNPJ) ─▶ ICP Score ─▶ Google Maps ─▶ checagem DNS / WhatsApp ─▶ Claude (opcional)
                                                                               │
           aviso no seu WhatsApp ◀── lead ◀── resposta ◀── WhatsApp / e-mail ◀─┘
 ```
 
 ## O que você precisa
 
-- Um **servidor Linux** com Docker, 4 GB de RAM e ~30 GB de disco (os arquivos
-  da Receita ocupam ~8 GB compactados; o banco fica pequeno porque só grava o
-  recorte do ICP). Um VPS de R$ 40–80/mês serve.
-- Um **chip dedicado** para o WhatsApp de prospecção. **Não use o seu número
-  pessoal nem o da empresa.**
-- Um **subdomínio de e-mail** (ex.: `contato.keystonecontroladoria.com.br`)
-  com SPF, DKIM e DMARC, e a caixa SMTP/IMAP dele.
-- Um domínio apontando para o servidor com HTTPS, para o link de descadastro
-  (qualquer proxy reverso: Caddy, Traefik, Cloudflare Tunnel).
-- Opcional: chave da API da Anthropic para a pesquisa e a frase de abertura.
+**Custo zero, no seu computador Windows:** siga o [`WINDOWS.md`](./WINDOWS.md).
+
+| | Grátis | Pago (opcional) |
+|---|---|---|
+| Onde roda | seu PC com Docker Desktop, ligado em horário comercial | VPS Linux de 4 GB (R$ 40–80/mês), 24 h |
+| WhatsApp | um chip que você já tenha parado | chip novo (~R$ 15, uma vez) |
+| E-mail | Gmail novo só para prospecção, com senha de app (500/dia) | subdomínio próprio com SPF, DKIM e DMARC |
+| Link de descadastro | Tailscale Funnel (`https://seu-pc.xxx.ts.net`) ou só a resposta "SAIR" | domínio com HTTPS |
+| Checagem de e-mail | DNS do domínio (padrão) | Reacher, só em servidor com porta 25 liberada |
+| IA | sem IA: templates e palavras-chave | chave da Anthropic |
+
+Em qualquer caso: ~30 GB de disco (os arquivos da Receita ocupam ~8 GB e o mês
+anterior é apagado depois de cada carga) e **um número de WhatsApp dedicado —
+nunca o seu pessoal nem o da empresa.**
 
 ## Subir
+
+No Windows, siga o [`WINDOWS.md`](./WINDOWS.md). No Linux ou Mac:
 
 ```bash
 cd prospeccao
@@ -54,12 +60,15 @@ algumas cidades.
 
 ```bash
 docker compose run --rm cli whatsapp-conectar
-docker compose cp worker:/data/whatsapp-qr.png .
 ```
 
-Abra `whatsapp-qr.png` e leia com o WhatsApp do chip de prospecção
-(Aparelhos conectados → Conectar aparelho). Também dá para parear pelo painel do
-Evolution em `http://SEU_SERVIDOR:8081/manager` com a `EVOLUTION_APIKEY`.
+Abra o painel do Evolution em `http://localhost:8081/manager`, entre com a URL
+`http://localhost:8081` e a `EVOLUTION_APIKEY`, clique em **Conectar** na
+instância `prospeccao` e leia o QR com o WhatsApp do chip (Aparelhos conectados
+→ Conectar aparelho). O QR expira em segundos, por isso o painel é mais prático.
+
+As portas só abrem para o próprio computador. Num servidor remoto, abra antes
+um túnel a partir da sua máquina: `ssh -L 8081:localhost:8081 usuario@servidor`.
 
 ### 3. Ensaiar sem enviar
 
@@ -105,7 +114,7 @@ docker compose run --rm cli <comando>
 | `receita-baixar` / `receita-carregar` | base da Receita |
 | `pontuar` | ICP Score e priorização |
 | `maps` | envia e coleta buscas no Google Maps |
-| `verificar` | e-mail (Reacher) e WhatsApp |
+| `verificar` | e-mail (DNS, ou Reacher se configurado) e WhatsApp |
 | `pesquisar` | pesquisa e frase de abertura com o Claude |
 | `enfileirar` | põe os priorizados na campanha do melhor canal |
 | `enviar` | envia o que venceu |
@@ -153,7 +162,8 @@ Pedido de descadastro é decidido sempre por regra, nunca pelo modelo.
   para o WhatsApp. A licença pede que esse aviso fique visível a quem
   administra o sistema e que o logo e o copyright do painel não sejam
   removidos.
-- **Reacher** é AGPL-3.0 e roda como serviço separado, chamado por HTTP.
+- **Reacher** (opcional, `--profile reacher`) é AGPL-3.0 e roda como serviço
+  separado, chamado por HTTP.
 - **gosom/google-maps-scraper** é MIT. Raspar o Google Maps viola os termos de
   uso do Google; o risco prático é bloqueio de IP (concorrência baixa por
   padrão; dá para usar proxy). Decisão registrada no ADR-014.

@@ -99,7 +99,7 @@ class Settings(BaseModel):
     webhook_base_url: str = "http://prospector:8000"
     api_token: str = ""
     gmaps_url: str = "http://gmaps:8080"
-    reacher_url: str = "http://reacher:8080"
+    reacher_url: str = ""          # vazio = verificação só por DNS (verify.emails_mx)
     reacher_secret: str = ""
     evolution_url: str = "http://evolution:8080"
     evolution_apikey: str = ""

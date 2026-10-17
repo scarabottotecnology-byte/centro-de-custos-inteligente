@@ -86,10 +86,14 @@ _BEST_CONTACT = {
         select ct.id from contacts ct where ct.company_id = %s and ct.phone_status = 'verified'
          order by (ct.full_name is not null) desc, (ct.source = 'receita_federal_open_data') desc limit 1
     """,
+    # Com Reacher, só 'verified'. Sem ele, vale também 'unknown' que já passou
+    # pela checagem de DNS (email_checked_at preenchido).
     "email": """
         select ct.id from contacts ct where ct.company_id = %s and ct.email is not null
-           and not ct.email_shared and ct.email_status = 'verified'
-         order by (ct.full_name is not null) desc limit 1
+           and not ct.email_shared
+           and (ct.email_status = 'verified'
+                or (%s and ct.email_status = 'unknown' and ct.email_checked_at is not null))
+         order by (ct.email_status = 'verified') desc, (ct.full_name is not null) desc limit 1
     """,
 }
 
@@ -110,7 +114,8 @@ def enqueue(conn: psycopg.Connection, org_id: str, settings: Settings, campaign_
     ).fetchall()
     for p in prospects:
         for channel in order:
-            contact = conn.execute(_BEST_CONTACT[channel], (p["company_id"],)).fetchone()
+            params = (p["company_id"],) if channel == "whatsapp" else (p["company_id"], not settings.reacher_url)
+            contact = conn.execute(_BEST_CONTACT[channel], params).fetchone()
             if contact:
                 conn.execute(
                     """
