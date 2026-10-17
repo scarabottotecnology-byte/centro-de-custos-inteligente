@@ -69,9 +69,9 @@ Depois:
 notepad prospeccao.yaml
 ```
 
-O arquivo já vem configurado para a **capital paulista** (`ufs: [SP]`,
-`municipios: [SAO PAULO]`). Para incluir a Grande SP, acrescente as cidades
-listadas no comentário logo acima de `filtros`. Preencha
+O arquivo já vem configurado para a **Grande São Paulo**: os 39 municípios da
+Região Metropolitana, agrupados por região (capital, ABC, oeste, sudoeste, norte
+e leste). Para focar numa parte, apague as cidades que não quiser. Preencha
 `aviso_dono_whatsapp` (o **seu** WhatsApp, que recebe o aviso de lead, no
 formato `5511999998888`), confira `remetente` e leia os textos das mensagens.
 Salve.

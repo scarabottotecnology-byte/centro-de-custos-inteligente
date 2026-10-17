@@ -93,10 +93,18 @@ class TestMessages:
         assert messages.title("SANTO ANDRE") == "Santo André"
         assert messages.title("TABOAO DA SERRA") == "Taboão da Serra"
         assert messages.title("GUARULHOS") == "Guarulhos"
+        assert messages.title("ARUJA") == "Arujá"
+        assert messages.title("MAIRIPORA") == "Mairiporã"
+        assert messages.title("EMBU-GUACU") == "Embu-Guaçu"
+        assert messages.title("EMBU GUACU") == "Embu Guaçu"
 
-    def test_exemplo_configurado_para_sao_paulo(self):
+    def test_exemplo_configurado_para_grande_sao_paulo(self):
         s = config.load(EXAMPLE_CONFIG)
-        assert s.icp.filtros.ufs == ["SP"] and s.icp.filtros.municipios == ["SAO PAULO"]
+        municipios = set(s.icp.filtros.municipios)
+        assert s.icp.filtros.ufs == ["SP"]
+        # 39 municípios da Região Metropolitana + a grafia antiga de Embu das Artes
+        assert len(municipios) == 40
+        assert {"SAO PAULO", "GUARULHOS", "SANTO ANDRE", "OSASCO", "EMBU DAS ARTES", "SALESOPOLIS"} <= municipios
 
     def test_nome_sem_sufixo_societario(self):
         assert messages.company_name({"razao_social": "ALFA NUMERICA COMERCIO LTDA"}) == "Alfa Numerica Comercio"
@@ -154,6 +162,10 @@ class TestMaps:
 
 
 class TestReceita:
+    def test_nome_de_municipio_ignora_hifen_e_acento(self):
+        assert receita.norm_name("BIRITIBA-MIRIM") == receita.norm_name("Biritiba Mirim")
+        assert receita.norm_name("Embu-Guaçu") == receita.norm_name("EMBU GUACU")
+
     def test_select_aplica_icp_em_cada_passada(self, receita_dir, settings):
         sel = receita.select(receita_dir, settings.icp.filtros, today=date(2026, 10, 1))
         assert set(sel.estabelecimentos) == {"11222333000181", "12ABC34501DE35", "77888999000181"}

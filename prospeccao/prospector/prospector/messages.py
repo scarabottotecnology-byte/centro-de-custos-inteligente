@@ -26,7 +26,8 @@ _ACCENTS = {
     "jundiai": "Jundiaí", "parnaiba": "Parnaíba", "carapicuiba": "Carapicuíba",
     "taboao": "Taboão", "araucaria": "Araucária", "ribeirao": "Ribeirão",
     "conceicao": "Conceição", "goncalo": "Gonçalo", "sebastiao": "Sebastião",
-    "embu-guacu": "Embu-Guaçu", "poa": "Poá",
+    "embu-guacu": "Embu-Guaçu", "guacu": "Guaçu", "poa": "Poá", "aruja": "Arujá",
+    "mairipora": "Mairiporã", "salesopolis": "Salesópolis", "lourenco": "Lourenço",
 }
 
 

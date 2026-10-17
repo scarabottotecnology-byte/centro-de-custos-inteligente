@@ -65,7 +65,7 @@ Mapeamento para os workflows de `04-WORKFLOWS-N8N.md`:
 
 ## Garantias testadas
 
-`prospeccao/prospector/tests/` — 63 testes, incluindo o ciclo completo contra
+`prospeccao/prospector/tests/` — 64 testes, incluindo o ciclo completo contra
 Postgres:
 
 - CNPJ alfanumérico validado pelo exemplo oficial da Receita.
@@ -103,5 +103,5 @@ As portas publicadas passaram a abrir só em `127.0.0.1`.
    `arquivos.receitafederal.gov.br`, Google e WhatsApp).
 2. Chip dedicado para o WhatsApp de prospecção.
 3. Revisar os textos da campanha em `prospeccao.yaml`. O ICP já vem para a
-   capital paulista (17/10/2026); a Grande SP fica comentada no exemplo.
+   Grande São Paulo, os 39 municípios da Região Metropolitana (17/10/2026).
 4. Migrar as tabelas para o Supabase `keystone-growth-os` na FASE 2.
