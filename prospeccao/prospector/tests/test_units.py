@@ -1,9 +1,12 @@
 from datetime import date, datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pytest
 
-from prospector import cnpj, inbound, maps, messages, outreach, phones, receita, scoring
+from prospector import cnpj, config, inbound, maps, messages, outreach, phones, receita, scoring
+
+EXAMPLE_CONFIG = Path(__file__).resolve().parents[2] / "prospeccao.example.yaml"
 
 
 class TestCnpj:
@@ -81,8 +84,27 @@ class TestMessages:
         assert text.startswith("Olá, Maria, tudo bem? Aqui é o Jefferson, da Keystone.")
         assert "Distribuidora Boa Vista" in text
         assert "\n\n" not in text and "  " not in text
-        assert values["cidade"] == "Sao Jose dos Pinhais"
+        assert values["cidade"] == "São José dos Pinhais"
         assert values["anos"] == "11"
+
+    def test_cidade_volta_com_acento(self):
+        assert messages.title("SAO PAULO") == "São Paulo"
+        assert messages.title("SAO BERNARDO DO CAMPO") == "São Bernardo do Campo"
+        assert messages.title("SANTO ANDRE") == "Santo André"
+        assert messages.title("TABOAO DA SERRA") == "Taboão da Serra"
+        assert messages.title("GUARULHOS") == "Guarulhos"
+        assert messages.title("ARUJA") == "Arujá"
+        assert messages.title("MAIRIPORA") == "Mairiporã"
+        assert messages.title("EMBU-GUACU") == "Embu-Guaçu"
+        assert messages.title("EMBU GUACU") == "Embu Guaçu"
+
+    def test_exemplo_configurado_para_grande_sao_paulo(self):
+        s = config.load(EXAMPLE_CONFIG)
+        municipios = set(s.icp.filtros.municipios)
+        assert s.icp.filtros.ufs == ["SP"]
+        # 39 municípios da Região Metropolitana + a grafia antiga de Embu das Artes
+        assert len(municipios) == 40
+        assert {"SAO PAULO", "GUARULHOS", "SANTO ANDRE", "OSASCO", "EMBU DAS ARTES", "SALESOPOLIS"} <= municipios
 
     def test_nome_sem_sufixo_societario(self):
         assert messages.company_name({"razao_social": "ALFA NUMERICA COMERCIO LTDA"}) == "Alfa Numerica Comercio"
@@ -140,6 +162,10 @@ class TestMaps:
 
 
 class TestReceita:
+    def test_nome_de_municipio_ignora_hifen_e_acento(self):
+        assert receita.norm_name("BIRITIBA-MIRIM") == receita.norm_name("Biritiba Mirim")
+        assert receita.norm_name("Embu-Guaçu") == receita.norm_name("EMBU GUACU")
+
     def test_select_aplica_icp_em_cada_passada(self, receita_dir, settings):
         sel = receita.select(receita_dir, settings.icp.filtros, today=date(2026, 10, 1))
         assert set(sel.estabelecimentos) == {"11222333000181", "12ABC34501DE35", "77888999000181"}

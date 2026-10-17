@@ -116,7 +116,7 @@ def cmd_servidor(settings, args) -> None:
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(prog="prospector", description="Prospecção B2B autônoma")
+    parser = argparse.ArgumentParser(prog="prospector", description="Sextante: prospecção B2B autônoma")
     parser.add_argument("--config", help="caminho do prospeccao.yaml")
     parser.add_argument("-v", "--verbose", action="store_true")
     sub = parser.add_subparsers(dest="comando", required=True)

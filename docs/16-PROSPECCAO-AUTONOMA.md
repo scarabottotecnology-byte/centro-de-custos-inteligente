@@ -1,4 +1,4 @@
-# 16 — Prospecção autônoma
+# 16 — Sextante: prospecção autônoma
 
 **Status:** implementado em `prospeccao/`, testado com Postgres real e com as
 APIs reais do gosom, Reacher e Evolution. Falta rodar com internet aberta
@@ -9,7 +9,7 @@ APIs reais do gosom, Reacher e Evolution. Falta rodar com internet aberta
 
 ## O que faz
 
-Um robô que, sozinho e todo dia útil:
+O Sextante é o robô que, sozinho e todo dia útil:
 
 1. **Descobre** empresas na base aberta do CNPJ da Receita Federal, só as que
    batem com o ICP (UF, município, CNAE, porte, capital social, idade, sem MEI).
@@ -65,7 +65,7 @@ Mapeamento para os workflows de `04-WORKFLOWS-N8N.md`:
 
 ## Garantias testadas
 
-`prospeccao/prospector/tests/` — 61 testes, incluindo o ciclo completo contra
+`prospeccao/prospector/tests/` — 64 testes, incluindo o ciclo completo contra
 Postgres:
 
 - CNPJ alfanumérico validado pelo exemplo oficial da Receita.
@@ -102,5 +102,6 @@ As portas publicadas passaram a abrir só em `127.0.0.1`.
 1. Rodar com internet aberta (este ambiente bloqueia
    `arquivos.receitafederal.gov.br`, Google e WhatsApp).
 2. Chip dedicado para o WhatsApp de prospecção.
-3. Revisar os textos da campanha em `prospeccao.yaml` e o ICP da região.
+3. Revisar os textos da campanha em `prospeccao.yaml`. O ICP já vem para a
+   Grande São Paulo, os 39 municípios da Região Metropolitana (17/10/2026).
 4. Migrar as tabelas para o Supabase `keystone-growth-os` na FASE 2.

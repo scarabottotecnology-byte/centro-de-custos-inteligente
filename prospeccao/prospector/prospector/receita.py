@@ -160,7 +160,7 @@ def _files(folder: Path, prefix: str) -> list[Path]:
 
 def norm_name(s: str) -> str:
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
-    return re.sub(r"\s+", " ", s).strip().upper()
+    return re.sub(r"[\s-]+", " ", s).strip().upper()
 
 
 def parse_date(s: str) -> date | None:

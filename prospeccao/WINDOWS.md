@@ -1,4 +1,4 @@
-# Rodando no seu computador Windows — custo zero
+# Sextante no seu computador Windows — custo zero
 
 Tudo aqui é gratuito. O único gasto possível é um chip de celular para o
 WhatsApp de prospecção, se você não tiver um número parado.
@@ -69,9 +69,12 @@ Depois:
 notepad prospeccao.yaml
 ```
 
-Ajuste `icp.filtros` (UF, cidades, CNAEs), `remetente`,
+O arquivo já vem configurado para a **Grande São Paulo**: os 39 municípios da
+Região Metropolitana, agrupados por região (capital, ABC, oeste, sudoeste, norte
+e leste). Para focar numa parte, apague as cidades que não quiser. Preencha
 `aviso_dono_whatsapp` (o **seu** WhatsApp, que recebe o aviso de lead, no
-formato `5541999998888`) e os textos das mensagens. Salve.
+formato `5511999998888`), confira `remetente` e leia os textos das mensagens.
+Salve.
 
 ## 4. Ligar
 

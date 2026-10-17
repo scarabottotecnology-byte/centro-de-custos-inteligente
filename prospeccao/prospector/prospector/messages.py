@@ -19,6 +19,16 @@ from datetime import date
 
 _SUFFIX = re.compile(r"\b(LTDA|EIRELI|EPP|ME|S/?A|SLU|SOCIEDADE LIMITADA UNIPESSOAL)\.?$", re.I)
 _SMALL = {"de", "da", "do", "dos", "das", "e"}
+# A Receita grava nomes em maiúsculas e sem acento ("SAO PAULO"). Palavras que
+# em português só existem acentuadas voltam com o acento ao montar a mensagem.
+_ACCENTS = {
+    "sao": "São", "jose": "José", "joao": "João", "andre": "André", "maua": "Mauá",
+    "jundiai": "Jundiaí", "parnaiba": "Parnaíba", "carapicuiba": "Carapicuíba",
+    "taboao": "Taboão", "araucaria": "Araucária", "ribeirao": "Ribeirão",
+    "conceicao": "Conceição", "goncalo": "Gonçalo", "sebastiao": "Sebastião",
+    "embu-guacu": "Embu-Guaçu", "guacu": "Guaçu", "poa": "Poá", "aruja": "Arujá",
+    "mairipora": "Mairiporã", "salesopolis": "Salesópolis", "lourenco": "Lourenço",
+}
 
 
 class _Safe(dict):
@@ -28,7 +38,7 @@ class _Safe(dict):
 
 def title(text: str) -> str:
     words = text.lower().split()
-    return " ".join(w if i and w in _SMALL else w.capitalize() for i, w in enumerate(words))
+    return " ".join(w if i and w in _SMALL else _ACCENTS.get(w, w.capitalize()) for i, w in enumerate(words))
 
 
 def company_name(company: dict) -> str:
