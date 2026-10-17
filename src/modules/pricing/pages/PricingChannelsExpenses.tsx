@@ -6,9 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   useSalesChannels, useCommercialExpenses,
   useUpsertChannel, useDeleteChannel, useUpsertExpense, useDeleteExpense,
-} from "@/hooks/usePricingData";
-import { channelVariablePct, fmtBRL, fmtPct, totalFixedExpenses } from "@/lib/pricing";
-import { EXPENSE_FIELDS, EXPENSE_HINTS, autoMapImportFields, type ImportFieldMapping } from "@/lib/pricing-import";
+} from "@/modules/pricing/hooks/usePricingData";
+import { channelVariablePct, fmtBRL, fmtPct, totalFixedExpenses } from "@/modules/pricing/lib/pricing";
+import { EXPENSE_FIELDS, EXPENSE_HINTS, autoMapImportFields, type ImportFieldMapping } from "@/modules/pricing/lib/pricing-import";
 import { getErrorMessage } from "@/lib/utils";
 import type { TablesInsert } from "@/integrations/supabase/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

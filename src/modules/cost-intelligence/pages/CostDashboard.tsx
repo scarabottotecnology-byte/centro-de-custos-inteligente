@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useFinancialData } from "@/hooks/useFinancialData";
+import { useFinancialData } from "@/modules/cost-intelligence/hooks/useFinancialData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -7,15 +7,20 @@ import {
   PieChart, Pie, Cell, LineChart, Line, Legend,
 } from "recharts";
 import { DollarSign, TrendingUp, TrendingDown, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { QueryState } from "@/components/shared/QueryState";
 
+// Escala do design system. Cor em gráfico codifica série — por isso os
+// tokens --chart-*, e não valores literais que ignoram o tema.
 const COLORS = [
-  "hsl(220, 70%, 50%)", "hsl(160, 60%, 45%)", "hsl(35, 90%, 55%)",
-  "hsl(280, 60%, 55%)", "hsl(0, 72%, 51%)", "hsl(190, 70%, 45%)",
-  "hsl(50, 80%, 50%)", "hsl(320, 60%, 50%)",
+  "hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))",
+  "hsl(var(--chart-4))", "hsl(var(--chart-5))", "hsl(var(--chart-6))",
 ];
 
 export default function Dashboard() {
-  const { data: entries = [], isLoading } = useFinancialData();
+  const { data: entries = [], isLoading, isError, error, refetch } = useFinancialData();
   const [filterFilial, setFilterFilial] = useState<string>("all");
   const [filterBU, setFilterBU] = useState<string>("all");
   const [filterCompetencia, setFilterCompetencia] = useState<string>("all");
@@ -79,38 +84,42 @@ export default function Dashboard() {
   const fmt = (v: number) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
-  if (isLoading) {
-    return <div className="flex items-center justify-center h-64 text-muted-foreground">Carregando...</div>;
-  }
-
-  if (entries.length === 0) {
-    return (
-      <div className="max-w-3xl mx-auto space-y-8 py-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">Fechamento demora dias? Orçamento só no Excel?</h1>
-          <p className="text-muted-foreground">Importe sua base financeira e tenha centro de custo, fornecedor e resultado num só lugar — sem depender de planilha solta.</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-          {[
-            "Fechamento gerencial demora dias",
-            "Custos sem critério de rateio",
-            "Cada área enxerga um número diferente",
-            "Falta visibilidade por centro de custo e fornecedor",
-          ].map((item) => (
-            <div key={item} className="rounded-lg border border-border bg-card px-4 py-3 text-muted-foreground">
-              {item}
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-col items-center justify-center gap-4 pt-4">
-          <FileText className="h-12 w-12 text-muted-foreground" />
-          <a href="/import" className="text-primary underline font-medium">Importar planilha</a>
-        </div>
-      </div>
-    );
-  }
-
   return (
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Controladoria"
+        title="Centro de Custos"
+        description="Custo previsto e realizado por centro, grupo, filial e competência."
+      />
+
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        isEmpty={entries.length === 0}
+        onRetry={() => refetch()}
+        emptyTitle="Fechamento demora dias? Orçamento só no Excel?"
+        emptyDescription="Importe sua base financeira e tenha centro de custo, fornecedor e resultado num só lugar — sem depender de planilha solta."
+        emptyAction={
+          <div className="flex w-full flex-col gap-4">
+            <ul className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+              {[
+                "Fechamento gerencial demora dias",
+                "Custos sem critério de rateio",
+                "Cada área enxerga um número diferente",
+                "Falta visibilidade por centro de custo e fornecedor",
+              ].map((item) => (
+                <li key={item} className="rounded-md border border-border bg-card px-4 py-3 text-muted-foreground">
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Button asChild variant="outline" size="sm" className="self-start">
+              <Link to="/cost-intelligence/import">Importar planilha</Link>
+            </Button>
+          </div>
+        }
+      >
     <div className="space-y-6">
       <div className="flex flex-wrap gap-3">
         <Select value={filterFilial} onValueChange={setFilterFilial}>
@@ -143,28 +152,28 @@ export default function Dashboard() {
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Previsto</CardTitle>
             <TrendingUp className="h-4 w-4 text-primary" />
           </CardHeader>
-          <CardContent><p className="text-2xl font-bold">{fmt(kpis.totalPrevisto)}</p></CardContent>
+          <CardContent><p className="text-2xl font-semibold tracking-tight numeric">{fmt(kpis.totalPrevisto)}</p></CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Pago</CardTitle>
             <DollarSign className="h-4 w-4 text-accent" />
           </CardHeader>
-          <CardContent><p className="text-2xl font-bold">{fmt(kpis.totalPago)}</p></CardContent>
+          <CardContent><p className="text-2xl font-semibold tracking-tight numeric">{fmt(kpis.totalPago)}</p></CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Diferença</CardTitle>
             <TrendingDown className="h-4 w-4 text-destructive" />
           </CardHeader>
-          <CardContent><p className="text-2xl font-bold">{fmt(kpis.diferenca)}</p></CardContent>
+          <CardContent><p className="text-2xl font-semibold tracking-tight numeric">{fmt(kpis.diferenca)}</p></CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Lançamentos</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent><p className="text-2xl font-bold">{kpis.count.toLocaleString("pt-BR")}</p></CardContent>
+          <CardContent><p className="text-2xl font-semibold tracking-tight numeric">{kpis.count.toLocaleString("pt-BR")}</p></CardContent>
         </Card>
       </div>
 
@@ -180,8 +189,8 @@ export default function Dashboard() {
                 <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
                 <Tooltip formatter={(v: number) => fmt(v)} />
                 <Legend />
-                <Bar dataKey="previsto" name="Previsto" fill="hsl(220, 70%, 50%)" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="pago" name="Pago" fill="hsl(160, 60%, 45%)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="previsto" name="Previsto" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="pago" name="Pago" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -211,13 +220,15 @@ export default function Dashboard() {
                 <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
                 <Tooltip formatter={(v: number) => fmt(v)} />
                 <Legend />
-                <Line type="monotone" dataKey="previsto" name="Previsto" stroke="hsl(220, 70%, 50%)" strokeWidth={2} />
-                <Line type="monotone" dataKey="pago" name="Pago" stroke="hsl(160, 60%, 45%)" strokeWidth={2} />
+                <Line type="monotone" dataKey="previsto" name="Previsto" stroke="hsl(var(--chart-2))" strokeWidth={2} />
+                <Line type="monotone" dataKey="pago" name="Pago" stroke="hsl(var(--chart-1))" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
+    </div>
+      </QueryState>
     </div>
   );
 }

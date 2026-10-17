@@ -3,11 +3,11 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceDot, Legend,
 } from "recharts";
 import { Calculator, TrendingUp, Target, Scale, Crown, Package } from "lucide-react";
-import { usePricingProducts, useSalesChannels, useCommercialExpenses } from "@/hooks/usePricingData";
+import { usePricingProducts, useSalesChannels, useCommercialExpenses } from "@/modules/pricing/hooks/usePricingData";
 import {
   allocateFixedExpenses, breakEven, channelVariablePct, custoVariavelUnitario,
   fmtBRL, fmtPct, simulateMargins, suggestedPrice, totalFixedExpenses,
-} from "@/lib/pricing";
+} from "@/modules/pricing/lib/pricing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
