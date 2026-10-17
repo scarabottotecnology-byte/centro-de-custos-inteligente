@@ -310,3 +310,62 @@ def test_lote_para_quando_a_janela_fecha(ctx, conn, settings, monkeypatch):
     wa = FakeWhatsApp(set())
     result = outreach.send_due(conn, org, settings, outreach.Senders(whatsapp=wa), sleep=lambda s: None)
     assert result["enviadas"] == 1 and len(wa.sent) == 1
+
+
+def _prioritize_boa(conn):
+    boa = _company(conn, "11222333000181")
+    conn.execute("update prospects set stage = 'prioritized', priority = 90 where company_id = %s", (boa["id"],))
+    conn.commit()
+    return boa
+
+
+def test_sem_reacher_verifica_dominio_pelo_dns(ctx, conn, settings):
+    boa = _prioritize_boa(conn)
+    conn.execute("insert into contacts (organization_id, company_id, email, source) values (%s, %s, %s, 'google_maps')",
+                 (ctx.org_id, boa["id"], "vendas@dominio-que-nao-existe.com.br"))
+    conn.commit()
+    asked = []
+
+    def fake_dns(domain):
+        asked.append(domain)
+        return {"gmail.com": True, "boavista.com.br": True, "dominio-que-nao-existe.com.br": False}.get(domain)
+
+    stats = verify.emails_mx(conn, ctx.org_id, has_mail_server=fake_dns)
+    assert stats == {"dominio_ok": 1, "dominio_invalido": 1, "dns_sem_resposta": 0}
+    rows = {r["email"]: r for r in conn.execute(
+        "select email, email_status, email_checked_at from contacts where company_id = %s and email is not null",
+        (boa["id"],))}
+    assert rows["contato@boavista.com.br"]["email_status"] == "unknown"
+    assert rows["contato@boavista.com.br"]["email_checked_at"] is not None
+    assert rows["vendas@dominio-que-nao-existe.com.br"]["email_status"] == "unverified"
+
+    # Sem WhatsApp verificado, cai no e-mail que passou pelo DNS.
+    settings.envio.canal_preferido = "email"
+    assert outreach.enqueue(conn, ctx.org_id, settings, ctx.campaign_ids)["email"] == 1
+    chosen = conn.execute("select ct.email from campaign_contacts cc join contacts ct on ct.id = cc.contact_id").fetchone()
+    assert chosen["email"] == "contato@boavista.com.br"
+
+
+def test_dns_sem_resposta_tenta_de_novo(ctx, conn):
+    _prioritize_boa(conn)
+    stats = verify.emails_mx(conn, ctx.org_id, has_mail_server=lambda d: True if d == "gmail.com" else None)
+    assert stats["dns_sem_resposta"] == 1
+    checked = conn.execute("select email_checked_at from contacts where email = 'contato@boavista.com.br'").fetchone()
+    assert checked["email_checked_at"] is None
+
+
+def test_com_reacher_exige_verificado(ctx, conn, settings):
+    _prioritize_boa(conn)
+    verify.emails_mx(conn, ctx.org_id, has_mail_server=lambda d: True)
+    settings.reacher_url = "http://reacher:8080"
+    settings.envio.canal_preferido = "email"
+    assert outreach.enqueue(conn, ctx.org_id, settings, ctx.campaign_ids)["email"] == 0
+
+
+def test_dns_que_nega_tudo_nao_invalida_ninguem(ctx, conn):
+    _prioritize_boa(conn)
+    stats = verify.emails_mx(conn, ctx.org_id, has_mail_server=lambda d: False)
+    assert stats["dns_sem_resposta"] == 1
+    row = conn.execute("select email_status, email_checked_at from contacts "
+                       "where email = 'contato@boavista.com.br'").fetchone()
+    assert row["email_status"] == "unknown" and row["email_checked_at"] is None

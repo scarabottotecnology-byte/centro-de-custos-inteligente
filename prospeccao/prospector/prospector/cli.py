@@ -8,10 +8,11 @@ import json
 import logging
 import time
 from datetime import datetime
+from pathlib import Path
 
 import uvicorn
 
-from . import config, db, outreach, pipeline
+from . import config, db, outreach, pipeline, receita
 
 log = logging.getLogger("prospector")
 
@@ -79,6 +80,8 @@ def _monthly_receita(ctx: pipeline.Context) -> None:
         result = pipeline.receita_carregar(ctx, downloaded)
         folder.mkdir(parents=True, exist_ok=True)
         (folder / ".carregado").write_text(json.dumps(result, default=str))
+        freed = receita.prune(ctx.settings.data_dir / "receita", keep=Path(downloaded))
+        log.info("arquivos de meses anteriores apagados: %.1f GB", freed / 1e9)
     except Exception:  # noqa: BLE001
         log.exception("atualização mensal da Receita falhou; tenta de novo no próximo ciclo")
 
@@ -124,7 +127,7 @@ def main(argv: list[str] | None = None) -> None:
         ("receita-carregar", "aplica o ICP sobre os arquivos e grava as empresas"),
         ("pontuar", "calcula o ICP Score e prioriza"),
         ("maps", "envia/coleta buscas no Google Maps"),
-        ("verificar", "verifica e-mails (Reacher) e WhatsApp (Evolution)"),
+        ("verificar", "verifica e-mails (DNS ou Reacher) e WhatsApp (Evolution)"),
         ("pesquisar", "pesquisa e frase de abertura com o Claude"),
         ("enfileirar", "coloca priorizados nas campanhas"),
         ("enviar", "envia o que está vencido, respeitando janela e limites"),

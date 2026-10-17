@@ -97,8 +97,11 @@ def maps_enriquecer(ctx: Context) -> dict:
 
 def verificar(ctx: Context) -> dict:
     out = {}
-    out["email"] = verify.emails(ctx.conn, ctx.org_id, ctx.settings,
-                                 verify.ReacherClient(ctx.settings.reacher_url, ctx.settings.reacher_secret))
+    s = ctx.settings
+    if s.reacher_url:
+        out["email"] = verify.emails(ctx.conn, ctx.org_id, s, verify.ReacherClient(s.reacher_url, s.reacher_secret))
+    else:
+        out["email_dns"] = verify.emails_mx(ctx.conn, ctx.org_id)
     if ctx.whatsapp:
         out["whatsapp"] = verify.whatsapp(ctx.conn, ctx.org_id, ctx.whatsapp)
     return out
