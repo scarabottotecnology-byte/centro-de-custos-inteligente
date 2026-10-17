@@ -14,6 +14,10 @@ import CostImport from "@/modules/cost-intelligence/pages/CostImport";
 import CostEntries from "@/modules/cost-intelligence/pages/CostEntries";
 import CostCenters from "@/modules/cost-intelligence/pages/CostCenters";
 
+import PricingCalculator from "@/modules/pricing/pages/PricingCalculator";
+import PricingProducts from "@/modules/pricing/pages/PricingProducts";
+import PricingChannelsExpenses from "@/modules/pricing/pages/PricingChannelsExpenses";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -49,6 +53,17 @@ const App = () => (
               <Route
                 path="/cost-intelligence/centers"
                 element={<CostCenters />}
+              />
+
+              {/* Precificação — módulo em operação. */}
+              <Route
+                path="/pricing/calculator"
+                element={<PricingCalculator />}
+              />
+              <Route path="/pricing/products" element={<PricingProducts />} />
+              <Route
+                path="/pricing/channels"
+                element={<PricingChannelsExpenses />}
               />
 
               {/* Rotas antigas, preservadas para não quebrar link salvo. */}

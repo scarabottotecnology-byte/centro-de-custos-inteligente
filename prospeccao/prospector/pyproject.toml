@@ -1,0 +1,31 @@
+[project]
+name = "prospector"
+version = "0.1.0"
+description = "Prospecção B2B autônoma: Receita Federal + Google Maps + WhatsApp + e-mail"
+requires-python = ">=3.11"
+dependencies = [
+  "anthropic>=0.70",
+  "dnspython>=2.6",
+  "fastapi>=0.115",
+  "httpx>=0.27",
+  "psycopg[binary]>=3.2",
+  "pydantic>=2.7",
+  "pyyaml>=6",
+  "uvicorn>=0.30",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+prospector = "prospector.cli:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["prospector*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

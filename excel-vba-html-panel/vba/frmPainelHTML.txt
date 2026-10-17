@@ -1,0 +1,48 @@
+' ============================================================
+' Este NÃO é um arquivo importável diretamente (UserForm com
+' controle ActiveX precisa ser criado pela interface do Excel —
+' ver passo a passo no README.md).
+'
+' Depois de criar o UserForm "frmPainelHTML" com o controle
+' "Microsoft Web Browser" nomeado "WebBrowser1", dê duplo clique
+' no formulário (modo Design) e cole todo o código abaixo no
+' editor de código do formulário.
+' ============================================================
+
+Private Sub UserForm_Initialize()
+    Me.Caption = "Painel de Centro de Custos"
+    Me.Width = 520
+    Me.Height = 420
+    CarregarPainel
+End Sub
+
+Private Sub CarregarPainel()
+    Dim caminho As String
+    caminho = ThisWorkbook.Path & Application.PathSeparator & "painel" & Application.PathSeparator & "index.html"
+    WebBrowser1.Navigate "file:///" & Replace(caminho, "\", "/")
+End Sub
+
+' Chamado pelo modPainel sempre que dados.js é reescrito.
+Public Sub RecarregarPainel()
+    On Error Resume Next
+    WebBrowser1.Refresh
+    On Error GoTo 0
+End Sub
+
+Private Sub UserForm_Resize()
+    On Error Resume Next
+    WebBrowser1.Left = 0
+    WebBrowser1.Top = 0
+    WebBrowser1.Width = Me.InsideWidth
+    WebBrowser1.Height = Me.InsideHeight
+    On Error GoTo 0
+End Sub
+
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    ' Ao invés de destruir o form, apenas oculta — assim o próximo
+    ' AbrirPainelHTML() reaproveita a instância já carregada.
+    If CloseMode = vbFormControlMenu Then
+        Cancel = True
+        Me.Hide
+    End If
+End Sub

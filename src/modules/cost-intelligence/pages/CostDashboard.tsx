@@ -98,12 +98,26 @@ export default function Dashboard() {
         error={error}
         isEmpty={entries.length === 0}
         onRetry={() => refetch()}
-        emptyTitle="Nenhum lançamento importado ainda"
-        emptyDescription="Importe uma planilha para que os indicadores e gráficos deste painel passem a ter conteúdo."
+        emptyTitle="Fechamento demora dias? Orçamento só no Excel?"
+        emptyDescription="Importe sua base financeira e tenha centro de custo, fornecedor e resultado num só lugar — sem depender de planilha solta."
         emptyAction={
-          <Button asChild variant="outline" size="sm">
-            <Link to="/cost-intelligence/import">Importar planilha</Link>
-          </Button>
+          <div className="flex w-full flex-col gap-4">
+            <ul className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+              {[
+                "Fechamento gerencial demora dias",
+                "Custos sem critério de rateio",
+                "Cada área enxerga um número diferente",
+                "Falta visibilidade por centro de custo e fornecedor",
+              ].map((item) => (
+                <li key={item} className="rounded-md border border-border bg-card px-4 py-3 text-muted-foreground">
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Button asChild variant="outline" size="sm" className="self-start">
+              <Link to="/cost-intelligence/import">Importar planilha</Link>
+            </Button>
+          </div>
         }
       >
     <div className="space-y-6">

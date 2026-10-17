@@ -113,7 +113,7 @@ export default function ImportPage() {
       <PageHeader
         eyebrow="Controladoria"
         title="Importar planilha"
-        description="Envie um .xlsx ou .csv, confira o mapeamento de colunas e revise o preview antes de gravar."
+        description="Tire sua base do Excel: mapeie as colunas uma vez e tenha os dados prontos para análise."
       />
 
       {/* Upload */}

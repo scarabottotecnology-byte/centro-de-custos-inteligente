@@ -24,6 +24,13 @@ O dashboard de **Centro de Custos** existente permanece no produto como o módul
 > (achado C-01). A correção está planejada para a FASE 2. Detalhes em
 > [`docs/00-AUDITORIA-ESTADO-ATUAL.md`](./docs/00-AUDITORIA-ESTADO-ATUAL.md).
 
+## Prospecção autônoma
+
+[`prospeccao/`](./prospeccao/README.md) é um robô de prospecção B2B open source
+e auto-hospedado: encontra empresas na base aberta do CNPJ, enriquece no Google
+Maps, pontua pelo ICP e aborda por WhatsApp e e-mail, sozinho, dentro do horário
+comercial. Sobe com `docker compose`. Decisão no ADR-014.
+
 ## Documentação
 
 A arquitetura completa está em [`docs/`](./docs/README.md) — visão, stack,

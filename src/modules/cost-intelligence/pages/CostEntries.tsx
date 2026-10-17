@@ -38,7 +38,7 @@ export default function Entries() {
       <PageHeader
         eyebrow="Controladoria"
         title="Lançamentos"
-        description="Consulta detalhada dos lançamentos importados, com busca e filtro por grupo."
+        description="Cada lançamento, buscável e filtrável — sem virar planilha perdida em e-mail."
       />
 
       <QueryState

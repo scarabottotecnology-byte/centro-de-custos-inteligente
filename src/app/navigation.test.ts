@@ -42,13 +42,15 @@ describe("registro de navegação", () => {
     }
   });
 
-  it("módulo ativo aponta para rota do Cost Intelligence", () => {
-    // Único módulo em operação hoje. Se algo mais aparecer como 'active' sem
-    // implementação real, o produto passa a mentir sobre o próprio estado.
+  it("módulo ativo aponta para um módulo implementado", () => {
+    // Em operação hoje: Cost Intelligence e Precificação. Se algo mais aparecer
+    // como 'active' sem implementação real, o produto passa a mentir sobre o
+    // próprio estado.
+    const implemented = ["/cost-intelligence", "/pricing/"];
     const active = ALL_NAV_ITEMS.filter((i) => i.status === "active");
     expect(active.length).toBeGreaterThan(0);
     for (const item of active) {
-      expect(item.to.startsWith("/cost-intelligence")).toBe(true);
+      expect(implemented.some((prefix) => item.to.startsWith(prefix))).toBe(true);
     }
   });
 

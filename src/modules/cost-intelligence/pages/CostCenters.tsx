@@ -64,7 +64,7 @@ export default function CostCenters() {
       <PageHeader
         eyebrow="Controladoria"
         title="Análise por centro de custo"
-        description="Detalhamento de um centro específico, com comparativo e totalização por fornecedor."
+        description="Rateio sem critério esconde onde o dinheiro está indo. Veja o gasto real por centro e fornecedor."
       />
 
       <QueryState
