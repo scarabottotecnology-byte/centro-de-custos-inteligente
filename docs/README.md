@@ -34,7 +34,8 @@ estabelecer o contrato de arquitetura que governa as FASES 1 a 24.
 | 07 | [Segurança, LGPD e Multi-tenant](./07-SEGURANCA-LGPD-MULTITENANT.md) | RLS, isolamento, segredos, base legal, direitos do titular |
 | 08 | [Observabilidade e Testes](./08-OBSERVABILIDADE-E-TESTES.md) | Estratégia de logs, métricas, alertas, pirâmide de testes |
 | 09 | [Roadmap e Critérios de Aceite](./09-ROADMAP-E-ACEITE.md) | FASE 1 a 24, definição de COMPLETE, critérios objetivos por fase |
-| 10 | [Decisões Arquiteturais (ADR)](./10-DECISOES-ARQUITETURAIS-ADR.md) | ADR-001 a ADR-012, incluindo as decisões irreversíveis sinalizadas |
+| 10 | [Decisões Arquiteturais (ADR)](./10-DECISOES-ARQUITETURAIS-ADR.md) | ADR-001 a ADR-012 e ADR-014, incluindo as decisões irreversíveis sinalizadas |
+| 16 | [Prospecção Autônoma](./16-PROSPECCAO-AUTONOMA.md) | Receita + Google Maps + WhatsApp + e-mail, rodando sozinho (ADR-014) |
 
 ---
 

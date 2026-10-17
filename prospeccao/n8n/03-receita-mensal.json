@@ -1,0 +1,103 @@
+{
+  "name": "Prospecção — Receita Federal (dia 12 de cada mês)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 2 12 * *"
+            }
+          ]
+        }
+      },
+      "name": "Dia 12, 2h da manhã",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/run/receita-baixar",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.PROSPECTOR_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 1800000
+        }
+      },
+      "name": "Baixar base",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/run/receita-carregar",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.PROSPECTOR_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 1800000
+        }
+      },
+      "name": "Carregar ICP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Dia 12, 2h da manhã": {
+      "main": [
+        [
+          {
+            "node": "Baixar base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar base": {
+      "main": [
+        [
+          {
+            "node": "Carregar ICP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Sao_Paulo",
+    "executionOrder": "v1"
+  },
+  "active": false
+}

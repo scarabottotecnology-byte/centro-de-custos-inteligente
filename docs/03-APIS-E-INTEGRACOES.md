@@ -228,17 +228,21 @@ vazar para o domínio.
    variam pelo número de campos retornados.
 3. **APIs licenciadas de terceiros**, que empacotam os mesmos dados abertos com
    conveniência de consulta.
+4. **Google Maps**, via gosom/google-maps-scraper auto-hospedado — site,
+   telefone comercial, avaliações e e-mails publicados no site da empresa.
 
-**O que não faremos:** scraping do LinkedIn, de portais de terceiros ou de
-qualquer plataforma que ofereça API oficial. Isso é proibição explícita das
-seções 3 e 64, e também é o comportamento que faz uma ferramenta ser bloqueada.
+> **Revisto pelo ADR-014 (16/10/2026).** O texto original proibia scraping de
+> portais e de qualquer plataforma com API oficial. A pedido do cliente, o
+> Google Maps e os sites institucionais passaram a ser fonte aceita. Continua
+> fora: **scraping do LinkedIn**.
 
-**Decisão pendente (ADR-009):** carga própria dos dados abertos (gratuita, mas
-exige pipeline de ingestão de arquivos grandes e ~50 GB de armazenamento) versus
-API licenciada (custo recorrente, integração trivial). Recomendação: começar com
-API licenciada na FASE 12 para validar o funil rápido, e avaliar a carga própria
-quando o volume justificar. `companies.source` já registra a procedência, então
-a troca depois não quebra nada.
+**Decidido (ADR-014, encerra o ADR-009):** carga própria dos dados abertos,
+filtrada pelo ICP já na leitura dos arquivos — não precisa dos ~50 GB, só do
+recorte do ICP. Implementado em `prospeccao/prospector/prospector/receita.py`.
+Desde 12/10/2026 a Receita publica os arquivos por WebDAV num compartilhamento
+Nextcloud; o token do compartilhamento é configurável porque já mudou antes.
+Desde julho/2026 o CNPJ pode ser alfanumérico (IN RFB 2.229) — `companies.cnpj`
+é texto e a validação aceita os dois formatos.
 
 **Limites do dado.** O cadastro da Receita traz CNPJ, razão social, nome
 fantasia, CNAE, situação, endereço, porte e data de abertura. **Não traz
@@ -256,8 +260,13 @@ critérios de ICP exigidos pela seção 20. Portanto:
 
 Dado de contato profissional só entra no sistema por fonte declarável:
 informado pelo próprio titular (formulário, conversa), publicado publicamente
-pela empresa (site institucional, canal oficial), ou fornecido por provedor
-licenciado com base legal própria.
+pela empresa (site institucional, canal oficial, ficha no Google Maps),
+declarado no cadastro público do CNPJ, ou fornecido por provedor licenciado
+com base legal própria (ADR-014).
+
+O e-mail do cadastro da Receita frequentemente é do escritório contábil, não da
+empresa. Quando o mesmo endereço aparece em três ou mais empresas do recorte,
+ele é marcado `email_shared` e não recebe abordagem.
 
 Sem fonte → `contacts.email_status = 'unknown'` e o campo fica vazio. **Nenhum
 agente de IA tem permissão de escrita nos campos de contato** (ver `05 §7`);

@@ -283,7 +283,8 @@ convenção — o papel usado pelo `ai-gateway` não tem `UPDATE` nessas colunas
 
 **G2 — Nenhum agente escreve fato sobre empresa.** A pesquisa (A6) grava em
 `company_research`, que é interpretação assumida. Campos cadastrais em
-`companies` só vêm de fonte oficial ou licenciada.
+`companies` só vêm de fonte oficial, licenciada ou pública declarada (Google
+Maps, site institucional — ADR-014), sempre com `source` e `source_url`.
 
 **G3 — Toda afirmação sobre a empresa cliente é fundamentada.** Serviços,
 metodologia, cases e posicionamento vêm de RAG com `grounded_on` preenchido.

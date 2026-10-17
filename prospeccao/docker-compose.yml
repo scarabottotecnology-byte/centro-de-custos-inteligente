@@ -1,0 +1,144 @@
+# Stack de prospecção autônoma. Tudo open source, roda num VPS de 4 GB.
+#
+#   docker compose up -d                 # sobe tudo
+#   docker compose run --rm cli init     # cria o esquema e as campanhas
+#
+# Detalhes no README.md desta pasta.
+
+x-prospector: &prospector
+  build:
+    context: .
+    dockerfile: prospector/Dockerfile
+  image: keystone/prospector:local
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql://prospector:${POSTGRES_PASSWORD}@postgres:5432/prospector
+    PROSPECTOR_CONFIG: /config/prospeccao.yaml
+    PROSPECTOR_DATA_DIR: /data
+    GMAPS_URL: http://gmaps:8080
+    REACHER_URL: http://reacher:8080
+    EVOLUTION_URL: http://evolution:8080
+    PROSPECTOR_WEBHOOK_BASE: http://api:8000
+  volumes:
+    - ./prospeccao.yaml:/config/prospeccao.yaml:ro
+    - prospector_data:/data
+  depends_on:
+    postgres:
+      condition: service_healthy
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: prospector
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: prospector
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init/001_schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
+      - ./db/init/002_evolution.sql:/docker-entrypoint-initdb.d/002_evolution.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prospector -d prospector"]
+      interval: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # Webhooks do WhatsApp, link de descadastro e gatilhos /run para o n8n.
+  api:
+    <<: *prospector
+    command: ["servidor", "--porta", "8000"]
+    ports:
+      - "${PROSPECTOR_PORT:-8000}:8000"
+
+  # O robô: roda o ciclo sozinho, em loop, dentro da janela de envio.
+  worker:
+    <<: *prospector
+    command: ["daemon", "--intervalo-minutos", "10", "--ciclo-minutos", "120", "--receita-mensal"]
+
+  # Para comandos avulsos: docker compose run --rm cli <comando>
+  cli:
+    <<: *prospector
+    restart: "no"
+    profiles: ["cli"]
+    command: ["funil"]
+
+  # Google Maps (gosom/google-maps-scraper, MIT).
+  gmaps:
+    image: gosom/google-maps-scraper:latest
+    command: ["-web", "-data-folder", "/gmapsdata", "-c", "2"]
+    environment:
+      DISABLE_TELEMETRY: "1"
+    volumes:
+      - gmaps_data:/gmapsdata
+    restart: unless-stopped
+
+  # Verificação de e-mail sem enviar (reacherhq/check-if-email-exists, AGPL-3.0).
+  # Roda como serviço separado, chamado por HTTP — o código do prospector não é derivado dele.
+  reacher:
+    image: reacherhq/backend:latest
+    environment:
+      RCH__HELLO_NAME: ${REACHER_HELLO_NAME:-localhost}
+      RCH__FROM_EMAIL: ${REACHER_FROM_EMAIL:-verificacao@localhost}
+      RCH__HEADER_SECRET: ${REACHER_SECRET}
+    restart: unless-stopped
+
+  # WhatsApp (Evolution API, Apache-2.0 com cláusula de aviso de uso — ver README).
+  evolution:
+    image: evoapicloud/evolution-api:v2.3.7
+    environment:
+      SERVER_URL: http://evolution:8080
+      AUTHENTICATION_API_KEY: ${EVOLUTION_APIKEY}
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://prospector:${POSTGRES_PASSWORD}@postgres:5432/evolution?schema=public
+      DATABASE_CONNECTION_CLIENT_NAME: prospeccao
+      DATABASE_SAVE_DATA_INSTANCE: "true"
+      DATABASE_SAVE_DATA_NEW_MESSAGE: "true"
+      CACHE_REDIS_ENABLED: "true"
+      CACHE_REDIS_URI: redis://redis:6379/6
+      CACHE_REDIS_PREFIX_KEY: evolution
+      CACHE_LOCAL_ENABLED: "false"
+      CONFIG_SESSION_PHONE_CLIENT: Keystone
+      CONFIG_SESSION_PHONE_NAME: Chrome
+      LOG_LEVEL: ERROR,WARN
+    ports:
+      - "${EVOLUTION_PORT:-8081}:8080"   # painel em /manager
+    volumes:
+      - evolution_instances:/evolution/instances
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  # Opcional: orquestração visual. `docker compose --profile n8n up -d`
+  n8n:
+    image: n8nio/n8n:latest
+    profiles: ["n8n"]
+    environment:
+      GENERIC_TIMEZONE: America/Sao_Paulo
+      TZ: America/Sao_Paulo
+      PROSPECTOR_API_TOKEN: ${PROSPECTOR_API_TOKEN}
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n:/workflows:ro
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  prospector_data:
+  gmaps_data:
+  evolution_instances:
+  n8n_data:

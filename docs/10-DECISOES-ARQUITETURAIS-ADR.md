@@ -170,6 +170,10 @@ explicar a diferença sem confundir. Vale o custo.
 
 ## ADR-009 — Fonte de dados de CNPJ: decisão adiada, com padrão 🟡
 
+> **Revisto pelo ADR-014 (16/10/2026).** A decisão foi tomada: carga própria
+> dos dados abertos, filtrada pelo ICP. A restrição de scraping abaixo foi
+> flexibilizada para o Google Maps e sites institucionais.
+
 **Contexto.** Duas opções legítimas: carga dos dados abertos da Receita Federal
 (gratuita, oficial, mensal, exige pipeline para arquivos grandes) ou API
 licenciada (custo recorrente, integração trivial).
@@ -247,6 +251,65 @@ precisa de verificação determinística.
 
 **Consequência.** Mais código e algum falso positivo (uma resposta legítima
 ocasionalmente barrada para revisão). Preferível ao inverso.
+
+---
+
+## ADR-014 — Prospecção autônoma com fontes públicas, priorizando faturamento 🔴
+
+**Data.** 16/10/2026, a pedido do Jefferson: *"pode montar todas, e alterar a
+minha própria regra, faturar é mais importante"*.
+
+**Contexto.** O ADR-009 adiava a fonte de CNPJ e proibia scraping de qualquer
+plataforma com API oficial. Na prática isso deixava o Company Discovery sem
+telefone, site nem e-mail utilizável — e sem canal não há venda. As
+plataformas open source de prospecção avaliadas (OpenOutreach, AgentSDR,
+agent-sdr) dependem de bases pagas americanas, fracas em PME brasileira.
+
+**Decisão.**
+
+1. **CNPJ: carga própria dos dados abertos da Receita**, filtrada pelo ICP na
+   leitura dos arquivos. Encerra o ADR-009. Os campos de telefone e e-mail do
+   cadastro são dado público e entram como contato, com `source` e `source_url`.
+2. **Google Maps via gosom/google-maps-scraper** (MIT, auto-hospedado) para
+   site, telefone comercial, avaliações e e-mails publicados no site da
+   empresa. É scraping de plataforma que tem API oficial (Places API) — a
+   restrição do ADR-009 deixa de valer para este caso.
+3. **WhatsApp via Evolution API** (modo Baileys, chip dedicado) para abordagem
+   ativa, sem esperar a aprovação de template da API oficial da Meta.
+4. **Envio autônomo** por padrão (`approval_mode = autonomous`), com
+   simulação ligada até o operador desligar.
+
+**O que continua proibido.** Scraping do LinkedIn (não faz parte da stack) e
+dado de contato inventado (G1 e §3.6 seguem valendo: e-mail
+`nome.sobrenome@` deduzido continua vetado).
+
+**O que continua obrigatório — porque protege o faturamento, não só a lei.**
+
+- `source` e `source_url` em toda empresa e todo contato.
+- Opt-out em toda primeira mensagem e link de descadastro em todo e-mail;
+  `suppression_list` checada antes de cada envio.
+- Limite diário por canal, janela de horário e intervalo aleatório entre
+  mensagens de WhatsApp.
+- Verificação de canal antes do envio (Reacher para e-mail, checagem de número
+  no próprio WhatsApp).
+
+Um chip banido ou um domínio em lista negra zera o canal por semanas. Esses
+controles são o que mantém a máquina vendendo no mês seguinte.
+
+**Riscos aceitos.**
+
+| Risco | Mitigação |
+|---|---|
+| Termos de uso do Google proíbem scraping; IP pode ser bloqueado | Concorrência baixa (`-c 2`), só prospects priorizados, proxy opcional |
+| Banimento do número no WhatsApp (Baileys não é API oficial) | Chip dedicado, 20/dia no início, opt-out na primeira mensagem, para ao primeiro "SAIR" |
+| E-mail do cadastro da Receita costuma ser do contador | Detectado (`email_shared`) e excluído da abordagem; vira lista de parceiros em `v_contadores_parceiros` |
+| LGPD: contato a titular sem consentimento | Base legal de legítimo interesse em B2B, origem registrada, descadastro em um clique, hash na lista de supressão |
+| Evolution API: licença exige aviso de uso visível ao administrador | Aviso no README da stack e no painel do Evolution (não removido) |
+
+**Por que é 🔴.** Muda a postura comercial do produto: de "só fonte oficial" para
+"fonte pública declarada". Mensagens já enviadas não voltam.
+
+**Implementação.** `prospeccao/` — ver `16-PROSPECCAO-AUTONOMA.md`.
 
 ---
 
