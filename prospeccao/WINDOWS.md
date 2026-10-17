@@ -69,9 +69,12 @@ Depois:
 notepad prospeccao.yaml
 ```
 
-Ajuste `icp.filtros` (UF, cidades, CNAEs), `remetente`,
+O arquivo já vem configurado para a **capital paulista** (`ufs: [SP]`,
+`municipios: [SAO PAULO]`). Para incluir a Grande SP, acrescente as cidades
+listadas no comentário logo acima de `filtros`. Preencha
 `aviso_dono_whatsapp` (o **seu** WhatsApp, que recebe o aviso de lead, no
-formato `5541999998888`) e os textos das mensagens. Salve.
+formato `5511999998888`), confira `remetente` e leia os textos das mensagens.
+Salve.
 
 ## 4. Ligar
 

@@ -15,10 +15,13 @@ oferta: >
 icp:
   nome: PME com controladoria terceirizável
   # Filtros aplicados NA CARGA da Receita. Quanto mais fechado, mais rápido e
-  # menor o banco. AJUSTE para a sua região.
+  # menor o banco. Configurado para a capital paulista. Para incluir a Grande SP,
+  # acrescente os municípios (nome como a Receita grava, sem acento), por exemplo:
+  # GUARULHOS, OSASCO, BARUERI, SANTO ANDRE, SAO BERNARDO DO CAMPO,
+  # SAO CAETANO DO SUL, DIADEMA, COTIA, TABOAO DA SERRA, SANTANA DE PARNAIBA.
   filtros:
-    ufs: [PR]
-    municipios: [CURITIBA, SAO JOSE DOS PINHAIS, PINHAIS, COLOMBO, ARAUCARIA]
+    ufs: [SP]
+    municipios: [SAO PAULO]
     cnae_prefixos: ["10", "22", "25", "28", "41", "42", "43", "45", "46", "49", "56", "62", "71", "86"]
     somente_matriz: true
     excluir_mei: true

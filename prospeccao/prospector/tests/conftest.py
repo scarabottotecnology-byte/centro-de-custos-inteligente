@@ -80,6 +80,10 @@ def receita_dir(tmp_path: Path) -> Path:
 def settings(tmp_path, monkeypatch) -> config.Settings:
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     s = config.load(EXAMPLE_CONFIG)
+    # Os dados de teste são de Curitiba: fixa a região aqui para os testes não
+    # dependerem da região configurada no exemplo.
+    s.icp.filtros.ufs = ["PR"]
+    s.icp.filtros.municipios = ["CURITIBA", "SAO JOSE DOS PINHAIS", "PINHAIS", "COLOMBO", "ARAUCARIA"]
     s.data_dir = tmp_path
     s.database_url = os.environ.get("TEST_DATABASE_URL", "")
     s.public_url = "https://prospeccao.exemplo.com.br"

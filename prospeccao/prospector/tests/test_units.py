@@ -1,9 +1,12 @@
 from datetime import date, datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pytest
 
-from prospector import cnpj, inbound, maps, messages, outreach, phones, receita, scoring
+from prospector import cnpj, config, inbound, maps, messages, outreach, phones, receita, scoring
+
+EXAMPLE_CONFIG = Path(__file__).resolve().parents[2] / "prospeccao.example.yaml"
 
 
 class TestCnpj:
@@ -81,8 +84,19 @@ class TestMessages:
         assert text.startswith("Olá, Maria, tudo bem? Aqui é o Jefferson, da Keystone.")
         assert "Distribuidora Boa Vista" in text
         assert "\n\n" not in text and "  " not in text
-        assert values["cidade"] == "Sao Jose dos Pinhais"
+        assert values["cidade"] == "São José dos Pinhais"
         assert values["anos"] == "11"
+
+    def test_cidade_volta_com_acento(self):
+        assert messages.title("SAO PAULO") == "São Paulo"
+        assert messages.title("SAO BERNARDO DO CAMPO") == "São Bernardo do Campo"
+        assert messages.title("SANTO ANDRE") == "Santo André"
+        assert messages.title("TABOAO DA SERRA") == "Taboão da Serra"
+        assert messages.title("GUARULHOS") == "Guarulhos"
+
+    def test_exemplo_configurado_para_sao_paulo(self):
+        s = config.load(EXAMPLE_CONFIG)
+        assert s.icp.filtros.ufs == ["SP"] and s.icp.filtros.municipios == ["SAO PAULO"]
 
     def test_nome_sem_sufixo_societario(self):
         assert messages.company_name({"razao_social": "ALFA NUMERICA COMERCIO LTDA"}) == "Alfa Numerica Comercio"
