@@ -1,6 +1,8 @@
-# Prospecção autônoma — Keystone
+# Sextante — prospecção autônoma da Keystone
 
-Robô de prospecção B2B 100% open source e auto-hospedado. Acha empresas na base
+O **Sextante** é o robô de prospecção B2B da Keystone, 100% open source e
+auto-hospedado. O nome vem do instrumento que os navegadores usavam para achar
+a posição certa no mar: aqui, ele acha as empresas certas para abordar. Acha empresas na base
 da Receita Federal, enriquece no Google Maps, pontua pelo seu ICP, verifica os
 canais e aborda por WhatsApp e e-mail — sozinho, dentro do horário comercial.
 Quando alguém responde com interesse, você recebe um aviso no seu WhatsApp.

@@ -309,7 +309,7 @@ controles são o que mantém a máquina vendendo no mês seguinte.
 **Por que é 🔴.** Muda a postura comercial do produto: de "só fonte oficial" para
 "fonte pública declarada". Mensagens já enviadas não voltam.
 
-**Implementação.** `prospeccao/` — ver `16-PROSPECCAO-AUTONOMA.md`.
+**Implementação.** `prospeccao/`, o programa Sextante — ver `16-PROSPECCAO-AUTONOMA.md`.
 
 ---
 

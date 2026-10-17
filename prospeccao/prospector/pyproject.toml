@@ -1,7 +1,7 @@
 [project]
 name = "prospector"
 version = "0.1.0"
-description = "Prospecção B2B autônoma: Receita Federal + Google Maps + WhatsApp + e-mail"
+description = "Sextante, prospecção B2B autônoma: Receita Federal + Google Maps + WhatsApp + e-mail"
 requires-python = ">=3.11"
 dependencies = [
   "anthropic>=0.70",

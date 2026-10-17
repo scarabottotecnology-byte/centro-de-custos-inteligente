@@ -1,4 +1,4 @@
-# Rodando no seu computador Windows — custo zero
+# Sextante no seu computador Windows — custo zero
 
 Tudo aqui é gratuito. O único gasto possível é um chip de celular para o
 WhatsApp de prospecção, se você não tiver um número parado.

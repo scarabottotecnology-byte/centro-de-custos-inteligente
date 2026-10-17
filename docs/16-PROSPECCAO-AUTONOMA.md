@@ -1,4 +1,4 @@
-# 16 — Prospecção autônoma
+# 16 — Sextante: prospecção autônoma
 
 **Status:** implementado em `prospeccao/`, testado com Postgres real e com as
 APIs reais do gosom, Reacher e Evolution. Falta rodar com internet aberta
@@ -9,7 +9,7 @@ APIs reais do gosom, Reacher e Evolution. Falta rodar com internet aberta
 
 ## O que faz
 
-Um robô que, sozinho e todo dia útil:
+O Sextante é o robô que, sozinho e todo dia útil:
 
 1. **Descobre** empresas na base aberta do CNPJ da Receita Federal, só as que
    batem com o ICP (UF, município, CNAE, porte, capital social, idade, sem MEI).

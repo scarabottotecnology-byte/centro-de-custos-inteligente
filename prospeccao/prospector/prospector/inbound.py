@@ -166,7 +166,7 @@ def _lead_alert(company: dict, contact: dict, channel: str, label: str, text: st
     quem = contact.get("full_name") or "contato"
     canal = contact.get("phone") if channel == "whatsapp" else contact.get("email")
     tipo = "QUER CONVERSAR" if label == "interested" else "FEZ UMA PERGUNTA"
-    return (f"🔥 Lead novo — {tipo}\n{nome} ({messages.title(company.get('municipio') or '')}/{company.get('uf')})\n"
+    return (f"🔥 Sextante: lead novo — {tipo}\n{nome} ({messages.title(company.get('municipio') or '')}/{company.get('uf')})\n"
             f"{quem} · {channel}: {canal}\n\n\"{text[:400]}\"")
 
 

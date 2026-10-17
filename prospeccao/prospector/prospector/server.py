@@ -37,7 +37,7 @@ def create_app(settings: config.Settings | None = None) -> FastAPI:
             app.state.org_id = ctx.org_id
         yield
 
-    app = FastAPI(title="Prospector", lifespan=lifespan)
+    app = FastAPI(title="Sextante", lifespan=lifespan)
 
     def _auth(authorization: str | None, token: str | None = None) -> None:
         given = token or (authorization or "").removeprefix("Bearer ").strip()
