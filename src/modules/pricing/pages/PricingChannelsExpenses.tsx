@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Upload, Loader2, CheckCircle, Store, Receipt } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, Loader2, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   useSalesChannels, useCommercialExpenses,
@@ -10,6 +10,8 @@ import {
 import { channelVariablePct, fmtBRL, fmtPct, totalFixedExpenses } from "@/modules/pricing/lib/pricing";
 import { EXPENSE_FIELDS, EXPENSE_HINTS, autoMapImportFields, type ImportFieldMapping } from "@/modules/pricing/lib/pricing-import";
 import { getErrorMessage } from "@/lib/utils";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { QueryState } from "@/components/shared/QueryState";
 import type { TablesInsert } from "@/integrations/supabase/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -48,7 +50,7 @@ const emptyExpense = {
 };
 
 function ChannelsTab() {
-  const { data: channels = [], isLoading } = useSalesChannels();
+  const { data: channels = [], isLoading, isError, error, refetch } = useSalesChannels();
   const upsertChannel = useUpsertChannel();
   const deleteChannel = useDeleteChannel();
   const [open, setOpen] = useState(false);
@@ -131,14 +133,15 @@ function ChannelsTab() {
         </Dialog>
       </div>
 
-      {isLoading ? (
-        <div className="text-muted-foreground py-8 text-center">Carregando...</div>
-      ) : channels.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
-          <Store className="h-12 w-12" />
-          <p>Nenhum canal de venda cadastrado.</p>
-        </div>
-      ) : (
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        isEmpty={channels.length === 0}
+        onRetry={() => refetch()}
+        emptyTitle="Nenhum canal de venda cadastrado"
+        emptyDescription="Cadastre cada canal com comissão, taxas e impostos para a calculadora comparar a margem real de cada um."
+      >
         <div className="rounded-lg border overflow-auto">
           <Table>
             <TableHeader>
@@ -192,13 +195,13 @@ function ChannelsTab() {
             </TableBody>
           </Table>
         </div>
-      )}
+      </QueryState>
     </div>
   );
 }
 
 function ExpensesTab() {
-  const { data: expenses = [], isLoading } = useCommercialExpenses();
+  const { data: expenses = [], isLoading, isError, error, refetch } = useCommercialExpenses();
   const upsertExpense = useUpsertExpense();
   const deleteExpense = useDeleteExpense();
   const queryClient = useQueryClient();
@@ -403,14 +406,15 @@ function ExpensesTab() {
           </Dialog>
         </CardHeader>
         <CardContent>
-          {isLoading ? (
-            <div className="text-muted-foreground py-8 text-center">Carregando...</div>
-          ) : expenses.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
-              <Receipt className="h-12 w-12" />
-              <p>Nenhuma despesa cadastrada.</p>
-            </div>
-          ) : (
+          <QueryState
+            isLoading={isLoading}
+            isError={isError}
+            error={error}
+            isEmpty={expenses.length === 0}
+            onRetry={() => refetch()}
+            emptyTitle="Nenhuma despesa cadastrada"
+            emptyDescription="Cadastre ou importe as despesas fixas mensais para a calculadora ratear o custo fixo entre os produtos."
+          >
             <div className="rounded-lg border overflow-auto max-h-[50vh]">
               <Table>
                 <TableHeader>
@@ -461,7 +465,7 @@ function ExpensesTab() {
                 </TableBody>
               </Table>
             </div>
-          )}
+          </QueryState>
         </CardContent>
       </Card>
     </div>
@@ -470,11 +474,12 @@ function ExpensesTab() {
 
 export default function PricingChannelsExpenses() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Canais de Venda & Despesas Comerciais</h1>
-        <p className="text-sm text-muted-foreground">Marketplace, loja física e atacado têm custos diferentes — aplicar a mesma margem para todos é deixar dinheiro na mesa.</p>
-      </div>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Precificação"
+        title="Canais de Venda & Despesas Comerciais"
+        description="Marketplace, loja física e atacado têm custos diferentes — aplicar a mesma margem para todos é deixar dinheiro na mesa."
+      />
       <Tabs defaultValue="channels">
         <TabsList>
           <TabsTrigger value="channels">Canais de Venda</TabsTrigger>
