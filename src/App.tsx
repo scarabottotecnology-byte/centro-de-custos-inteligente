@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppLayout } from "@/components/AppLayout";
 import { ThemeProvider } from "@/app/ThemeProvider";
+import { AuthProvider } from "@/app/auth/AuthProvider";
+import { RequireAuth } from "@/app/auth/RequireAuth";
+import LoginPage from "@/app/auth/LoginPage";
 import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
 import { PLANNED_ITEMS } from "@/app/navigation";
 import NotFound from "@/app/NotFound";
@@ -20,6 +23,68 @@ import PricingChannelsExpenses from "@/modules/pricing/pages/PricingChannelsExpe
 
 const queryClient = new QueryClient();
 
+/** Tudo o que não é /login exige sessão e vínculo ativo (C-01). */
+const ProtectedApp = () => (
+  <RequireAuth>
+    <AppLayout>
+      <Routes>
+        {/* Módulos ainda não construídos. As rotas existem para que a
+          navegação seja real desde já, mas cada uma declara em que fase
+          o módulo chega — nenhuma exibe dado de exemplo. */}
+        {PLANNED_ITEMS.map((item) => (
+          <Route
+            key={item.to}
+            path={item.to}
+            element={<ModulePlaceholder item={item} />}
+          />
+        ))}
+
+        {/* Cost Intelligence — módulo em operação. */}
+        <Route path="/cost-intelligence" element={<CostDashboard />} />
+        <Route
+          path="/cost-intelligence/import"
+          element={<CostImport />}
+        />
+        <Route
+          path="/cost-intelligence/entries"
+          element={<CostEntries />}
+        />
+        <Route
+          path="/cost-intelligence/centers"
+          element={<CostCenters />}
+        />
+
+        {/* Precificação — módulo em operação. */}
+        <Route
+          path="/pricing/calculator"
+          element={<PricingCalculator />}
+        />
+        <Route path="/pricing/products" element={<PricingProducts />} />
+        <Route
+          path="/pricing/channels"
+          element={<PricingChannelsExpenses />}
+        />
+
+        {/* Rotas antigas, preservadas para não quebrar link salvo. */}
+        <Route
+          path="/import"
+          element={<Navigate to="/cost-intelligence/import" replace />}
+        />
+        <Route
+          path="/entries"
+          element={<Navigate to="/cost-intelligence/entries" replace />}
+        />
+        <Route
+          path="/cost-centers"
+          element={<Navigate to="/cost-intelligence/centers" replace />}
+        />
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AppLayout>
+  </RequireAuth>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
@@ -27,62 +92,12 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AppLayout>
+          <AuthProvider>
             <Routes>
-              {/* Módulos ainda não construídos. As rotas existem para que a
-                navegação seja real desde já, mas cada uma declara em que fase
-                o módulo chega — nenhuma exibe dado de exemplo. */}
-              {PLANNED_ITEMS.map((item) => (
-                <Route
-                  key={item.to}
-                  path={item.to}
-                  element={<ModulePlaceholder item={item} />}
-                />
-              ))}
-
-              {/* Cost Intelligence — módulo em operação. */}
-              <Route path="/cost-intelligence" element={<CostDashboard />} />
-              <Route
-                path="/cost-intelligence/import"
-                element={<CostImport />}
-              />
-              <Route
-                path="/cost-intelligence/entries"
-                element={<CostEntries />}
-              />
-              <Route
-                path="/cost-intelligence/centers"
-                element={<CostCenters />}
-              />
-
-              {/* Precificação — módulo em operação. */}
-              <Route
-                path="/pricing/calculator"
-                element={<PricingCalculator />}
-              />
-              <Route path="/pricing/products" element={<PricingProducts />} />
-              <Route
-                path="/pricing/channels"
-                element={<PricingChannelsExpenses />}
-              />
-
-              {/* Rotas antigas, preservadas para não quebrar link salvo. */}
-              <Route
-                path="/import"
-                element={<Navigate to="/cost-intelligence/import" replace />}
-              />
-              <Route
-                path="/entries"
-                element={<Navigate to="/cost-intelligence/entries" replace />}
-              />
-              <Route
-                path="/cost-centers"
-                element={<Navigate to="/cost-intelligence/centers" replace />}
-              />
-
-              <Route path="*" element={<NotFound />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="*" element={<ProtectedApp />} />
             </Routes>
-          </AppLayout>
+          </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>

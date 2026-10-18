@@ -120,6 +120,13 @@ Classificação conforme o comando `AUDITAR SISTEMA` (seção 68 do Master Promp
 
 **C-01 — O banco de dados é efetivamente público para leitura, escrita e exclusão.**
 
+> **Atualização (2026-10-18, issue #10):** o achado vale também para
+> `pricing_products`, `sales_channels` e `commercial_expenses`, criadas depois
+> desta auditoria, com `UPDATE` anônimo além de leitura, inserção e exclusão.
+> A correção está em `supabase/migrations/20261018003000_c01_tenancy_rls.sql`
+> e só fecha o problema depois de aplicada no projeto. Passo a passo em
+> `17-ACESSO-E-RLS.md`.
+
 `supabase/migrations/…sql` cria seis políticas de RLS, três delas para o papel
 `anon`:
 

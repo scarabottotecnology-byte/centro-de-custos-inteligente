@@ -14,8 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
+      organizations: {
+        Row: {
+          id: string
+          slug: string
+          legal_name: string
+          display_name: string
+          cnpj: string | null
+          timezone: string
+          locale: string
+          plan: string
+          status: string
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          slug: string
+          legal_name: string
+          display_name: string
+          cnpj?: string | null
+          timezone?: string
+          locale?: string
+          plan?: string
+          status?: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          slug?: string
+          legal_name?: string
+          display_name?: string
+          cnpj?: string | null
+          timezone?: string
+          locale?: string
+          plan?: string
+          status?: string
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Relationships: []
+      }
+      memberships: {
+        Row: {
+          id: string
+          organization_id: string
+          user_id: string
+          role: Database["public"]["Enums"]["org_role"]
+          status: Database["public"]["Enums"]["membership_status"]
+          invited_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          organization_id: string
+          user_id: string
+          role?: Database["public"]["Enums"]["org_role"]
+          status?: Database["public"]["Enums"]["membership_status"]
+          invited_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          organization_id?: string
+          user_id?: string
+          role?: Database["public"]["Enums"]["org_role"]
+          status?: Database["public"]["Enums"]["membership_status"]
+          invited_by?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pricing_products: {
         Row: {
+          organization_id: string
           id: string
           sku: string | null
           nome: string
@@ -36,6 +120,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          organization_id?: string
           id?: string
           sku?: string | null
           nome: string
@@ -55,6 +140,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          organization_id?: string
           id?: string
           sku?: string | null
           nome?: string
@@ -73,10 +159,19 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pricing_products_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sales_channels: {
         Row: {
+          organization_id: string
           id: string
           nome: string
           comissao_pct: number
@@ -90,6 +185,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          organization_id?: string
           id?: string
           nome: string
           comissao_pct?: number
@@ -103,6 +199,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          organization_id?: string
           id?: string
           nome?: string
           comissao_pct?: number
@@ -115,10 +212,19 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "sales_channels_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       commercial_expenses: {
         Row: {
+          organization_id: string
           id: string
           descricao: string
           categoria: string | null
@@ -129,6 +235,7 @@ export type Database = {
           created_at: string
         }
         Insert: {
+          organization_id?: string
           id?: string
           descricao: string
           categoria?: string | null
@@ -139,6 +246,7 @@ export type Database = {
           created_at?: string
         }
         Update: {
+          organization_id?: string
           id?: string
           descricao?: string
           categoria?: string | null
@@ -148,10 +256,19 @@ export type Database = {
           import_batch_id?: string | null
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "commercial_expenses_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       financial_entries: {
         Row: {
+          organization_id: string
           bu: string | null
           bu_projeto: string | null
           cca: string | null
@@ -179,6 +296,7 @@ export type Database = {
           vencimento: string | null
         }
         Insert: {
+          organization_id?: string
           bu?: string | null
           bu_projeto?: string | null
           cca?: string | null
@@ -206,6 +324,7 @@ export type Database = {
           vencimento?: string | null
         }
         Update: {
+          organization_id?: string
           bu?: string | null
           bu_projeto?: string | null
           cca?: string | null
@@ -232,7 +351,15 @@ export type Database = {
           valor_previsto?: number | null
           vencimento?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "financial_entries_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -242,7 +369,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      org_role: "owner" | "admin" | "operator" | "analyst" | "viewer"
+      membership_status: "invited" | "active" | "suspended"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -369,6 +497,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      org_role: ["owner", "admin", "operator", "analyst", "viewer"],
+      membership_status: ["invited", "active", "suspended"],
+    },
   },
 } as const
