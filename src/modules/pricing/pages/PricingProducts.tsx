@@ -1,12 +1,14 @@
 import { useCallback, useMemo, useState } from "react";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
-import { Plus, Upload, Loader2, CheckCircle, Pencil, Trash2, Package } from "lucide-react";
+import { Plus, Upload, Loader2, CheckCircle, Pencil, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { usePricingProducts, useUpsertProduct, useDeleteProduct } from "@/modules/pricing/hooks/usePricingData";
 import { custoVariavelUnitario, fmtBRL, type PricingProduct } from "@/modules/pricing/lib/pricing";
 import { PRODUCT_FIELDS, PRODUCT_HINTS, autoMapImportFields, type ImportFieldMapping } from "@/modules/pricing/lib/pricing-import";
 import { getErrorMessage } from "@/lib/utils";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { QueryState } from "@/components/shared/QueryState";
 import type { TablesInsert } from "@/integrations/supabase/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,7 +44,7 @@ const emptyForm = {
 };
 
 export default function PricingProducts() {
-  const { data: products = [], isLoading } = usePricingProducts();
+  const { data: products = [], isLoading, isError, error, refetch } = usePricingProducts();
   const upsertProduct = useUpsertProduct();
   const deleteProduct = useDeleteProduct();
   const queryClient = useQueryClient();
@@ -189,90 +191,91 @@ export default function PricingProducts() {
   const totalCatalog = useMemo(() => products.length, [products]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Catálogo de Produtos</h1>
-          <p className="text-sm text-muted-foreground">Preço no achismo custa margem. Cadastre o custo real de cada produto uma vez e precifique com critério daqui pra frente.</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={openNew}><Plus className="h-4 w-4 mr-2" />Novo Produto</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{form.id ? "Editar Produto" : "Novo Produto"}</DialogTitle>
-            </DialogHeader>
-            <div className="grid grid-cols-2 gap-4 py-2">
-              <div className="col-span-2">
-                <Label>Nome do Produto *</Label>
-                <Input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-              </div>
-              <div>
-                <Label>SKU / Código</Label>
-                <Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
-              </div>
-              <div>
-                <Label>Categoria</Label>
-                <Input value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value })} />
-              </div>
-              <div>
-                <Label>Unidade</Label>
-                <Input value={form.unidade} onChange={(e) => setForm({ ...form, unidade: e.target.value })} />
-              </div>
-              <div>
-                <Label>Volume Mensal Estimado</Label>
-                <Input type="number" value={form.volume_mensal_estimado} onChange={(e) => setForm({ ...form, volume_mensal_estimado: Number(e.target.value) })} />
-              </div>
-              <div className="col-span-2 border-t pt-3 mt-1">
-                <p className="text-sm font-medium text-muted-foreground mb-2">Custos Variáveis Unitários</p>
-              </div>
-              <div>
-                <Label>Matéria-Prima (R$)</Label>
-                <Input type="number" value={form.custo_materia_prima} onChange={(e) => setForm({ ...form, custo_materia_prima: Number(e.target.value) })} />
-              </div>
-              <div>
-                <Label>Embalagem (R$)</Label>
-                <Input type="number" value={form.custo_embalagem} onChange={(e) => setForm({ ...form, custo_embalagem: Number(e.target.value) })} />
-              </div>
-              <div>
-                <Label>Mão de Obra Direta (R$)</Label>
-                <Input type="number" value={form.mao_de_obra_direta} onChange={(e) => setForm({ ...form, mao_de_obra_direta: Number(e.target.value) })} />
-              </div>
-              <div>
-                <Label>Custos Indiretos - CIF (R$)</Label>
-                <Input type="number" value={form.custos_indiretos} onChange={(e) => setForm({ ...form, custos_indiretos: Number(e.target.value) })} />
-              </div>
-              <div className="col-span-2">
-                <Label>Outros Custos Variáveis (R$)</Label>
-                <Input type="number" value={form.outros_custos_variaveis} onChange={(e) => setForm({ ...form, outros_custos_variaveis: Number(e.target.value) })} />
-              </div>
-              <div className="col-span-2 border-t pt-3 mt-1">
-                <p className="text-sm font-medium text-muted-foreground mb-2">Precificação</p>
-              </div>
-              <div>
-                <Label>Preço de Venda Atual (R$)</Label>
-                <Input type="number" value={form.preco_atual} onChange={(e) => setForm({ ...form, preco_atual: Number(e.target.value) })} />
-              </div>
-              <div>
-                <Label>Margem Desejada (%)</Label>
-                <Input type="number" value={form.margem_desejada_pct} onChange={(e) => setForm({ ...form, margem_desejada_pct: Number(e.target.value) })} />
-              </div>
-              <div className="col-span-2 flex items-center gap-2 pt-2">
-                <Switch checked={form.ativo} onCheckedChange={(v) => setForm({ ...form, ativo: v })} />
-                <Label>Produto ativo</Label>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancelar</Button>
-              <Button onClick={handleSave} disabled={upsertProduct.isPending}>
-                {upsertProduct.isPending && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
-                Salvar
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Precificação"
+        title="Catálogo de Produtos"
+        description="Preço no achismo custa margem. Cadastre o custo real de cada produto uma vez e precifique com critério daqui pra frente."
+        actions={
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={openNew}><Plus className="h-4 w-4 mr-2" />Novo Produto</Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{form.id ? "Editar Produto" : "Novo Produto"}</DialogTitle>
+                </DialogHeader>
+                <div className="grid grid-cols-2 gap-4 py-2">
+                  <div className="col-span-2">
+                    <Label>Nome do Produto *</Label>
+                    <Input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
+                  </div>
+                  <div>
+                    <Label>SKU / Código</Label>
+                    <Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
+                  </div>
+                  <div>
+                    <Label>Categoria</Label>
+                    <Input value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value })} />
+                  </div>
+                  <div>
+                    <Label>Unidade</Label>
+                    <Input value={form.unidade} onChange={(e) => setForm({ ...form, unidade: e.target.value })} />
+                  </div>
+                  <div>
+                    <Label>Volume Mensal Estimado</Label>
+                    <Input type="number" value={form.volume_mensal_estimado} onChange={(e) => setForm({ ...form, volume_mensal_estimado: Number(e.target.value) })} />
+                  </div>
+                  <div className="col-span-2 border-t pt-3 mt-1">
+                    <p className="text-sm font-medium text-muted-foreground mb-2">Custos Variáveis Unitários</p>
+                  </div>
+                  <div>
+                    <Label>Matéria-Prima (R$)</Label>
+                    <Input type="number" value={form.custo_materia_prima} onChange={(e) => setForm({ ...form, custo_materia_prima: Number(e.target.value) })} />
+                  </div>
+                  <div>
+                    <Label>Embalagem (R$)</Label>
+                    <Input type="number" value={form.custo_embalagem} onChange={(e) => setForm({ ...form, custo_embalagem: Number(e.target.value) })} />
+                  </div>
+                  <div>
+                    <Label>Mão de Obra Direta (R$)</Label>
+                    <Input type="number" value={form.mao_de_obra_direta} onChange={(e) => setForm({ ...form, mao_de_obra_direta: Number(e.target.value) })} />
+                  </div>
+                  <div>
+                    <Label>Custos Indiretos - CIF (R$)</Label>
+                    <Input type="number" value={form.custos_indiretos} onChange={(e) => setForm({ ...form, custos_indiretos: Number(e.target.value) })} />
+                  </div>
+                  <div className="col-span-2">
+                    <Label>Outros Custos Variáveis (R$)</Label>
+                    <Input type="number" value={form.outros_custos_variaveis} onChange={(e) => setForm({ ...form, outros_custos_variaveis: Number(e.target.value) })} />
+                  </div>
+                  <div className="col-span-2 border-t pt-3 mt-1">
+                    <p className="text-sm font-medium text-muted-foreground mb-2">Precificação</p>
+                  </div>
+                  <div>
+                    <Label>Preço de Venda Atual (R$)</Label>
+                    <Input type="number" value={form.preco_atual} onChange={(e) => setForm({ ...form, preco_atual: Number(e.target.value) })} />
+                  </div>
+                  <div>
+                    <Label>Margem Desejada (%)</Label>
+                    <Input type="number" value={form.margem_desejada_pct} onChange={(e) => setForm({ ...form, margem_desejada_pct: Number(e.target.value) })} />
+                  </div>
+                  <div className="col-span-2 flex items-center gap-2 pt-2">
+                    <Switch checked={form.ativo} onCheckedChange={(v) => setForm({ ...form, ativo: v })} />
+                    <Label>Produto ativo</Label>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancelar</Button>
+                  <Button onClick={handleSave} disabled={upsertProduct.isPending}>
+                    {upsertProduct.isPending && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+                    Salvar
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+        }
+      />
 
       {/* Import */}
       <Card>
@@ -317,14 +320,15 @@ export default function PricingProducts() {
       <Card>
         <CardHeader><CardTitle className="text-base">Produtos Cadastrados ({totalCatalog})</CardTitle></CardHeader>
         <CardContent>
-          {isLoading ? (
-            <div className="text-muted-foreground py-8 text-center">Carregando...</div>
-          ) : products.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
-              <Package className="h-12 w-12" />
-              <p>Nenhum produto cadastrado ainda. Importe a planilha ou cadastre o primeiro.</p>
-            </div>
-          ) : (
+          <QueryState
+            isLoading={isLoading}
+            isError={isError}
+            error={error}
+            isEmpty={products.length === 0}
+            onRetry={() => refetch()}
+            emptyTitle="Nenhum produto cadastrado ainda"
+            emptyDescription="Importe a planilha acima ou cadastre o primeiro produto em Novo Produto."
+          >
             <div className="rounded-lg border overflow-auto max-h-[60vh]">
               <Table>
                 <TableHeader>
@@ -378,7 +382,7 @@ export default function PricingProducts() {
                 </TableBody>
               </Table>
             </div>
-          )}
+          </QueryState>
         </CardContent>
       </Card>
     </div>

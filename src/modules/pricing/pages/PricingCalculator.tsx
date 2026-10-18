@@ -2,12 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceDot, Legend,
 } from "recharts";
-import { Calculator, TrendingUp, Target, Scale, Crown, Package } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Calculator, TrendingUp, Target, Scale, Crown } from "lucide-react";
 import { usePricingProducts, useSalesChannels, useCommercialExpenses } from "@/modules/pricing/hooks/usePricingData";
 import {
   allocateFixedExpenses, breakEven, channelVariablePct, custoVariavelUnitario,
   fmtBRL, fmtPct, simulateMargins, suggestedPrice, totalFixedExpenses,
 } from "@/modules/pricing/lib/pricing";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { QueryState } from "@/components/shared/QueryState";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -16,9 +20,13 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function PricingCalculator() {
-  const { data: products = [], isLoading: loadingProducts } = usePricingProducts();
-  const { data: channels = [], isLoading: loadingChannels } = useSalesChannels();
-  const { data: expenses = [], isLoading: loadingExpenses } = useCommercialExpenses();
+  const productsQuery = usePricingProducts();
+  const channelsQuery = useSalesChannels();
+  const expensesQuery = useCommercialExpenses();
+  const queries = [productsQuery, channelsQuery, expensesQuery];
+  const { data: products = [] } = productsQuery;
+  const { data: channels = [] } = channelsQuery;
+  const { data: expenses = [] } = expensesQuery;
 
   const activeProducts = useMemo(() => products.filter((p) => p.ativo), [products]);
   const activeChannels = useMemo(() => channels.filter((c) => c.ativo), [channels]);
@@ -104,31 +112,33 @@ export default function PricingCalculator() {
     });
   }, [be.pontoEquilibrioUnidades, simulatedPrice, custosFixosAlocados, custoVariavel, variavelPct, product]);
 
-  const isLoading = loadingProducts || loadingChannels || loadingExpenses;
-
-  if (isLoading) {
-    return <div className="text-muted-foreground p-8">Carregando...</div>;
-  }
-
-  if (activeProducts.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-64 gap-4">
-        <Package className="h-16 w-16 text-muted-foreground" />
-        <p className="text-muted-foreground text-lg">Sem produto cadastrado, não tem como simular preço.</p>
-        <a href="/pricing/products" className="text-primary underline">Cadastrar produtos</a>
-      </div>
-    );
-  }
+  // Preço sugerido depende das três tabelas: se qualquer uma falhar, simular
+  // com as outras daria um número errado com cara de certo.
+  const failed = queries.find((q) => q.isError);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2">
-        <Calculator className="h-6 w-6 text-primary" />
-        <div>
-          <h1 className="text-2xl font-bold">Calculadora de Precificação</h1>
-          <p className="text-sm text-muted-foreground">Descubra a margem líquida real e o ponto de equilíbrio antes de vender no prejuízo — não depois.</p>
-        </div>
-      </div>
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        eyebrow="Precificação"
+        title="Calculadora de Precificação"
+        description="Descubra a margem líquida real e o ponto de equilíbrio antes de vender no prejuízo — não depois."
+      />
+
+      <QueryState
+        isLoading={queries.some((q) => q.isLoading)}
+        isError={failed !== undefined}
+        error={failed?.error}
+        isEmpty={activeProducts.length === 0}
+        onRetry={() => queries.filter((q) => q.isError).forEach((q) => q.refetch())}
+        emptyTitle="Sem produto cadastrado, não tem como simular preço"
+        emptyDescription="Cadastre os produtos com o custo real. A calculadora usa esse custo, os canais e as despesas fixas para sugerir preço e margem."
+        emptyAction={
+          <Button asChild variant="outline" size="sm" className="self-start">
+            <Link to="/pricing/products">Cadastrar produtos</Link>
+          </Button>
+        }
+      >
+      <div className="space-y-6">
 
       {/* Selectors */}
       <div className="flex flex-wrap gap-3">
@@ -312,6 +322,8 @@ export default function PricingCalculator() {
           </Card>
         </>
       )}
+      </div>
+      </QueryState>
     </div>
   );
 }
