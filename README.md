@@ -63,3 +63,15 @@ VITE_SUPABASE_PROJECT_ID=
 Apenas chaves públicas ficam no frontend. Segredos (tokens OAuth, chaves de LLM,
 credenciais de provedor) vivem exclusivamente no servidor — ver
 [`docs/07-SEGURANCA-LGPD-MULTITENANT.md`](./docs/07-SEGURANCA-LGPD-MULTITENANT.md).
+
+### Qual projeto Supabase é qual
+
+Há dois projetos Supabase, e cada um tem o código num repositório diferente:
+
+| Projeto | O que é | Onde está o código |
+|---|---|---|
+| `hlvkkziiaeyqyenekdck` | Banco **deste app** (custos e precificação). Gerenciado pela Lovable; é para ele que apontam o `.env` e o `supabase/config.toml` | Este repositório: `supabase/migrations/` |
+| `rplnjrqpzqznbxfascqs` (`keystone`) | Growth OS: conteúdo, social media e pipeline de criativos, com as Edge Functions | [`scarabottotecnology-byte/Keystone`](https://github.com/scarabottotecnology-byte/Keystone), em `supabase/functions/` |
+
+Edge Functions do projeto de conteúdo não entram aqui: o deploy delas sai do
+repositório Keystone (`supabase/functions/PIPELINE-CRIATIVOS.md` lá).
