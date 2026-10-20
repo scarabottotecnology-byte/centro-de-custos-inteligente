@@ -12,6 +12,25 @@ segunda a sexta, das 9h às 17h30, e continua de onde parou quando o PC volta.
 
 ---
 
+## Jeito rápido: dois cliques
+
+1. Instale o **Docker Desktop** (item 1 abaixo) e, se for usar e-mail, crie o
+   Gmail de prospecção (item 2).
+2. Na pasta `prospeccao`, dê dois cliques em **`INICIAR.bat`**. Ele:
+   - confere se o Docker está aberto (e abre, se não estiver);
+   - na primeira vez, gera as senhas internas e pergunta o Gmail de prospecção
+     (Enter para pular) e o **seu** WhatsApp, que recebe o aviso de lead;
+   - liga os programas e abre o painel para conectar o WhatsApp do chip (item 5).
+3. Depois disso:
+   - **`STATUS.bat`** mostra o funil e o que o robô está fazendo;
+   - **`PARAR.bat`** pausa tudo;
+   - o `INICIAR.bat` pode rodar de novo quando quiser: não pergunta nada outra vez.
+
+O robô sempre começa em **simulação** (item 7). Os itens abaixo são o mesmo
+processo feito à mão, se preferir ou se algo der errado.
+
+---
+
 ## 1. Instalar os programas (uma vez)
 
 1. **Docker Desktop** — https://www.docker.com/products/docker-desktop/
