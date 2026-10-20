@@ -1,5 +1,6 @@
 ﻿# Liga o Sextante no Windows: confere o Docker, cria a configuração na primeira
-# vez, sobe os programas e abre a tela de conexão do WhatsApp.
+# vez, sobe os programas, abre a tela de conexão do WhatsApp e cria o atalho
+# Sextante na área de trabalho.
 # Chamado pelo INICIAR.bat. Pode rodar quantas vezes quiser: o que já foi
 # configurado não é perguntado de novo.
 #
@@ -122,12 +123,31 @@ if ($conectou) {
     Write-Host 'Não consegui preparar o WhatsApp agora. Rode o INICIAR.bat de novo daqui a alguns minutos.' -ForegroundColor Yellow
 }
 
-# --- 5. Pronto ---------------------------------------------------------------
+# --- 5. Atalho na área de trabalho -------------------------------------------
+Passo 'Criando o atalho Sextante na área de trabalho'
+try {
+    $desktop = [Environment]::GetFolderPath('Desktop')
+    $atalho = (New-Object -ComObject WScript.Shell).CreateShortcut((Join-Path $desktop 'Sextante.lnk'))
+    $atalho.TargetPath = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+    $atalho.Arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $pasta 'scripts\abrir.ps1') + '"'
+    $atalho.WorkingDirectory = $pasta
+    $atalho.IconLocation = (Join-Path $pasta 'sextante.ico') + ',0'
+    $atalho.WindowStyle = 7
+    $atalho.Description = 'Abre o painel do Sextante'
+    $atalho.Save()
+    Write-Host 'Pronto: clique duas vezes em "Sextante" na área de trabalho para abrir o painel.'
+} catch {
+    Write-Host "Não consegui criar o atalho ($($_.Exception.Message)). O painel abre pelo endereço abaixo." -ForegroundColor Yellow
+}
+
+# --- 6. Pronto ---------------------------------------------------------------
 Passo 'Situação atual'
 & docker compose run --rm cli funil
 
 Write-Host ''
 Write-Host 'O robô está ligado em SIMULAÇÃO: faz tudo, menos enviar.' -ForegroundColor Green
 Write-Host 'Agora ele baixa a base da Receita (~8 GB, pode levar 1 hora) e seleciona as empresas.'
-Write-Host 'Pode fechar esta janela: ele continua rodando. Use o STATUS.bat para acompanhar.'
+Write-Host 'Pode fechar esta janela: ele continua rodando. Acompanhe pelo atalho Sextante.'
 Write-Host 'Para ligar o envio de verdade, veja o WINDOWS.md, item 7.'
+
+& (Join-Path $PSScriptRoot 'abrir.ps1')

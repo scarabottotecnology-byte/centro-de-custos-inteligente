@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sextante</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23132A3A'/%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M32 10 14 50M32 10l18 40M14 50a43.9 43.9 0 0 0 36 0' stroke='%23D2A859' stroke-width='4.4'/%3E%3Cpath d='M32 10l5 42' stroke='%23E9EEF0' stroke-width='3.2'/%3E%3C/g%3E%3Ccircle cx='32' cy='10' r='5' fill='%23D2A859'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --mar: #E7EDEF;
+  --carta: #F3F6F7;
+  --tinta: #132A3A;
+  --tinta-2: #51666F;
+  --raia: #C5D1D6;
+  --latao: #9C742A;
+  --latao-vivo: #B98B35;
+  --verde: #2C7560;
+  --coral: #B4473A;
+  --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --texto: "Figtree", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mar: #0E1C25; --carta: #132530; --tinta: #E3EBEE; --tinta-2: #93A7B0;
+    --raia: #2A3F4B; --latao: #D2A859; --latao-vivo: #E2BC6E; --verde: #5DB596; --coral: #E07B6C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --mar: #0E1C25; --carta: #132530; --tinta: #E3EBEE; --tinta-2: #93A7B0;
+  --raia: #2A3F4B; --latao: #D2A859; --latao-vivo: #E2BC6E; --verde: #5DB596; --coral: #E07B6C;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--mar);
+  color: var(--tinta);
+  font: 400 16px/1.5 var(--texto);
+}
+a { color: inherit; text-decoration-color: var(--latao); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--latao-vivo); outline-offset: 3px; border-radius: 2px; }
+
+.casco { max-width: 1080px; margin: 0 auto; padding: 28px 16px 48px; }
+@media (min-width: 720px) { .casco { padding: 40px 40px 64px; } }
+
+/* Cabeçalho */
+.topo { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.marca { display: flex; align-items: center; gap: 10px; font: 700 22px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; }
+.marca svg { width: 26px; height: 26px; }
+.marca small { font: 500 13px/1 var(--texto); letter-spacing: 0; text-transform: none; color: var(--tinta-2); }
+.hora { font: 400 12px/1 var(--mono); color: var(--tinta-2); white-space: nowrap; }
+@media (max-width: 479px) { .marca small { display: none; } }
+
+/* Tese: a frase de estado */
+.tese { margin: 44px 0 0; max-width: 18ch; font: 500 clamp(40px, 7.4vw, 76px)/.98 var(--display); letter-spacing: .005em; text-wrap: balance; }
+.tese em { font-style: normal; color: var(--latao); }
+.subtese { margin: 14px 0 0; max-width: 56ch; color: var(--tinta-2); font-size: 17px; }
+
+/* Assinatura: o limbo do sextante */
+.limbo { margin: 20px -16px 0; }
+@media (min-width: 720px) { .limbo { margin: 8px 0 0; } }
+.limbo svg { display: block; width: 100%; height: auto; overflow: hidden; }
+.limbo .quadro { stroke: var(--raia); stroke-width: 1.25; fill: none; }
+.limbo .arco { stroke: var(--tinta); stroke-width: 1.5; fill: none; }
+.limbo .risco { stroke: var(--tinta-2); stroke-width: 1; }
+.limbo .risco.meio { stroke-width: 1.25; }
+.limbo .risco.marco { stroke: var(--tinta); stroke-width: 1.75; }
+.limbo .num { font: 700 46px/1 var(--display); fill: var(--tinta); text-anchor: middle; font-variant-numeric: tabular-nums; }
+.limbo .rot { font: 500 14px/1 var(--mono); fill: var(--tinta-2); text-anchor: middle; letter-spacing: .08em; text-transform: uppercase; }
+.limbo .vazio .num { fill: var(--tinta-2); opacity: .55; }
+.limbo .alvo .num { fill: var(--latao); }
+.limbo .alvo .rot { fill: var(--latao); }
+.limbo .braco { transform-box: view-box; transform-origin: 400px -260px; transition: transform 1.6s cubic-bezier(.2, .7, .1, 1); }
+.limbo .braco line { stroke: var(--latao-vivo); stroke-width: 2.5; stroke-linecap: round; }
+.limbo .braco .nonio { fill: var(--latao-vivo); }
+.estagios { display: none; }
+@media (max-width: 639px) {
+  .limbo .num, .limbo .rot { display: none; }
+  .estagios { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 14px 12px; margin: 8px 0 0; padding: 0 16px; list-style: none; }
+  .estagios li { border-top: 1px solid var(--raia); padding-top: 8px; }
+  .estagios b { display: block; font: 700 32px/1 var(--display); font-variant-numeric: tabular-nums; }
+  .estagios span { font: 500 11px/1.3 var(--mono); color: var(--tinta-2); letter-spacing: .08em; text-transform: uppercase; }
+  .estagios .alvo b, .estagios .alvo span { color: var(--latao); }
+}
+
+/* Leituras dos instrumentos */
+.leituras { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin: 36px 0 0; padding: 0; border-top: 1px solid var(--raia); border-bottom: 1px solid var(--raia); }
+.leitura { padding: 14px 16px 16px 0; list-style: none; }
+@media (min-width: 720px) { .leitura + .leitura { padding-left: 18px; border-left: 1px solid var(--raia); } }
+.leitura dt { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); }
+.leitura dd { margin: 8px 0 0; font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.leitura dd small { font-weight: 400; color: var(--tinta-2); font-size: 14px; }
+.luz { width: 8px; height: 8px; border-radius: 50%; background: var(--tinta-2); flex: none; }
+.luz.ok { background: var(--verde); }
+.luz.atencao { background: var(--latao-vivo); }
+.luz.problema { background: var(--coral); }
+.acao { font: 600 14px/1 var(--texto); color: var(--tinta); background: none; border: 1px solid var(--latao); border-radius: 999px; padding: 6px 12px; text-decoration: none; }
+.acao:hover { background: var(--carta); }
+
+/* Diários */
+.diarios { display: grid; gap: 40px; margin-top: 48px; }
+@media (min-width: 860px) { .diarios { grid-template-columns: 1fr 1fr; gap: 56px; } }
+.diario h2 { margin: 0; font: 700 26px/1 var(--display); letter-spacing: .03em; text-transform: uppercase; }
+.diario > p { margin: 6px 0 0; color: var(--tinta-2); font-size: 15px; }
+.lista { margin: 18px 0 0; padding: 0; list-style: none; }
+.item { padding: 14px 0; border-top: 1px solid var(--raia); display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; }
+.item:last-child { border-bottom: 1px solid var(--raia); }
+.item .quem { font-weight: 600; overflow-wrap: anywhere; }
+.item .quando { font: 400 12px/1.6 var(--mono); color: var(--tinta-2); white-space: nowrap; }
+.item .texto { grid-column: 1 / -1; color: var(--tinta-2); font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.item .selo { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-2); margin-left: 8px; }
+.item .selo.falhou { color: var(--coral); }
+.vazio-lista { margin: 18px 0 0; padding: 18px 0; border-top: 1px solid var(--raia); border-bottom: 1px solid var(--raia); color: var(--tinta-2); font-size: 15px; max-width: 48ch; }
+
+.rodape { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--raia); display: flex; flex-wrap: wrap; gap: 8px 28px; color: var(--tinta-2); font-size: 14px; }
+.rodape code { font: 400 13px/1 var(--mono); color: var(--tinta); }
+
+@media (prefers-reduced-motion: reduce) { .limbo .braco { transition: none; } }
+</style>
+</head>
+<body>
+<main class="casco">
+  <header class="topo">
+    <div class="marca">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke-linecap="round"><path d="M32 10 14 50M32 10l18 40M14 50a43.9 43.9 0 0 0 36 0" style="stroke: var(--latao-vivo)" stroke-width="4.4"/><path d="M32 10l5 42" stroke="currentColor" stroke-width="3.2"/></g><circle cx="32" cy="10" r="5" style="fill: var(--latao-vivo)"/></svg>
+      Sextante <small id="org"></small>
+    </div>
+    <span class="hora" id="hora" aria-live="polite"></span>
+  </header>
+
+  <h1 class="tese" id="tese">Lendo o robô…</h1>
+  <p class="subtese" id="subtese"></p>
+
+  <section class="limbo" aria-label="Funil de prospecção">
+    <svg id="limbo" viewBox="0 170 800 270" role="img" aria-labelledby="limbo-titulo">
+      <title id="limbo-titulo">Funil de prospecção</title>
+    </svg>
+    <ul class="estagios" id="estagios"></ul>
+  </section>
+
+  <dl class="leituras" id="leituras"></dl>
+
+  <div class="diarios">
+    <section class="diario">
+      <h2>Leads</h2>
+      <p>Quem respondeu com interesse. Você também recebe o aviso no WhatsApp.</p>
+      <div id="leads"></div>
+    </section>
+    <section class="diario">
+      <h2>Últimas mensagens</h2>
+      <p id="mensagens-sub">O que o robô mandou por último.</p>
+      <div id="mensagens"></div>
+    </section>
+  </div>
+
+  <footer class="rodape">
+    <span>Pausar o robô: <code>PARAR.bat</code></span>
+    <span>Ligar o envio de verdade: <code>WINDOWS.md</code>, item 7</span>
+    <span>A tela se atualiza sozinha a cada 30 segundos.</span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var PIVO = { x: 400, y: -260 }, R = 600;
+  var ETAPAS = [
+    ["empresas", "Empresas"], ["priorizados", "Priorizados"], ["contatados", "Contatados"],
+    ["responderam", "Responderam"], ["leads", "Leads"]
+  ];
+  var ANGULOS = [-28, -14, 0, 14, 28];
+  var DIAS = ["seg", "ter", "qua", "qui", "sex", "sáb", "dom"];
+  var CANAL = { whatsapp: "WhatsApp", email: "E-mail", linkedin: "LinkedIn" };
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, attrs, text) {
+    var n = document.createElement(tag);
+    for (var k in attrs || {}) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function svg(tag, attrs, text) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs || {}) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function ponto(graus, raio) {
+    var a = graus * Math.PI / 180;
+    return { x: PIVO.x + raio * Math.sin(a), y: PIVO.y + raio * Math.cos(a) };
+  }
+  function num(n) { return Number(n || 0).toLocaleString("pt-BR"); }
+  function quando(iso) {
+    var d = new Date(iso), seg = (Date.now() - d) / 1000;
+    if (seg < 90) return "agora";
+    if (seg < 3600) return "há " + Math.round(seg / 60) + " min";
+    if (seg < 86400) return "há " + Math.round(seg / 3600) + " h";
+    return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+  }
+
+  // --- Token: chega pelo atalho no endereço (#t=...) e fica guardado neste navegador.
+  var CHAVE = "sextante.token", token = null;
+  var m = location.hash.match(/[#&]t=([^&]+)/);
+  if (m) {
+    token = decodeURIComponent(m[1]);
+    try { localStorage.setItem(CHAVE, token); } catch (e) {}
+    history.replaceState(null, "", location.pathname);
+  } else {
+    try { token = localStorage.getItem(CHAVE); } catch (e) {}
+  }
+
+  // --- Desenho fixo do limbo: quadro, arco e graduação.
+  var limbo = $("limbo"), braco, marcos = [];
+  (function desenhar() {
+    var a = ponto(-32, R), b = ponto(32, R);
+    // Os dois raios do quadro, do alto da tela até as pontas do arco.
+    var topoA = ponto(-32, -PIVO.y / Math.cos(32 * Math.PI / 180)), topoB = ponto(32, -PIVO.y / Math.cos(32 * Math.PI / 180));
+    limbo.appendChild(svg("path", { "class": "quadro", d: "M" + topoA.x + " 0 L" + a.x + " " + a.y + " M" + topoB.x + " 0 L" + b.x + " " + b.y }));
+    limbo.appendChild(svg("path", { "class": "arco", d: "M" + a.x + " " + a.y + " A" + R + " " + R + " 0 0 0 " + b.x + " " + b.y }));
+    for (var g = -32; g <= 32; g++) {
+      var tam = g % 7 === 0 ? 22 : (g % 7 === 3 || g % 7 === -3 ? 13 : 7);
+      var cls = "risco" + (g % 7 === 0 ? " marco" : tam === 13 ? " meio" : "");
+      var p1 = ponto(g, R), p2 = ponto(g, R - tam);
+      limbo.appendChild(svg("line", { "class": cls, x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y }));
+    }
+    ETAPAS.forEach(function (e, i) {
+      var g = svg("g", { "class": "vazio" });
+      var pn = ponto(ANGULOS[i], R + 52), pr = ponto(ANGULOS[i], R + 78);
+      var t = svg("text", { "class": "num", x: pn.x, y: pn.y }, "–");
+      g.appendChild(t);
+      g.appendChild(svg("text", { "class": "rot", x: pr.x, y: pr.y }, e[1]));
+      limbo.appendChild(g);
+      marcos.push({ g: g, t: t });
+    });
+    braco = svg("g", { "class": "braco", style: "transform: rotate(34deg)" });
+    var pb = ponto(0, R + 6), pv = ponto(0, R - 30);
+    braco.appendChild(svg("line", { x1: PIVO.x, y1: 0, x2: pb.x, y2: pb.y }));
+    braco.appendChild(svg("path", { "class": "nonio", d: "M" + (pv.x - 9) + " " + pv.y + " L" + (pv.x + 9) + " " + pv.y + " L" + pb.x + " " + (pb.y - 4) + " Z" }));
+    limbo.appendChild(braco);
+  })();
+
+  // --- Frases
+  function tese(d) {
+    var f = d.funil, r = d.receita;
+    if (!f.empresas && r.estado !== "carregada") {
+      if (r.estado === "aguardando") return ["Aguardando a <em>base da Receita</em>.", "O download começa sozinho a partir do dia 10 de cada mês, quando a Receita publica os dados novos."];
+      return ["Baixando a <em>base da Receita</em>.", "São uns 8 GB. Leva cerca de uma hora; depois ele seleciona as empresas do seu perfil."];
+    }
+    if (d.simulacao) {
+      var s = f.simuladas_hoje;
+      return [s ? "Hoje ele teria enviado <em>" + num(s) + "</em> " + (s === 1 ? "mensagem" : "mensagens") + "."
+                : "Em simulação, <em>sem enviar</em> nada.",
+              "Ele faz tudo, menos enviar: escolhe as empresas, confere os contatos e escreve as mensagens para você revisar."];
+    }
+    var e = f.enviadas_hoje;
+    return [e ? "Enviou <em>" + num(e) + "</em> " + (e === 1 ? "mensagem" : "mensagens") + " hoje."
+              : (d.janela.aberta ? "Ligado, procurando <em>quem abordar</em>." : "Fora do horário: <em>descansando</em>."),
+            "Envio de verdade ligado, dentro do horário e dos limites diários."];
+  }
+
+  function janelaTexto(j) {
+    if (j.aberta) return ["Aberta", "até " + j.fim];
+    var dias = j.dias.map(function (n) { return DIAS[n]; });
+    var faixa = dias.length > 2 && j.dias[j.dias.length - 1] - j.dias[0] === j.dias.length - 1
+      ? dias[0] + " a " + dias[dias.length - 1] : dias.join(", ");
+    return ["Fechada", faixa + ", " + j.inicio + " às " + j.fim];
+  }
+
+  function leitura(rotulo, luz, valor, detalhe, acao) {
+    var box = el("div", { "class": "leitura" });
+    box.appendChild(el("dt", null, rotulo));
+    var dd = el("dd");
+    dd.appendChild(el("span", { "class": "luz " + luz, "aria-hidden": "true" }));
+    dd.appendChild(el("span", null, valor));
+    if (detalhe) dd.appendChild(el("small", null, detalhe));
+    if (acao) dd.appendChild(acao);
+    box.appendChild(dd);
+    return box;
+  }
+
+  function lista(alvo, itens, vazio, montar) {
+    var box = $(alvo);
+    box.textContent = "";
+    if (!itens.length) { box.appendChild(el("p", { "class": "vazio-lista" }, vazio)); return; }
+    var ul = el("ul", { "class": "lista" });
+    itens.forEach(function (it) { ul.appendChild(montar(it)); });
+    box.appendChild(ul);
+  }
+
+  function render(d) {
+    var f = d.funil;
+    $("org").textContent = d.organizacao ? "· " + d.organizacao : "";
+    $("hora").textContent = "atualizado " + new Date(d.atualizado).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+    var t = tese(d);
+    $("tese").innerHTML = t[0];
+    $("subtese").textContent = t[1];
+
+    // Limbo: o braço aponta para a etapa mais avançada que já tem alguém.
+    var alvo = -1;
+    ETAPAS.forEach(function (e, i) { if (f[e[0]] > 0) alvo = i; });
+    var lis = $("estagios");
+    lis.textContent = "";
+    ETAPAS.forEach(function (e, i) {
+      var n = f[e[0]] || 0;
+      marcos[i].t.textContent = num(n);
+      marcos[i].g.setAttribute("class", i === alvo ? "alvo" : (n ? "" : "vazio"));
+      var li = el("li", i === alvo ? { "class": "alvo" } : null);
+      li.appendChild(el("b", null, num(n)));
+      li.appendChild(el("span", null, e[1]));
+      lis.appendChild(li);
+    });
+    $("limbo-titulo").textContent = "Funil: " + ETAPAS.map(function (e) { return num(f[e[0]]) + " " + e[1].toLowerCase(); }).join(", ");
+    var ang = alvo < 0 ? 34 : -ANGULOS[alvo];
+    requestAnimationFrame(function () { braco.style.transform = "rotate(" + ang + "deg)"; });
+
+    // Leituras
+    var box = $("leituras");
+    box.textContent = "";
+    box.appendChild(leitura("Envio", d.simulacao ? "atencao" : "ok", d.simulacao ? "Simulação" : "Ligado",
+      d.simulacao ? "não envia nada" : "limite " + num(d.limites.whatsapp || 0) + " WhatsApp e " + num(d.limites.email || 0) + " e-mails por dia"));
+    var j = janelaTexto(d.janela);
+    box.appendChild(leitura("Horário de envio", d.janela.aberta ? "ok" : "", j[0], j[1]));
+    var w = d.canais.whatsapp, conectar = null;
+    if (w === "desconectado") {
+      conectar = el("a", { "class": "acao", href: "http://localhost:8081/manager", target: "_blank", rel: "noopener" }, "Conectar");
+    }
+    box.appendChild(leitura("WhatsApp do chip", w === "conectado" ? "ok" : w === "desconectado" ? "problema" : "",
+      w === "conectado" ? "Conectado" : w === "desconectado" ? "Desconectado" : "Não configurado", null, conectar));
+    box.appendChild(leitura("E-mail", d.canais.email === "configurado" ? "ok" : "",
+      d.canais.email === "configurado" ? "Configurado" : "Não configurado", d.canais.email === "configurado" ? null : "só WhatsApp"));
+    var r = d.receita;
+    var mes = r.mes ? new Date(r.mes + "-15").toLocaleDateString("pt-BR", { month: "short", year: "numeric" }) : null;
+    box.appendChild(leitura("Base da Receita", r.estado === "carregada" ? "ok" : "atencao",
+      { carregada: "Carregada", carregando: "Carregando", baixando: "Baixando", aguardando: "Aguardando" }[r.estado], mes));
+
+    lista("leads", d.leads, "Nenhum lead ainda. Quando alguém responder com interesse, aparece aqui.", function (l) {
+      var li = el("li", { "class": "item" });
+      var quem = el("span", { "class": "quem" }, l.empresa || "Empresa sem nome");
+      if (l.canal) quem.appendChild(el("span", { "class": "selo" }, CANAL[l.canal] || l.canal));
+      li.appendChild(quem);
+      li.appendChild(el("span", { "class": "quando" }, quando(l.quando)));
+      if (l.mensagem) li.appendChild(el("span", { "class": "texto" }, "“" + l.mensagem + "”"));
+      return li;
+    });
+
+    $("mensagens-sub").textContent = d.simulacao
+      ? "O que ele teria mandado. Em simulação, nada sai daqui."
+      : "O que o robô mandou por último.";
+    lista("mensagens", d.mensagens, "Nenhuma mensagem ainda. Ele escreve depois de selecionar as empresas e confirmar os contatos.", function (msg) {
+      var li = el("li", { "class": "item" });
+      var quem = el("span", { "class": "quem" }, msg.empresa || "Empresa sem nome");
+      var selo = msg.status === "failed" ? "falhou" : msg.status === "dry_run" ? "simulada" : CANAL[msg.canal] || msg.canal;
+      quem.appendChild(el("span", { "class": "selo" + (msg.status === "failed" ? " falhou" : "") }, selo));
+      li.appendChild(quem);
+      li.appendChild(el("span", { "class": "quando" }, quando(msg.quando)));
+      if (msg.texto) li.appendChild(el("span", { "class": "texto" }, msg.texto));
+      return li;
+    });
+  }
+
+  function falha(titulo, texto) {
+    $("tese").textContent = titulo;
+    $("subtese").textContent = texto;
+    $("hora").textContent = "";
+  }
+
+  function atualizar() {
+    if (!token) {
+      falha("Abra pelo atalho.", "Dê dois cliques no atalho Sextante da área de trabalho. Ele abre esta tela já com o acesso liberado.");
+      return;
+    }
+    fetch("/painel/dados", { headers: { Authorization: "Bearer " + token }, cache: "no-store" })
+      .then(function (resp) {
+        if (resp.status === 401) {
+          try { localStorage.removeItem(CHAVE); } catch (e) {}
+          token = null;
+          throw new Error("acesso");
+        }
+        if (!resp.ok) throw new Error("http " + resp.status);
+        return resp.json();
+      })
+      .then(render)
+      .catch(function (err) {
+        if (err.message === "acesso") atualizar();
+        else falha("O robô não respondeu.", "Dê dois cliques no atalho Sextante de novo. Se continuar assim, rode o INICIAR.bat e mande a tela para o Claude.");
+      });
+  }
+
+  atualizar();
+  setInterval(atualizar, 30000);
+})();
+</script>
+</body>
+</html>

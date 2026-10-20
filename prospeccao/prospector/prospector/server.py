@@ -1,4 +1,4 @@
-"""API HTTP: webhook do WhatsApp, link de descadastro e gatilhos para o n8n."""
+"""API HTTP: webhook do WhatsApp, link de descadastro, gatilhos para o n8n e o painel local."""
 
 from __future__ import annotations
 
@@ -12,7 +12,8 @@ from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import HTMLResponse
 from psycopg.rows import dict_row
 
-from . import config, inbound, pipeline
+from . import config, inbound, painel, pipeline
+from .providers import EvolutionClient
 
 log = logging.getLogger(__name__)
 
@@ -75,6 +76,23 @@ def create_app(settings: config.Settings | None = None) -> FastAPI:
         with _conn(settings) as conn:
             inbound.optout_by_token(conn, token)
         return _PAGE.format(title="Pronto", text="Você não receberá mais mensagens nossas.", extra="")
+
+    # A página não traz dado nenhum: os números vêm de /painel/dados, que pede o
+    # token. Assim o painel continua fechado mesmo com a porta exposta pelo Funnel.
+    @app.get("/painel", response_class=HTMLResponse)
+    def painel_page() -> str:
+        return painel.HTML.read_text(encoding="utf-8")
+
+    @app.get("/painel/dados")
+    def painel_dados(authorization: str | None = Header(default=None)) -> dict:
+        _auth(authorization)
+        whatsapp = None
+        if settings.evolution_apikey:
+            evo = EvolutionClient(settings.evolution_url, settings.evolution_apikey,
+                                  settings.evolution_instance, timeout=3)
+            whatsapp = evo.is_connected()
+        with _conn(settings) as conn:
+            return painel.snapshot(conn, settings, app.state.org_id, whatsapp)
 
     @app.post("/run/{etapa}")
     async def run(etapa: str, authorization: str | None = Header(default=None)) -> dict:

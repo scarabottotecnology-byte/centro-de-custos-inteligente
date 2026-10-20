@@ -20,9 +20,13 @@ segunda a sexta, das 9h às 17h30, e continua de onde parou quando o PC volta.
    - confere se o Docker está aberto (e abre, se não estiver);
    - na primeira vez, gera as senhas internas e pergunta o Gmail de prospecção
      (Enter para pular) e o **seu** WhatsApp, que recebe o aviso de lead;
-   - liga os programas e abre o painel para conectar o WhatsApp do chip (item 5).
+   - liga os programas e abre o painel para conectar o WhatsApp do chip (item 5);
+   - cria o atalho **Sextante** na área de trabalho.
 3. Depois disso:
-   - **`STATUS.bat`** mostra o funil e o que o robô está fazendo;
+   - o atalho **Sextante** abre o painel no navegador: o que o robô está
+     fazendo, o funil, os leads e as últimas mensagens. Se o Docker ou o robô
+     estiverem parados, ele liga antes de abrir;
+   - **`STATUS.bat`** mostra o mesmo em texto, com os registros do robô;
    - **`PARAR.bat`** pausa tudo;
    - o `INICIAR.bat` pode rodar de novo quando quiser: não pergunta nada outra vez.
 

@@ -19,6 +19,15 @@ def test_api(conn, settings, receita_dir):
         assert funil["empresas"] == 3
         assert client.post("/run/nada", headers={"Authorization": "Bearer segredo"}).status_code == 404
 
+        assert "Sextante" in client.get("/painel").text
+        assert client.get("/painel/dados").status_code == 401
+        dados = client.get("/painel/dados", headers={"Authorization": "Bearer segredo"}).json()
+        assert dados["funil"]["empresas"] == 3 and dados["funil"]["simuladas_hoje"] == 0
+        assert dados["simulacao"] is True
+        assert dados["canais"] == {"whatsapp": "sem_configuracao", "email": "sem_configuracao"}
+        assert dados["receita"] == {"estado": "carregando", "mes": "2026-09"}  # a pasta do receita_dir
+        assert dados["leads"] == [] and dados["mensagens"] == []
+
         assert client.post("/webhooks/evolution", json={}).status_code == 401
         ignored = client.post("/webhooks/evolution?token=segredo", json={"event": "connection.update"})
         assert ignored.json() == {"classificacao": None}

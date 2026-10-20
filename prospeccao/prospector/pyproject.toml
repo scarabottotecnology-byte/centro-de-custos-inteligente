@@ -27,5 +27,8 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 include = ["prospector*"]
 
+[tool.setuptools.package-data]
+prospector = ["*.html"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

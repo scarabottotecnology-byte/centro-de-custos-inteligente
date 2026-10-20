@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from prospector import cnpj, config, inbound, maps, messages, outreach, phones, receita, scoring
+from prospector import cnpj, config, inbound, maps, messages, outreach, painel, phones, receita, scoring
 
 EXAMPLE_CONFIG = Path(__file__).resolve().parents[2] / "prospeccao.example.yaml"
 
@@ -247,3 +247,16 @@ def test_prune_apaga_so_meses_antigos(tmp_path):
     assert not (tmp_path / "2026-08" / "Empresas0.zip").exists()
     assert (tmp_path / "2026-08" / ".carregado").exists()
     assert (tmp_path / "2026-09" / "Empresas0.zip").exists()
+
+
+def test_painel_receita_status(tmp_path):
+    assert painel.receita_status(tmp_path) == {"estado": "aguardando", "mes": None}
+    setembro, outubro = tmp_path / "receita" / "2026-09", tmp_path / "receita" / "2026-10"
+    setembro.mkdir(parents=True)
+    assert painel.receita_status(tmp_path) == {"estado": "baixando", "mes": "2026-09"}
+    (setembro / ".completo").touch()
+    assert painel.receita_status(tmp_path) == {"estado": "carregando", "mes": "2026-09"}
+    (setembro / ".carregado").touch()
+    outubro.mkdir()
+    # O mês novo ainda baixando não esconde que o anterior está carregado.
+    assert painel.receita_status(tmp_path) == {"estado": "carregada", "mes": "2026-09"}
