@@ -1,0 +1,25 @@
+# Servidor na internet (Oracle Cloud grátis ou qualquer VPS Linux): põe o Caddy
+# na frente da API, com HTTPS automático. Quem instala é o servidor/instalar.sh;
+# o passo a passo está em SERVIDOR.md.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.servidor.yml up -d
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      SITE: ${PROSPECTOR_SITE:?defina PROSPECTOR_SITE no .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./servidor/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

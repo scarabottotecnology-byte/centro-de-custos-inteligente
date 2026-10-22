@@ -66,6 +66,11 @@ class Context:
             log.info("AVISO DE LEAD:\n%s", text)
 
 
+def whatsapp_webhook(settings: Settings) -> str:
+    """Endereço que a Evolution chama a cada mensagem recebida no chip."""
+    return f"{settings.webhook_base_url.rstrip('/')}/webhooks/evolution?token={settings.api_token}"
+
+
 def receita_baixar(ctx: Context) -> dict:
     return {"pasta": str(receita.download(ctx.settings))}
 

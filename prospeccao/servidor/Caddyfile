@@ -1,0 +1,15 @@
+# HTTPS automático (Let's Encrypt) no endereço de PROSPECTOR_SITE.
+# Só vai para a internet o que precisa: o painel, o link de descadastro e a
+# checagem de saúde. O webhook do WhatsApp e os gatilhos /run continuam só na
+# rede interna dos contêineres.
+{$SITE} {
+	encode gzip
+	redir / /painel
+
+	@publico path /painel /painel/* /saida/* /health
+	handle @publico {
+		reverse_proxy api:8000
+	}
+
+	respond 404
+}

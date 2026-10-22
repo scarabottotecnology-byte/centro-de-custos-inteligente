@@ -1,4 +1,4 @@
-"""API HTTP: webhook do WhatsApp, link de descadastro, gatilhos para o n8n e o painel local."""
+"""API HTTP: webhook do WhatsApp, link de descadastro, gatilhos para o n8n e o painel."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ import hmac
 import logging
 from contextlib import asynccontextmanager
 
+import httpx
 import psycopg
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.concurrency import run_in_threadpool
@@ -78,21 +79,47 @@ def create_app(settings: config.Settings | None = None) -> FastAPI:
         return _PAGE.format(title="Pronto", text="Você não receberá mais mensagens nossas.", extra="")
 
     # A página não traz dado nenhum: os números vêm de /painel/dados, que pede o
-    # token. Assim o painel continua fechado mesmo com a porta exposta pelo Funnel.
+    # token. Assim o painel continua fechado mesmo com a porta exposta na internet.
     @app.get("/painel", response_class=HTMLResponse)
     def painel_page() -> str:
         return painel.HTML.read_text(encoding="utf-8")
 
+    def _evolution() -> EvolutionClient | None:
+        if not settings.evolution_apikey:
+            return None
+        return EvolutionClient(settings.evolution_url, settings.evolution_apikey,
+                               settings.evolution_instance, timeout=5)
+
     @app.get("/painel/dados")
     def painel_dados(authorization: str | None = Header(default=None)) -> dict:
         _auth(authorization)
-        whatsapp = None
-        if settings.evolution_apikey:
-            evo = EvolutionClient(settings.evolution_url, settings.evolution_apikey,
-                                  settings.evolution_instance, timeout=3)
-            whatsapp = evo.is_connected()
+        evo = _evolution()
+        whatsapp = evo.is_connected() if evo else None
         with _conn(settings) as conn:
             return painel.snapshot(conn, settings, app.state.org_id, whatsapp)
+
+    # Pareamento do chip pelo próprio painel. No servidor o manager da Evolution
+    # não fica exposto; aqui o QR só sai para quem tem o token.
+    @app.post("/painel/whatsapp")
+    def painel_whatsapp(authorization: str | None = Header(default=None)) -> dict:
+        _auth(authorization)
+        evo = _evolution()
+        if evo is None:
+            return {"estado": "sem_configuracao"}
+        if evo.is_connected():
+            return {"estado": "conectado"}
+        try:
+            evo.create_instance(pipeline.whatsapp_webhook(settings))
+        except httpx.HTTPError:
+            pass  # a instância já existe; a Evolution responde com erro e segue
+        try:
+            qr = evo.connect()
+        except httpx.HTTPError:
+            raise HTTPException(status_code=503, detail="WhatsApp ainda está ligando") from None
+        imagem = qr.get("base64") or None
+        if imagem and not imagem.startswith("data:"):
+            imagem = "data:image/png;base64," + imagem
+        return {"estado": "desconectado", "qr": imagem, "codigo": qr.get("pairingCode")}
 
     @app.post("/run/{etapa}")
     async def run(etapa: str, authorization: str | None = Header(default=None)) -> dict:

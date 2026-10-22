@@ -123,6 +123,25 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--latao-vivo); ou
 .rodape { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--raia); display: flex; flex-wrap: wrap; gap: 8px 28px; color: var(--tinta-2); font-size: 14px; }
 .rodape code { font: 400 13px/1 var(--mono); color: var(--tinta); }
 
+/* Entrada com senha (no servidor) e pareamento do WhatsApp */
+.sem-acesso .limbo, .sem-acesso .leituras, .sem-acesso .diarios, .sem-acesso .rodape { display: none; }
+.entrada { margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; max-width: 520px; }
+.entrada label { flex-basis: 100%; font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); }
+.entrada input { flex: 1 1 240px; font: 400 16px/1.2 var(--texto); color: var(--tinta); background: var(--carta); border: 1px solid var(--raia); border-radius: 8px; padding: 11px 12px; }
+.entrada input:focus-visible { outline: 2px solid var(--latao-vivo); outline-offset: 1px; }
+.entrada .erro { flex-basis: 100%; margin: 0; color: var(--coral); font-size: 14px; }
+.acao.cheia { background: var(--tinta); color: var(--mar); border-color: var(--tinta); padding: 12px 18px; cursor: pointer; }
+.acao.cheia:hover { background: var(--tinta); opacity: .9; }
+button.acao { cursor: pointer; }
+dialog.pareamento { border: 1px solid var(--raia); border-radius: 14px; background: var(--carta); color: var(--tinta); padding: 24px; width: min(420px, calc(100vw - 32px)); }
+dialog.pareamento::backdrop { background: rgb(14 28 37 / .55); }
+dialog.pareamento h2 { margin: 0; font: 700 26px/1 var(--display); letter-spacing: .03em; text-transform: uppercase; }
+dialog.pareamento ol { margin: 12px 0 0; padding-left: 20px; color: var(--tinta-2); font-size: 15px; }
+dialog.pareamento .qr { display: grid; place-items: center; margin: 18px 0 0; min-height: 264px; border-radius: 10px; background: #fff; }
+dialog.pareamento .qr img { width: 256px; height: 256px; image-rendering: pixelated; }
+dialog.pareamento .qr p { margin: 0; padding: 24px; color: #51666F; text-align: center; font-size: 15px; }
+dialog.pareamento .rodape-qr { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; font: 400 12px/1.4 var(--mono); color: var(--tinta-2); }
+
 @media (prefers-reduced-motion: reduce) { .limbo .braco { transition: none; } }
 </style>
 </head>
@@ -138,6 +157,12 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--latao-vivo); ou
 
   <h1 class="tese" id="tese">Lendo o robô…</h1>
   <p class="subtese" id="subtese"></p>
+  <form class="entrada" id="entrada" hidden>
+    <label for="senha">Senha do painel</label>
+    <input id="senha" type="password" autocomplete="current-password" required>
+    <button class="acao cheia" type="submit">Entrar</button>
+    <p class="erro" id="entrada-erro" hidden>Senha errada. Confira e tente de novo.</p>
+  </form>
 
   <section class="limbo" aria-label="Funil de prospecção">
     <svg id="limbo" viewBox="0 170 800 270" role="img" aria-labelledby="limbo-titulo">
@@ -162,11 +187,24 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--latao-vivo); ou
   </div>
 
   <footer class="rodape">
-    <span>Pausar o robô: <code>PARAR.bat</code></span>
-    <span>Ligar o envio de verdade: <code>WINDOWS.md</code>, item 7</span>
     <span>A tela se atualiza sozinha a cada 30 segundos.</span>
+    <span>Ligar o envio de verdade: <code>PROSPECTOR_DRY_RUN=false</code> no <code>.env</code></span>
   </footer>
 </main>
+
+<dialog class="pareamento" id="pareamento" aria-labelledby="pareamento-titulo">
+  <h2 id="pareamento-titulo">Conectar o WhatsApp</h2>
+  <ol>
+    <li>No celular do chip de prospecção, abra o WhatsApp.</li>
+    <li>Toque em Aparelhos conectados e depois em Conectar um aparelho.</li>
+    <li>Aponte a câmera para o código abaixo.</li>
+  </ol>
+  <div class="qr" id="qr" aria-live="polite"><p>Gerando o código…</p></div>
+  <div class="rodape-qr">
+    <span id="qr-estado">O código muda a cada 30 segundos.</span>
+    <button class="acao" type="button" id="qr-fechar">Fechar</button>
+  </div>
+</dialog>
 
 <script>
 (function () {
@@ -332,7 +370,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--latao-vivo); ou
     box.appendChild(leitura("Horário de envio", d.janela.aberta ? "ok" : "", j[0], j[1]));
     var w = d.canais.whatsapp, conectar = null;
     if (w === "desconectado") {
-      conectar = el("a", { "class": "acao", href: "http://localhost:8081/manager", target: "_blank", rel: "noopener" }, "Conectar");
+      conectar = el("button", { "class": "acao", type: "button" }, "Conectar");
+      conectar.addEventListener("click", abrirPareamento);
     }
     box.appendChild(leitura("WhatsApp do chip", w === "conectado" ? "ok" : w === "desconectado" ? "problema" : "",
       w === "conectado" ? "Conectado" : w === "desconectado" ? "Desconectado" : "Não configurado", null, conectar));
@@ -374,9 +413,75 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--latao-vivo); ou
     $("hora").textContent = "";
   }
 
+  // Sem token: no computador, o atalho traz o token no endereço; no servidor,
+  // a senha do painel é o próprio PROSPECTOR_API_TOKEN.
+  function pedirSenha(errou) {
+    falha("Entre no painel.", "Digite a senha que você escolheu ao instalar. No computador, o atalho Sextante já entra sozinho.");
+    document.body.classList.add("sem-acesso");
+    $("entrada").hidden = false;
+    $("entrada-erro").hidden = !errou;
+    $("senha").focus();
+  }
+
+  $("entrada").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    token = $("senha").value.trim();
+    if (!token) return;
+    try { localStorage.setItem(CHAVE, token); } catch (e) {}
+    $("entrada").hidden = true;
+    tentouSenha = true;
+    atualizar();
+  });
+
+  // --- Pareamento do WhatsApp: QR code no próprio painel.
+  var dialogo = $("pareamento"), relogioQr = null;
+  function pedirQr() {
+    fetch("/painel/whatsapp", { method: "POST", headers: { Authorization: "Bearer " + token }, cache: "no-store" })
+      .then(function (resp) {
+        if (resp.status === 503) return { estado: "ligando" };
+        if (!resp.ok) throw new Error("http " + resp.status);
+        return resp.json();
+      })
+      .then(function (r) {
+        var box = $("qr");
+        box.textContent = "";
+        if (r.estado === "conectado") {
+          box.appendChild(el("p", null, "WhatsApp conectado. Pode fechar esta janela."));
+          $("qr-estado").textContent = "";
+          clearInterval(relogioQr);
+          atualizar();
+        } else if (r.qr) {
+          box.appendChild(el("img", { src: r.qr, alt: "QR code para conectar o WhatsApp" }));
+          $("qr-estado").textContent = r.codigo ? "Ou use o código " + r.codigo : "O código muda a cada 30 segundos.";
+        } else {
+          box.appendChild(el("p", null, "O WhatsApp ainda está ligando. O código aparece aqui em alguns segundos."));
+        }
+      })
+      .catch(function () {
+        $("qr").textContent = "";
+        $("qr").appendChild(el("p", null, "Não consegui falar com o WhatsApp. Tentando de novo…"));
+      });
+  }
+  function abrirPareamento() {
+    $("qr").textContent = "";
+    $("qr").appendChild(el("p", null, "Gerando o código…"));
+    if (dialogo.showModal) dialogo.showModal(); else dialogo.setAttribute("open", "");
+    pedirQr();
+    clearInterval(relogioQr);
+    relogioQr = setInterval(pedirQr, 20000);
+  }
+  function fecharPareamento() {
+    clearInterval(relogioQr);
+    if (dialogo.close) dialogo.close(); else dialogo.removeAttribute("open");
+  }
+  $("qr-fechar").addEventListener("click", fecharPareamento);
+  dialogo.addEventListener("close", function () { clearInterval(relogioQr); });
+
+  var tentouSenha = false;
   function atualizar() {
     if (!token) {
-      falha("Abra pelo atalho.", "Dê dois cliques no atalho Sextante da área de trabalho. Ele abre esta tela já com o acesso liberado.");
+      pedirSenha(tentouSenha);
+      tentouSenha = false;
       return;
     }
     fetch("/painel/dados", { headers: { Authorization: "Bearer " + token }, cache: "no-store" })
@@ -389,10 +494,14 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--latao-vivo); ou
         if (!resp.ok) throw new Error("http " + resp.status);
         return resp.json();
       })
-      .then(render)
+      .then(function (d) {
+        tentouSenha = false;
+        document.body.classList.remove("sem-acesso");
+        render(d);
+      })
       .catch(function (err) {
         if (err.message === "acesso") atualizar();
-        else falha("O robô não respondeu.", "Dê dois cliques no atalho Sextante de novo. Se continuar assim, rode o INICIAR.bat e mande a tela para o Claude.");
+        else falha("O robô não respondeu.", "Espere um minuto e recarregue a página. No computador, clique no atalho Sextante de novo; se continuar assim, rode o INICIAR.bat e mande a tela para o Claude.");
       });
   }
 
