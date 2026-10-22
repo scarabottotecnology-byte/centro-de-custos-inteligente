@@ -1,6 +1,7 @@
 """Acesso ao Postgres e utilidades compartilhadas."""
 
 import hashlib
+import os
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -10,7 +11,11 @@ from psycopg.types.json import Jsonb
 
 from .config import Settings
 
-SCHEMA = Path(__file__).resolve().parents[2] / "db" / "init" / "001_schema.sql"
+# No repositório o esquema fica em prospeccao/db/. Na imagem Docker o pacote vai
+# para site-packages e o esquema para /app/db, por isso o Dockerfile aponta o
+# caminho em PROSPECTOR_SCHEMA.
+SCHEMA = Path(os.environ.get("PROSPECTOR_SCHEMA")
+              or Path(__file__).resolve().parents[2] / "db" / "init" / "001_schema.sql")
 
 
 @contextmanager

@@ -20,6 +20,8 @@ Receita (CNPJ) ─▶ ICP Score ─▶ Google Maps ─▶ checagem DNS / WhatsAp
 
 **Custo zero, no seu computador Windows:** siga o [`WINDOWS.md`](./WINDOWS.md).
 
+**Custo zero, num servidor ligado 24 h (Oracle Cloud grátis):** siga o [`SERVIDOR.md`](./SERVIDOR.md).
+
 | | Grátis | Pago (opcional) |
 |---|---|---|
 | Onde roda | seu PC com Docker Desktop, ligado em horário comercial | VPS Linux de 4 GB (R$ 40–80/mês), 24 h |

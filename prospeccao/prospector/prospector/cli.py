@@ -53,9 +53,8 @@ def cmd_whatsapp(settings, args) -> None:
         ctx = pipeline.Context.open(settings, conn)
         if not ctx.evolution:
             raise SystemExit("EVOLUTION_APIKEY não configurada")
-        hook = f"{settings.webhook_base_url.rstrip('/')}/webhooks/evolution?token={settings.api_token}"
         try:
-            ctx.evolution.create_instance(hook)
+            ctx.evolution.create_instance(pipeline.whatsapp_webhook(settings))
         except Exception as exc:  # noqa: BLE001 - instância já existente devolve erro e segue
             log.info("instância não criada (provavelmente já existe): %s", exc)
         qr = ctx.evolution.connect()
