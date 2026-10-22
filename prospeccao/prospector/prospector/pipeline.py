@@ -53,7 +53,7 @@ class Context:
     @cached_property
     def smtp(self) -> SmtpSender | None:
         s = self.settings
-        if not s.smtp_host:
+        if not s.smtp_host or not s.smtp_user:
             return None
         return SmtpSender(s.smtp_host, s.smtp_port, s.smtp_user, s.smtp_password,
                           s.smtp_from or s.smtp_user, s.envio.remetente.nome)
@@ -122,7 +122,8 @@ def enviar(ctx: Context) -> dict:
 
 def caixa_de_entrada(ctx: Context) -> dict:
     s = ctx.settings
-    if not s.imap_host:
+    # O .env.example já traz o host do Gmail; sem usuário, o e-mail não foi configurado.
+    if not s.imap_host or not s.imap_user:
         return {"desligado": True}
     return inbound.poll_imap(ctx.conn, ctx.org_id, ctx.claude, s.imap_host, s.imap_user, s.imap_password,
                              notify=ctx.notify_owner)

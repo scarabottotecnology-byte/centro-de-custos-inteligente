@@ -260,3 +260,17 @@ def test_painel_receita_status(tmp_path):
     outubro.mkdir()
     # O mês novo ainda baixando não esconde que o anterior está carregado.
     assert painel.receita_status(tmp_path) == {"estado": "carregada", "mes": "2026-09"}
+
+
+def test_email_sem_usuario_fica_desligado():
+    # O .env.example traz SMTP_HOST e IMAP_HOST do Gmail; quem usa só WhatsApp
+    # deixa usuário e senha vazios, e o robô não deve tentar entrar.
+    from types import SimpleNamespace
+
+    from prospector import pipeline
+
+    s = config.load(Path(__file__).resolve().parents[2] / "prospeccao.example.yaml")
+    s.imap_host, s.imap_user = "imap.gmail.com", ""
+    s.smtp_host, s.smtp_user = "smtp.gmail.com", ""
+    assert pipeline.caixa_de_entrada(SimpleNamespace(settings=s)) == {"desligado": True}
+    assert pipeline.Context(s, None).smtp is None
