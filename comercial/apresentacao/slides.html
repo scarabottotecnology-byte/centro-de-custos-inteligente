@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Keystone · Apresentação Comercial</title>
+<style>
+/*FONTS*/
+@page { size: 1920px 1080px; margin: 0; }
+:root{
+  --bg:#090909; --bg2:#101010; --card:#151515; --line:rgba(242,239,233,.10);
+  --gold:#c9b58a; --gold2:#ddcba0; --gold-dim:rgba(201,181,138,.10);
+  --cream:#f2efe9; --dim:rgba(242,239,233,.72); --mute:rgba(242,239,233,.46);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--cream);font-family:"Manrope",system-ui,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.s{width:1920px;height:1080px;position:relative;overflow:hidden;page-break-after:always;padding:120px 150px;display:flex;flex-direction:column;background:var(--bg)}
+.s:last-child{page-break-after:auto}
+.s::after{content:"";position:absolute;left:150px;right:150px;bottom:84px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.35}
+.foot{position:absolute;left:150px;right:150px;bottom:40px;display:flex;justify-content:space-between;font-size:15px;letter-spacing:.24em;text-transform:uppercase;color:var(--mute)}
+.foot b{color:var(--gold);font-weight:600}
+.eyebrow{font-size:18px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1,h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;line-height:1.02;letter-spacing:-.01em}
+h2{font-size:84px;margin-top:26px;max-width:1450px}
+h2 em,h1 em{font-style:italic;color:var(--gold2);font-weight:400}
+.lead{font-size:28px;line-height:1.55;color:var(--dim);font-weight:300;max-width:1180px;margin-top:30px}
+.num{font-family:"Cormorant Garamond",serif;font-size:56px;color:var(--gold);opacity:.55;line-height:1;font-weight:400}
+
+/* capa */
+.cover{justify-content:center}
+.mono{width:120px;height:120px;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:72px;color:var(--gold);margin-bottom:64px;transform:rotate(45deg)}
+.mono span{transform:rotate(-45deg)}
+.cover h1{font-size:132px;max-width:1500px;margin-top:34px}
+.cover .lead{font-size:32px;margin-top:40px}
+.cover .meta{margin-top:80px;display:flex;gap:56px;font-size:18px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+.cover .meta span{display:flex;align-items:center;gap:14px}
+.cover .meta span::before{content:"";width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}
+.glow{position:absolute;right:-260px;top:-260px;width:1100px;height:1100px;border-radius:50%;background:radial-gradient(circle,rgba(201,181,138,.14),transparent 62%)}
+
+/* listas */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:64px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:64px}
+.cell{background:var(--bg);padding:44px 48px;display:flex;gap:30px}
+.grid3 .cell{flex-direction:column;gap:18px;padding:44px 44px 48px}
+.cell h3{font-family:"Cormorant Garamond",serif;font-size:38px;font-weight:500;line-height:1.1}
+.cell p{font-size:21px;line-height:1.55;color:var(--dim);font-weight:300;margin-top:10px}
+.grid3 .cell p{margin-top:0}
+.tag{font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+
+/* sinais */
+.signals{margin-top:64px;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.signals div{display:grid;grid-template-columns:110px 1fr;align-items:baseline;padding:30px 0;border-bottom:1px solid var(--line)}
+.signals p{font-size:34px;font-weight:300;line-height:1.35}
+.signals p strong{font-weight:600;color:var(--cream)}
+
+/* orbita */
+.orb{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:70px}
+.orb > div{background:var(--bg);padding:46px 34px 50px;min-height:330px}
+.orb .L{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:110px;color:var(--gold);line-height:.9}
+.orb h3{font-size:24px;font-weight:600;margin-top:26px;letter-spacing:.02em}
+.orb p{font-size:19px;line-height:1.5;color:var(--mute);margin-top:12px}
+
+/* etapas */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-top:80px;position:relative}
+.steps::before{content:"";position:absolute;top:34px;left:34px;right:34px;height:1px;background:var(--gold);opacity:.4}
+.step .dot{width:68px;height:68px;border-radius:50%;border:1.5px solid var(--gold);background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:34px;color:var(--gold);position:relative}
+.step h3{font-family:"Cormorant Garamond",serif;font-size:44px;font-weight:500;margin-top:34px}
+.step p{font-size:22px;line-height:1.55;color:var(--dim);font-weight:300;margin-top:14px}
+.note{margin-top:auto;margin-bottom:40px;border-left:2px solid var(--gold);padding:8px 0 8px 32px;font-size:26px;color:var(--dim);font-weight:300;max-width:1300px}
+.note strong{color:var(--cream);font-weight:600}
+
+/* cta */
+.cta{justify-content:center}
+.cta h2{font-size:110px}
+.contact{margin-top:80px;display:grid;grid-template-columns:repeat(3,auto);gap:90px;justify-content:start}
+.contact div span{display:block;font-size:16px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.contact div b{display:block;margin-top:14px;font-size:30px;font-weight:500;color:var(--cream)}
+</style>
+</head>
+<body>
+
+<!-- 1. Capa -->
+<section class="s cover">
+  <div class="glow"></div>
+  <div class="mono"><span>K</span></div>
+  <div class="eyebrow">Controladoria Estratégica · FP&amp;A · Gestão de Custos</div>
+  <h1>Clareza financeira para <em>decisões que importam.</em></h1>
+  <p class="lead">Estruturamos a gestão financeira de empresas em crescimento: margem, caixa e números confiáveis para decidir com segurança.</p>
+  <div class="meta"><span>Apresentação comercial</span><span>2026</span></div>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>01</span></div>
+</section>
+
+<!-- 2. Sinais -->
+<section class="s">
+  <div class="eyebrow">O ponto de partida</div>
+  <h2>A empresa cresceu. <em>A gestão financeira acompanhou?</em></h2>
+  <div class="signals">
+    <div><span class="num">01</span><p><strong>O fechamento atrasa</strong> e o resultado do mês chega quando já não dá para corrigir nada.</p></div>
+    <div><span class="num">02</span><p><strong>O preço é definido sem conhecer o custo real</strong> de cada serviço, produto ou cliente.</p></div>
+    <div><span class="num">03</span><p><strong>O faturamento sobe, mas o caixa não acompanha</strong> e ninguém sabe exatamente onde o dinheiro fica.</p></div>
+    <div><span class="num">04</span><p><strong>A reforma tributária chega em 2027</strong>, com a CBS no lugar de PIS e Cofins, e o impacto na margem ainda não foi simulado.</p></div>
+  </div>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>02</span></div>
+</section>
+
+<!-- 3. Clínicas -->
+<section class="s">
+  <div class="eyebrow">Para clínicas e consultórios</div>
+  <h2>Em saúde, a margem se perde <em>em lugares bem específicos.</em></h2>
+  <div class="grid2">
+    <div class="cell"><span class="num">01</span><div><h3>Custo por procedimento</h3><p>Quanto custa, de verdade, cada consulta, exame ou procedimento, incluindo hora de sala, equipe e insumos.</p></div></div>
+    <div class="cell"><span class="num">02</span><div><h3>Convênio x particular</h3><p>Margem por convênio, impacto de glosas e do prazo de repasse no caixa da clínica.</p></div></div>
+    <div class="cell"><span class="num">03</span><div><h3>Regime tributário e fator R</h3><p>Simples ou Lucro Presumido, Anexo III ou V: a escolha certa muda o imposto pago todo mês.</p></div></div>
+    <div class="cell"><span class="num">04</span><div><h3>Pró-labore e distribuição</h3><p>Como remunerar os sócios com segurança, separando o que é da clínica e o que é dos médicos.</p></div></div>
+  </div>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>03</span></div>
+</section>
+
+<!-- 4. Serviços -->
+<section class="s">
+  <div class="eyebrow">O que fazemos</div>
+  <h2>Seis frentes, <em>um mesmo objetivo:</em> decidir com números.</h2>
+  <div class="grid3">
+    <div class="cell"><span class="tag">01</span><h3>Controladoria Estratégica</h3><p>Processos, controles internos e fechamento rápido e confiável.</p></div>
+    <div class="cell"><span class="tag">02</span><h3>FP&amp;A e Planejamento</h3><p>Orçamento, metas e acompanhamento do realizado com a metodologia ÓRBITA™.</p></div>
+    <div class="cell"><span class="tag">03</span><h3>Gestão de Custos</h3><p>Custo real, margem de contribuição e precificação por serviço e cliente.</p></div>
+    <div class="cell"><span class="tag">04</span><h3>Business Intelligence</h3><p>Indicadores e painéis para enxergar o negócio sem depender de planilhas soltas.</p></div>
+    <div class="cell"><span class="tag">05</span><h3>Planejamento Tributário</h3><p>Regime ideal e preparação da empresa para a reforma tributária.</p></div>
+    <div class="cell"><span class="tag">06</span><h3>Valuation &amp; M&amp;A</h3><p>Quanto vale a empresa e como se preparar para sócios, investidores ou venda.</p></div>
+  </div>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>04</span></div>
+</section>
+
+<!-- 5. ÓRBITA -->
+<section class="s">
+  <div class="eyebrow">Metodologia proprietária</div>
+  <h2>ÓRBITA™: <em>o ciclo que transforma plano em resultado.</em></h2>
+  <div class="orb">
+    <div><div class="L">O</div><h3>Objetivos</h3><p>Metas financeiras alinhadas à estratégia do negócio.</p></div>
+    <div><div class="L">R</div><h3>Roadmap</h3><p>Plano de ação trimestral, com responsáveis e prazos.</p></div>
+    <div><div class="L">B</div><h3>Budget</h3><p>Orçamento integrado por área e centro de custo.</p></div>
+    <div><div class="L">I</div><h3>Indicadores</h3><p>KPIs financeiros e operacionais em rotina.</p></div>
+    <div><div class="L">T</div><h3>Tracking</h3><p>Realizado x orçado analisado continuamente.</p></div>
+    <div><div class="L">A</div><h3>Ação</h3><p>Correção de desvios antes que virem crise.</p></div>
+  </div>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>05</span></div>
+</section>
+
+<!-- 6. Como trabalhamos -->
+<section class="s">
+  <div class="eyebrow">Como trabalhamos</div>
+  <h2>Do diagnóstico à rotina, <em>em quatro etapas.</em></h2>
+  <div class="steps">
+    <div class="step"><div class="dot">1</div><h3>Diagnóstico</h3><p>Avaliação da maturidade financeira e dos pontos que mais pesam na margem e no caixa.</p></div>
+    <div class="step"><div class="dot">2</div><h3>Desenho</h3><p>Plano de contas, centros de custo, políticas e controles sob medida.</p></div>
+    <div class="step"><div class="dot">3</div><h3>Implantação</h3><p>Implementação assistida, lado a lado com a sua equipe.</p></div>
+    <div class="step"><div class="dot">4</div><h3>Acompanhamento</h3><p>Leitura mensal dos números e ajuste contínuo dos processos.</p></div>
+  </div>
+  <p class="note"><strong>Transferência de conhecimento:</strong> estruturamos, capacitamos e acompanhamos. A operação continua com a sua equipe.</p>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>06</span></div>
+</section>
+
+<!-- 7. Diferenciais -->
+<section class="s">
+  <div class="eyebrow">Por que a Keystone</div>
+  <h2>Método de grande empresa, <em>na medida da sua.</em></h2>
+  <div class="grid2">
+    <div class="cell"><span class="num">01</span><div><h3>Foco em empresas em crescimento</h3><p>Para negócios cuja complexidade financeira cresce mais rápido que a estrutura interna.</p></div></div>
+    <div class="cell"><span class="num">02</span><div><h3>Entregáveis prontos para decidir</h3><p>Relatórios e análises claros, no formato que sócios e conselho usam sem retrabalho.</p></div></div>
+    <div class="cell"><span class="num">03</span><div><h3>Tecnologia onde faz sentido</h3><p>ERP, BI e automação entram depois que processo e plano de contas estão de pé.</p></div></div>
+    <div class="cell"><span class="num">04</span><div><h3>Confidencialidade absoluta</h3><p>Acordo de confidencialidade antes de qualquer dado compartilhado. LGPD sempre.</p></div></div>
+  </div>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>07</span></div>
+</section>
+
+<!-- 8. Próximo passo -->
+<section class="s cta">
+  <div class="glow"></div>
+  <div class="eyebrow">Próximo passo</div>
+  <h2>Uma conversa de diagnóstico, <em>sem custo.</em></h2>
+  <p class="lead">Entendemos o momento da sua empresa e mostramos onde estão as maiores oportunidades de margem e de caixa. Sem compromisso.</p>
+  <div class="contact">
+    <div><span>Agende</span><b>calendly.com/scarabotto-tecnology</b></div>
+    <div><span>E-mail</span><b>contato@keystonecontroladoria.com.br</b></div>
+    <div><span>Site</span><b>keystone-phi.vercel.app</b></div>
+  </div>
+  <div class="foot"><span><b>Keystone</b> Capital Advisory</span><span>08</span></div>
+</section>
+
+</body>
+</html>
