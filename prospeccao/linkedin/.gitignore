@@ -1,0 +1,6 @@
+# Dá acesso à conta do LinkedIn.
+sessao_linkedin.json
+# Dados pessoais de contatos: ficam só no computador de quem roda.
+Connections.csv
+perfis.txt
+saida/
